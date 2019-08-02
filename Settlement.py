@@ -1,6 +1,6 @@
 class Settlement(object):
-
-	#Attributes 
+	#test
+	#Attributes
 	__settlement_id = 0
 	__households = [] #list of household objects belonging to this settlement
 	__population = 0
@@ -8,13 +8,13 @@ class Settlement(object):
 	__grain = 0
 	__neighbors = [] # list of settlement objects
 	__colour = "white"
-	__coordinates = [] #list of x and y coordinates of the position of the settlements 
+	__coordinates = [] #list of x and y coordinates of the position of the settlements
 
 	"""docstring for Settlement"""
 	def __init__(self, arg):
 		super(Settlement, self).__init__()
 		self.arg = arg
-		
+
 	def checkSettlementPopulation():
 		#
 
