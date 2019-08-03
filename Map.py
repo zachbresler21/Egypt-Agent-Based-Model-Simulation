@@ -1,21 +1,22 @@
-import Numpy as np
-class Map (object):
+import numpy as np
 
+class Map (object):
 	#Attributes
 	__lorenz_points = 0.0
 	__gini_index_reserve = 0.0
 	__avg_ambition = 0.0
 	__avg_competency = 0.0
-	__member_name = "" #WHAT IS THIS
-	__patches_list = [] #list of patches
+	__grid = np.empty((40,40),dtype = object) #numpy array
 
-	"""docstring for Map"""
-	def __init__(self, arg):
-		super(Map, self).__init__()
-		self.arg = arg
+	def __init__ (self):
+		count = 1
+		for x in range:
+			for y in range:
+				self.__grid[x,y] = Patch(count, True) #this should insert a Patch object - i made every Patch a Field
+				count += 1
+
+	'''def createRiver():
 		
-	def createRiver():
-		#river
 
 	def setUpSettlements(settlement_list):
 		#takes a list of settlements as a parameter
@@ -46,6 +47,16 @@ class Map (object):
 
 	def updatePlotValues(totHouseholds, totPopulation, ambition, competency):
 		#update - REVISE THE METHOD THAT IS IN THE SIMULATE CLASS
+
+ 
+'''
+
+
+
+
+
+
+
 
 
  
