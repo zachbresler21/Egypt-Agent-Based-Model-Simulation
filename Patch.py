@@ -16,16 +16,16 @@ class Patch(object):
 			self.inner = self.Field(patch_id, 0.8, 0)
 
 	def toggleSettlement(self):
-		self.__isSettlement = !self.__isSettlement
+		self.__isSettlement =  not self.__isSettlement
 
 	def toggleField(self):
-		self.__isField = !self.__isField
+		self.__isField = not self.__isField
 
 	def toggleRiver(self):
-		self.__isRiver = !self.__isRiver
+		self.__isRiver = not self.__isRiver
 
 	def toggleOwned(self):
-		self.__isOwned = !self.__isOwned
+		self.__isOwned = not self.__isOwned
 
 	def changeColour(self, colour):
 		self.__colour = colour
@@ -47,7 +47,7 @@ class Patch(object):
 			self.__years_fallow = years_fallow
 
 		def toggleHarvested(self):
-			self.__harvested = !self.__harvested;
+			self.__harvested = not self.__harvested;
 
 		def fieldChangeover():
 			return 0
