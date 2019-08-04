@@ -94,7 +94,7 @@ class Map:
 		    fn = get_sample_data("/Users/user/Desktop/settlement_yellow.png", asfileobj=False)
 		    arr_img = plt.imread(fn, format='png')
 
-		    imagebox = OffsetImage(arr_img, zoom=1)
+		    imagebox = OffsetImage(arr_img, zoom=0.6)
 		    imagebox.image.axes = ax
 
 		    ab = AnnotationBbox(imagebox, xy,
@@ -134,10 +134,27 @@ class Map:
 		    '''
 		    ax.axis('off') #comment out if you want to see the axis
 
-		    axSlider1 = plt.axes([0.03, 0.8, 0.2, 0.02])
+		    ######################### USER INPUT #########################
+		    #SLIDERS
+		    axSlider1 = plt.axes([0.03, 0.8, 0.235, 0.02])
 		    timeSpanSlider = Slider(ax = axSlider1, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
 		    plt.text(100,2, "Model Time Span:", fontsize = 10, weight = "bold")
 
+		    #BUTTONS
+		    
+		    axSetUp = plt.axes([0.03, 0.9, 0.08, 0.05])
+		    bSetUp = Button(axSetUp, 'Set Up')
+
+		    axStart = plt.axes([0.12, 0.9, 0.08, 0.05])
+		    bStart = Button(axStart, 'Start')
+
+		    axPause = plt.axes([0.21, 0.9, 0.08, 0.05])
+		    ICON_PAUSE = plt.imread("/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/pause.png")
+		    bPause = Button(axPause, '',image=ICON_PAUSE)
+
+		    #bnext.on_clicked(callback.next)
+		    
+		    #bprev.on_clicked(callback.prev)
 
 		    plt.show()
 			
