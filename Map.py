@@ -6,6 +6,7 @@ import matplotlib.patches as ptc
 from matplotlib.patches import Circle
 from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage, AnnotationBbox)
 from matplotlib.cbook import get_sample_data
+from matplotlib.widgets import Slider, Button
 
 class Map:
 	#Attributes
@@ -24,12 +25,15 @@ class Map:
 		cmap = mpl.colors.ListedColormap(['yellow', 'green'])
 		#bounds = [1,2,3 ]
 		#norm = colors.BoundaryNorm(cmap.N)
-		plt.rcParams['toolbar'] = 'None'
+		plt.rcParams['toolbar'] = 'None' #removes the toolbar at the bottom of the GUI
 		
 		if 1:
-		    fig, ax = plt.subplots()
+		    fig, ax = plt.subplots(figsize=(14,7.2))
 		    ax.imshow(arr, cmap=cmap, interpolation= "None")
-		    
+
+		    plt.subplots_adjust(left = 0.4)#adds space to the right of the plot
+
+
 		    # Define a 1st position to annotate (display it with a marker)
 		    xy = (40, 40)
 		    ax.plot(xy[0], xy[1], ".r")
@@ -106,6 +110,8 @@ class Map:
 		    ax.add_artist(ab)
 		    ax.grid(which='major', axis='both', linestyle='-', color='0', linewidth=0)
 		    # Fix the display limits to see everything
+
+		    #UNCOMMENT BELOW IF YOU WANT TO INVERT THE DIMENSIONS (EITHER 0 TO 40 OR 40 TO 0)
 		    #ax.set_xlim(0, 40)
 		    #ax.set_ylim(0, 40)
 
@@ -126,7 +132,13 @@ class Map:
 		    plt.xticks([])
 		    plt.yticks([])
 		    '''
-		    ax.axis('off')
+		    ax.axis('off') #comment out if you want to see the axis
+
+		    axSlider1 = plt.axes([0.03, 0.8, 0.2, 0.02])
+		    timeSpanSlider = Slider(ax = axSlider1, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Model Time Span:", fontsize = 10, weight = "bold")
+
+
 		    plt.show()
 			
 
@@ -165,28 +177,6 @@ class Map:
 
  
 '''
-#used for testing the display
+
 mac = Map()
-mac.runSimulation() 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
+mac.runSimulation()
