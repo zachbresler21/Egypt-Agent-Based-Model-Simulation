@@ -1,7 +1,7 @@
-class Simulate (object):
-	#Attributes 
+class Simulate:
+	#Attributes
 	__model_time_span = 0
-	__starting_settlemenets = 0
+	__starting_settlements = 0
 	__starting_households = 0
 	__starting_household_size = 0
 	__starting_grain = 0
@@ -17,15 +17,9 @@ class Simulate (object):
 	__allow_land_rental = False
 	__rental_rate = 0.0
 	__projected_historical_population = 0
-	__household_List= [] #List of Household objects
-	__settlement_List = [] #List of Settlement objects
+	__household_List= [] #List of all Household objects
+	__settlement_List = [] #List of all Settlement objects
 
-	"""docstring for Simulate"""
-	def __init__(self, arg):
-		super(Simulate, self).__init__()
-		self.arg = arg
-
-	
 	def clearAll():
 		#clear all method
 
@@ -37,9 +31,24 @@ class Simulate (object):
 
 	def setUpSettlements():
 		#MAP
+		for i in __starting_settlements:
+			s = Settlement()
+			__settlement_List.append(s)
+			s.setHouseholds(setUpHouseholds()) #calls method in settlement class to set households in the settlement
+
+
+
 
 	def setUpHouseholds():
 		#MAP
+		#returns a list of households per settlement to be used in setUpSettlements
+		households_for_settlement = [] #List of households to be added to settlements
+		for i in startingHouseholds:
+			Household h = new Household()
+			households_for_settlement.append(h)
+			__household_List.append(h)
+
+		return households_for_settlement
 
 	def createRiver():
 		#MAP
@@ -71,18 +80,19 @@ class Simulate (object):
 	def calcTotalPopulation():
 		#totPOP
 
+	def main(self):
+		#Main METHOD
+		print("Simulation running")
+		#Will get input from sliders later on
+		__starting_settlements = int(input("Enter starting settlements: "))
+		__starting_households = int(input("Enter starting households: "))
+
+		setUpSettlements()
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
+	if __name__ == "__main__":
+		main()
