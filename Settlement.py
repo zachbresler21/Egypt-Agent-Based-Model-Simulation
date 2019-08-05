@@ -15,6 +15,12 @@ class Settlement(object):
 		super(Settlement, self).__init__()
 		self.arg = arg
 
+	def setHouseholds(self, householdList):
+		#Called from setUpSettlements in simulate class - sets the households in each settlement
+		self.__households = householdList
+
+
+
 	def checkSettlementPopulation():
 		#
 
