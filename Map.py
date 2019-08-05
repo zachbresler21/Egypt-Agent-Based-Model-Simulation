@@ -6,7 +6,7 @@ import matplotlib.patches as ptc
 from matplotlib.patches import Circle
 from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage, AnnotationBbox)
 from matplotlib.cbook import get_sample_data
-from matplotlib.widgets import Slider, Button
+from matplotlib.widgets import Slider, Button, RadioButtons
 
 class Map:
 	#Attributes
@@ -140,6 +140,45 @@ class Map:
 		    timeSpanSlider = Slider(ax = axSlider1, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
 		    plt.text(100,2, "Model Time Span:", fontsize = 10, weight = "bold")
 
+		    #axRadio1 = plt.axes([0.03, 0.73, 0.2, 0.08])
+		    #manaulSeedRadio = RadioButtons(axRadio1, ('On', 'Off'))
+
+		    axSlider2 = plt.axes([0.03, 0.66, 0.235, 0.02])
+		    settlementsSlider = Slider(ax = axSlider2, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Settlements:", fontsize = 10, weight = "bold")
+
+		    axSlider3 = plt.axes([0.03, 0.59, 0.235, 0.02])
+		    householdsSlider = Slider(ax = axSlider3, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Households:", fontsize = 10, weight = "bold")
+
+		    axSlider4 = plt.axes([0.03, 0.52, 0.235, 0.02])
+		    houseSizeSlider = Slider(ax = axSlider4, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Household Size:", fontsize = 10, weight = "bold")
+
+		    axSlider5 = plt.axes([0.03, 0.45, 0.235, 0.02])
+		    grainSlider = Slider(ax = axSlider5, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Grain:", fontsize = 10, weight = "bold")
+
+		    axSlider6 = plt.axes([0.03, 0.38, 0.235, 0.02])
+		    minAmbitionSlider = Slider(ax = axSlider6, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Min Ambition:", fontsize = 10, weight = "bold")
+
+		    axSlider7 = plt.axes([0.03, 0.31, 0.235, 0.02])
+		    minCompetencySlider = Slider(ax = axSlider7, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Min Competency:", fontsize = 10, weight = "bold")
+
+		    axSlider8 = plt.axes([0.03, 0.24, 0.235, 0.02])
+		    generationalSlider = Slider(ax = axSlider8, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Generational Variation:", fontsize = 10, weight = "bold")
+
+		    axSlider9 = plt.axes([0.03, 0.17, 0.235, 0.02])
+		    knowledgeRadiusSlider = Slider(ax = axSlider9, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Knowledge Radius:", fontsize = 10, weight = "bold")
+
+		    axSlider10 = plt.axes([0.03, 0.1, 0.235, 0.02])
+		    distanceCostSlider = Slider(ax = axSlider10, label = "", valmin = 100, valmax = 500, valinit = 400, valfmt= '%1.0f',valstep = 10)
+		    plt.text(100,2, "Starting Distance Cost:", fontsize = 10, weight = "bold")
+
 		    #BUTTONS
 		    
 		    axSetUp = plt.axes([0.03, 0.9, 0.08, 0.05])
@@ -149,13 +188,12 @@ class Map:
 		    bStart = Button(axStart, 'Start')
 
 		    axPause = plt.axes([0.21, 0.9, 0.08, 0.05])
-		    ICON_PAUSE = plt.imread("/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/pause.png")
-		    bPause = Button(axPause, '',image=ICON_PAUSE)
+		    bPause = Button(axPause, 'Pause')
 
 		    #bnext.on_clicked(callback.next)
 		    
 		    #bprev.on_clicked(callback.prev)
-
+		    print(mpl.get_backend())
 		    plt.show()
 			
 
