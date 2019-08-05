@@ -123,7 +123,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.setWindowTitle("Egypt Simulation")
 
 		self.show()
-		exit(self.qapp.exec_()) 
+		exit(self.qapp.exec_())
 
 
 	def runSimulation(self):
@@ -132,7 +132,7 @@ class Simulate(QtWidgets.QMainWindow):
 		#bounds = [1,2,3 ]
 		#norm = colors.BoundaryNorm(cmap.N)
 		plt.rcParams['toolbar'] = 'None' #removes the toolbar at the bottom of the GUI
-		
+
 		if 1:
 			fig, ax = plt.subplots(figsize=(14,7.2))
 			ax.imshow(arr, cmap=cmap, interpolation= "None")
@@ -242,7 +242,7 @@ class Simulate(QtWidgets.QMainWindow):
 
 			######################### USER INPUT #########################
 			#SLIDERS
-			
+
 
 			#slider = QtWidgets.QSlider(Qt.Horizontal, self)
 			#slider.setGeometry(30, 40, 200, 30)
@@ -253,7 +253,7 @@ class Simulate(QtWidgets.QMainWindow):
 			#slider.setSingleStep(1)
 
 			#BUTTONS
-			
+
 			self.scrollableWindow(fig)
 			#plt.show()
 '''
@@ -273,4 +273,3 @@ class Simulate(QtWidgets.QMainWindow):
 qapp = QtWidgets.QApplication([])
 s = Simulate()
 s.runSimulation()
-

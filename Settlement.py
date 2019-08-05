@@ -17,8 +17,9 @@ class Settlement(object):
 
 	def setHouseholds(self, householdList):
 		#Called from setUpSettlements in simulate class - sets the households in each settlement
+		self.__settlement_id = __settlement_id
+		__settlement_id += 1
 		self.__households = householdList
-
 
 
 	def checkSettlementPopulation():
