@@ -15,7 +15,7 @@ class Settlement(object):
 		super(Settlement, self).__init__()
 		self.arg = arg
 
-	def checkSettlementPopulation():
+	def checkSettlementPopulation(self):
 		#Size 1 - small ; 2 - medium ; 3 large ; 4 XL
 		if __population <= 0:
     			#removeSettlement
@@ -29,10 +29,12 @@ class Settlement(object):
 		else:
 			return 1
 
-	def addHousehold(household):
+	def addHousehold(self, household):
 		#takes in either a list of household objects or just one household object
+		
+		#adds/removes a household for populationShift() OR fission()
 
-	def removeHousehold(household):
+	def removeHousehold(self, household):
 		for i in __households:
 			if household_size <= 0: #delete if no one lives here
 				del i
