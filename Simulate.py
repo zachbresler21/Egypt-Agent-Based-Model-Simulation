@@ -19,25 +19,29 @@ class Simulate:
 	__projected_historical_population = 0
 	__household_List= [] #List of all Household objects
 	__settlement_List = [] #List of all Settlement objects
+	map = Map()
 
 	def clearAll():
 		#clear all method
+		__settlement_List.clear()
+		__household_List.clear()
+		#map.clear
 
 	def resetTicks():
 		#resetTicks
 
+
 	def setUpPatches():
 		#MAP
+
 
 	def setUpSettlements():
 		#MAP
 		for i in __starting_settlements:
 			s = Settlement()
 			__settlement_List.append(s)
-			s.setHouseholds(setUpHouseholds()) #calls method in settlement class to set households in the settlement
-
-
-
+			s.setHouseholds(setUpHouseholds()) #calls method in settlement class (setHouseholds) to set households in the settlements
+		map.setUpSettlements(__settlement_List) #Sends to map class where it changes patches to settlements and plots settlements in grid
 
 	def setUpHouseholds():
 		#MAP
@@ -80,17 +84,17 @@ class Simulate:
 	def calcTotalPopulation():
 		#totPOP
 
+
 	def main(self):
 		#Main METHOD
 		print("Simulation running")
 		#Will get input from sliders later on
 		__starting_settlements = int(input("Enter starting settlements: "))
 		__starting_households = int(input("Enter starting households: "))
+		__starting_grain = int(input("Enter starting grain: "))
 
 		setUpSettlements()
-
-
-
+		map.setUpSettlements(__settlement_List)
 
 
 
