@@ -16,13 +16,26 @@ class Settlement(object):
 		self.arg = arg
 
 	def checkSettlementPopulation():
-		#
+		#Size 1 - small ; 2 - medium ; 3 large ; 4 XL
+		if __population <= 0:
+    			#removeSettlement
+    			return 0
+    		else if __population > 150:
+    			return 4
+    		else if (__population > 100 and __population <= 150) :
+    			return 3
+		else if (__population > 49 and __population <= 100):
+			return 2
+		else:
+			return 1
 
 	def addHousehold(household):
 		#takes in either a list of household objects or just one household object
 
 	def removeHousehold(household):
-		#
+		for i in __households:
+			if household_size <= 0: #delete if no one lives here
+				del i
+			if i == household: #delete the household passed through as a parameter
+				del i
 
-	def setSize():
-		#
