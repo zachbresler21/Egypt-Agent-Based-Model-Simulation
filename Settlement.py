@@ -53,6 +53,13 @@ class Settlement:
 		self.__households.append(household)
 
 
+
+	def setSize():
+		#
+
+	def setCoordinates(self, coords):
+		self.__coordinates = coords
+=======
 	def removeHousehold(self, household):
 		count = 0
 		for i in self.__households:
@@ -61,3 +68,4 @@ class Settlement:
 			if i == household: #delete the household passed through as a parameter
 				self.__households.remove(count)
 			count+=1
+
