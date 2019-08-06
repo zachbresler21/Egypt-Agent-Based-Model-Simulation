@@ -35,9 +35,11 @@ class Settlement(object):
 		#adds/removes a household for populationShift() OR fission()
 
 	def removeHousehold(self, household):
+		int count = 0
 		for i in __households:
 			if household_size <= 0: #delete if no one lives here
-				del i
+				__households.remove(count)
 			if i == household: #delete the household passed through as a parameter
-				del i
+				__households.remove(count)
+			count++	
 
