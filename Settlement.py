@@ -33,3 +33,6 @@ class Settlement(object):
 
 	def setSize():
 		#
+
+	def setCoordinates(self, coords):
+		self.__coordinates = coords
