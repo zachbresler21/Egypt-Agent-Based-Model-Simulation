@@ -18,8 +18,11 @@ class Household (object):
 	"""docstring for Household"""
 	def __init__(self, arg):
 		super(Household, self).__init__()
+		self.__id = Household.__id
+		Household__id += 1
+
 		self.arg = arg
-		
+
 	def claimFields():
 		#
 
@@ -67,9 +70,3 @@ class Household (object):
 
 		def completeFarm():
 			#WHAT DOES THIS DO
-
-
-
-
-
-			

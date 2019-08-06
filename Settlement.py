@@ -22,6 +22,7 @@ class Settlement:
 		self.__colour = __colour
 		self.__coordinates = __coordinates
 
+
 	def checkSettlementPopulation(self):
 		#Size 1 - small ; 2 - medium ; 3 large ; 4 XL
 		#Same as setSize() method that used to be in this class
@@ -39,6 +40,13 @@ class Settlement:
 			return 1
 
 	def addHousehold(self, household):
+=======
+	def setHouseholds(self, householdList):
+		#Called from setUpSettlements in simulate class - sets the households in each settlement
+		self.__settlement_id = __settlement_id
+		__settlement_id += 1
+		self.__households = householdList
+
 
 		#takes in either a list of household objects or just one household object
 		#adds/removes a household for populationShift() OR fission()

@@ -1,22 +1,18 @@
 import numpy as np
 
-class Map (object):
+class Map:
 	#Attributes
 	__lorenz_points = 0.0
 	__gini_index_reserve = 0.0
 	__avg_ambition = 0.0
 	__avg_competency = 0.0
-	__grid = np.empty((40,40),dtype = object) #numpy array
+	__grid = np.empty((40,40), dtype= int) #list of patches
 
-	def __init__ (self):
-		count = 1
-		for x in range:
-			for y in range:
-				self.__grid[x,y] = Patch(count, True) #this should insert a Patch object - i made every Patch a Field
-				count += 1
-
-	'''def createRiver():
+	def __init__(self):
+		self.__grid = np.random.randint(10, size= (40,40))
 		
+	def createRiver():
+	
 
 	def setUpSettlements(settlement_list):
 		#takes a list of settlements as a parameter
@@ -48,22 +44,5 @@ class Map (object):
 	def updatePlotValues(totHouseholds, totPopulation, ambition, competency):
 		#update - REVISE THE METHOD THAT IS IN THE SIMULATE CLASS
 
- 
-'''
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
+	def clearAll(self):
+		#clear everything and start new 
