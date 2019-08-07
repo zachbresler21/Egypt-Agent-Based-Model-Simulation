@@ -38,6 +38,13 @@ class Map:
 		c = random.randint(0,41)
 		return [r,c]
 
+	def isPatchAvailable(self,coords):
+		if not self.__patches[coords[0], coords[1]].isRiver() AND not self.__patches[coords[0],coords[1]].isSettlement():
+			return True
+		else:
+			return False
+
+
 	def setUpSettlements(self,settlement_list):
 		#takes a list of settlements as a parameter
 		counter = 0
@@ -45,7 +52,7 @@ class Map:
 
 		while(counter < len(settlement_list)):
 			coords = generateCoords()
-			if not self.__patches[coords[0], coords[1]].isRiver() AND not self.__patches[coords[0],coords[1]].isSettlement():
+			if self.isPatchAvailable(coords) == True:
 				__settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
