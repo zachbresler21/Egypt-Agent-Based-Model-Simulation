@@ -52,7 +52,6 @@ class Simulate(QtWidgets.QMainWindow):
 	__projected_historical_population = 0
 	__household_List= np.empty(250, dtype= object) #List of all Household objects
 	__settlement_List = np.empty(21, dtype= object) #List of all Settlement objects
-	__patches = np.empty((40,40), dtype= object)
 	x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	#map = Map()
@@ -86,48 +85,28 @@ class Simulate(QtWidgets.QMainWindow):
 		pass
 	
 	def setUpPatches(self):
-		self.__patches = self.map.createPatches() #hopefully will return a numpy array of patches
-
-	def generateUniqueCoordinates(self):
-		#generate unique "__starting_settlements" number of coordinates to test which settlement placement
-		self.x = np.random.choice(range(2,41), self.__starting_settlements, replace=False)
-		self.y = np.random.choice(range(41), self.__starting_settlements, replace=False)
+		self.map.createPatches()
 
 	def setUpSettlements(self):
 		#MAP
 		s_id=0
-		for i in range(__starting_settlements):
+		for i in range(self.__starting_settlements):
 			s_id+=1
-			s = Settlement(s_id, setUpHouseholds, __population, __num_households, __grain, __neighbors, __colour, checkCoordinates(self.x[i], self.y[i]))
+			s = Settlement(s_id, (self.__starting_households*self.__starting_household_size), self.__starting_households, self.__grain, __neighbors, __colour)
 			self.__settlement_List[i] = s
-			#s.setHouseholds(setUpHouseholds()) #calls method in settlement class to set households in the settlement
+			s.setHouseholds(setUpHouseholds()) #calls method in settlement class to set households in the settlement
 
 	def setUpHouseholds(self):
 		#MAP
-		for i in range(self.__starting_households*__starting_settlements):
-			h = Household()
-			self.__household_List[i] = h
-
-	def settlementHouseholds(self):
-		#returns a list of households per settlement to be used in setUpSettlements
-		#setUpHouseholds must be run before this method is run as to ensure _household_list is populated
-		households_for_settlement = np.empty(10, dtype = object)
+		c_id =0
+		households_for_settlement = np.empty(self.__starting_household, dtype = object)
 		for i in range(self.__starting_households):
-			households_for_settlement[i] = self.__household_List[i]
-
+			c_id +=1
+			h = Household(cd_id)#The constructor for Household needs to be completed
+			self.__household_List[i] = h
+			households_for_settlement[i] = h
+		
 		return households_for_settlement
-
-	def checkCoordinates(self, x_coord, y_coord):
-		#check the patches if out to claim (field, no settlement, no river)
-		#this would go in the map class to set up array of patches
-		#count = 1
-		#for x in range 40:
-		#	for y in range 40:
-		#		self.__grid[x,y] = Patch(count, True) #this should insert a Patch object - i made every Patch a Field
-		#		count += 1
-		#make sure that setUpPatches is run before this method to ensure _patches is populated
-		p = self.__patches[x_coord, y_coord]
-		if(p.isRiver() == False && p.isSettlement() == False && p.isField == True): return np.array[x_coord, y_coord]
 
 	def createRiver():
 		#need to set 2 columns of the Map to river
@@ -204,6 +183,8 @@ class Simulate(QtWidgets.QMainWindow):
 			xy = (23, 40)
 			ax.plot(xy[0], xy[1], "ro-")
 
+			for s in self.__settlement_List:
+				ax.plot(s.getX(), s.getY(), "ro-") #need a getX and getY coordinate methods in settlement class
 			# Annotate the 1st position with a text box ('Test 1')
 			'''
 			offsetbox = TextArea("Test 1", minimumdescent=False)
