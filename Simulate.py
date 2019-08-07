@@ -75,8 +75,8 @@ class Simulate(QtWidgets.QMainWindow):
 		self.__allow_land_rental = False
 		self.__rental_rate = 0.0
 		self.__projected_historical_population = 0
-		self.__household_List= [] #List of all Household objects
-		self.__settlement_List = [] #List of all Settlement objects
+		self.__household_List= np.empty(250, dtype= object) #List of all Household objects
+		self.__settlement_List = np.empty(21, dtype= object) #List of all Settlement objects
 		#self.map = Map() 
 		#WILL ALSO NEED TO CLEAR THE NUMPY ARRAY AND THE VISUALS 
 		
@@ -165,7 +165,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.__min_fission_chance = fission_chance
 		self.__allow_land_rental = allow_rent
 		self.__rental_rate = rent_rate
-#def __init__(self, __settlement_id, __households, __population, __num_households, __grain, __neighbors, __colour, __coordinates)
+
 	def runSimulation(self):
 		arr = np.random.randint(3, size= (41,41)) #making it all yellow from the beginning 
 		cmap = mpl.colors.ListedColormap(['blue','yellow', 'green'])
@@ -695,7 +695,3 @@ if __name__ == "__main__":
 	
 	sys.exit(app.exec_())
 	sys.exit(qapp.exec_())
-
-
-
-
