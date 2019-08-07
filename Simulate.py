@@ -98,10 +98,8 @@ class Simulate(QtWidgets.QMainWindow):
 
 	def setUpHouseholds(self):
 		#MAP
-		c_id =0
 		households_for_settlement = np.empty(self.__starting_household, dtype = object)
 		for i in range(self.__starting_households):
-			c_id +=1
 			h = Household(cd_id)#The constructor for Household needs to be completed
 			self.__household_List[i] = h
 			households_for_settlement[i] = h
