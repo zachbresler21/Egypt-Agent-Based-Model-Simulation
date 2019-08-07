@@ -14,6 +14,12 @@ class Map:
 	def __init__(self):
 		self.__grid = np.random.randint(10, size= (40,40))
 
+	def getPatches(self):
+		return self.__patches
+
+	def getGrid(self):
+		return self.__grid
+
 
 	def createPatches(self):
 		#Use multiprocessing
@@ -110,3 +116,9 @@ class Map:
 
 	def clearAll(self):
 		#clear everything and start new
+		__lorenz_points = 0.0
+		__gini_index_reserve = 0.0
+		__avg_ambition = 0.0
+		__avg_competency = 0.0
+		__grid = np.empty((40,40), dtype= int)
+		__patches = np.empty((40,40), dtype = object)
