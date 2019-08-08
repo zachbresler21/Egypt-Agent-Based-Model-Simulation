@@ -1,4 +1,4 @@
-class Patch(object):
+class Patch():
 
 
 	#Attributes
