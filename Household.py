@@ -1,4 +1,6 @@
-class Household (object):
+from Map import Map
+from Settlement import Settlement
+class Household:
 
 	#Attributes
 	__id = 0
@@ -14,54 +16,58 @@ class Household (object):
 	__rental_rate = 0.0
 	__fields_owned = [] #list of Field objects
 	__fields_harvested = [] #list of Field objects
+	#__belongingSettlement = Settlement()
 
 	"""docstring for Household"""
-	def __init__(self, __id, size ,__tot_grain, __houseColour, __fields_owned, __fields_harvested):
-		super().__init__(__settlement_id, __coordinates)
-		self.__id = Household.__id
-		Household__id += 1
-		self.__size = __size
-		self.__tot_grain = __tot_grain
+	def __init__(self,h_id, settle,size ,tot_grain, houseColour, fields_owned, fields_harvested, ):
+
+		self.__id = h_id
+		self.__belongingSettlement = settle
+		self.__size = size
+		self.__tot_grain = tot_grain
 		self.__ambtion = 0
 		self.__competency = 0
 		self.__knowledge_radius = 0
-		self.__houseColour = __houseColour
+		self.__houseColour = houseColour
 		self.__generationCountdown = 0
 		self.__distance_cost = 0
 		self.__allow_land_rental = False
 		self.__rental_rate = 0
-		self.__fields_owned = __fields_owned
-		self.__fields_harvested = __fields_harvested
+		self.__fields_owned = fields_owned
+		self.__fields_harvested = fields_harvested
 
-	def set_ambtion(self, __ambtion):
-		self.__ambtion = __ambtion
+	def set_ambtion(self, ambtion):
+		pass
 
-	def set_competency(self, __competency):
-		self.__competency = __competency
+	def set_competency(self, competency):
+		self.__competency = competency
 
-	def set_knowledge_radius(self, __knowledge_radius):
-		self.__knowledge_radius = __knowledge_radius
+	def set_knowledge_radius(self, knowledge_radius):
+		self.__knowledge_radius = knowledge_radius
 
-	def set_generationCountdown(self, __generationCountdown):
-		self.__generationCountdown = __generationCountdown
+	def set_generationCountdown(self, generationCountdown):
+		self.__generationCountdown = generationCountdown
 
-	def set_distance_cost(self, __distance_cost):
-		self.__distance_cost = __distance_cost
+	def set_distance_cost(self, distance_cost):
+		self.__distance_cost = distance_cost
 
-	def set_allow_land_rental(self, __allow_land_rental):
-		self.__allow_land_rental = __allow_land_rental
+	def set_allow_land_rental(self, allow_land_rental):
+		self.__allow_land_rental = allow_land_rental
 
-	def set_rental_rate(self, __rental_rate):
-		self.__rental_rate = __rental_rate
+	def set_rental_rate(self, rental_rate):
+		self.__rental_rate = rental_rate
 		
 	def claimFields():
 		#
+		pass
 
 	def completeClaim():
 		#
+		pass
 
 	def rentLand():
 		#
+		pass
 
 	def consumeGrain():
 		self.__tot_grain = self.__tot_grain - (self.__size*160)
@@ -75,36 +81,42 @@ class Household (object):
 
 	def populationShift():
 		#
+		pass
 
 	def removeMember():
-		s = Settlement()
-		self.size = self.size - 1
-		if self.size = 0:
-			s.removeHousehold()
+		self.__size = self.__size - 1
+		if self.__size == 0:
+			self.__belongingSettlement.removeHousehold()
 
 	def addMember():
-		self.size = self.size + 1
+		self.__size = self.__size + 1
 
 	def beginFarm():
 		#
+		pass
 
 	def generationalChangeover():
 		#
+		pass
 
 	def removeFields():
 		#
+		pass
 
 	class Farm (object):
 		"""docstring for ClassName"""
-		def __init__(self, arg):
-			super(ClassName, self).__init__()
-			self.arg = arg
+		#def __init__(self, arg):
+			#super(ClassName, self).__init__()
+			#self.arg = arg
 
 		def determineField(field):
 			#takes a Field object as a parameter
+			pass
 
 		def calcYield(field):
 			#takes a Field object as a parameter
+			pass
 
 		def completeFarm():
 			#WHAT DOES THIS DO
+			pass
