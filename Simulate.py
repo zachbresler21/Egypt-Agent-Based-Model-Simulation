@@ -57,7 +57,8 @@ class Simulate(QtWidgets.QMainWindow):
 	__rental_rate = 0.0
 	__projected_historical_population = 0
 	__household_List= np.empty(250, dtype= Household) #List of all Household objects
-	__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
+	#__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
+	__settlement_List = []
 	coordinates = []
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
@@ -84,13 +85,13 @@ class Simulate(QtWidgets.QMainWindow):
 		self.__projected_historical_population = 0
 		self.__household_List= np.empty(250, dtype= Household) #List of all Household objects
 		self.__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
-		self.map = Map() 
-		#WILL ALSO NEED TO CLEAR THE NUMPY ARRAY AND THE VISUALS 
-		
+		self.map = Map()
+		#WILL ALSO NEED TO CLEAR THE NUMPY ARRAY AND THE VISUALS
+
 	def resetTicks():
 		#resetTicks
 		pass
-	
+
 	def setUpPatches(self):
 		self.map.createPatches()
 
@@ -101,26 +102,27 @@ class Simulate(QtWidgets.QMainWindow):
 		for i in range(self.__starting_settlements):
 			s_id+=1
 			s = Settlement(s_id,(self.__starting_households*self.__starting_household_size), self.__starting_households )
-			self.__settlement_List[i] = s
+			#self.__settlement_List[i] = s
+			self.__settlement_List.append(s)
 			s.setHouseholds(self.setUpHouseholds(s)) #calls method in settlement class to set households in the settlement
 		coordinates = self.map.setUpSettlements(self.__settlement_List)
 
 	def setUpHouseholds(self, settle):
 		#MAP
-		
+
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
 			c_id = self.c_id+1
 			h = Household(c_id, settle, self.__starting_household_size, self.__min_competency, self.__min_ambition)
 			self.__household_List[i] = h
 			households_for_settlement[i] = h
-		
+
 		return households_for_settlement
 
 	def createRiver():
 		#need to set 2 columns of the Map to river
 		#this means setting the Patch objects' attribute isRiver to true
-		#and chanding the colour of the 2 columns to blue 
+		#and chanding the colour of the 2 columns to blue
 		#this method will be called within the run simulation method
 		map.createRiver()
 
@@ -156,7 +158,7 @@ class Simulate(QtWidgets.QMainWindow):
 	def calcTotalPopulation():
 		return self.__starting_settlements * self.__starting_households * self.__starting_household_size
 
-	def saveUserInput(self, time, settlements, households, household_size, grain, comp, amb, gen_var, 
+	def saveUserInput(self, time, settlements, households, household_size, grain, comp, amb, gen_var,
 		knowledge, dist, fallow, pop_growth, allow_fission, fission_chance, allow_rent, rent_rate):
 		self.c_id = 0
 		self.__model_time_span = time
@@ -184,12 +186,12 @@ class Simulate(QtWidgets.QMainWindow):
 		self.establishPopulation()
 
 	def runSimulation(self):
-		arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning 
+		arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning
 		cmap = mpl.colors.ListedColormap(['yellow', 'green'])
 		#bounds = [1,2,3 ]
 		#norm = colors.BoundaryNorm(cmap.N)
 		plt.rcParams['toolbar'] = 'None' #removes the toolbar at the bottom of the GUI
-		
+
 		if 1:
 			fig, ax = plt.subplots(figsize=(15,8.2))
 			ax.imshow(arr, cmap=cmap, interpolation= "None")
@@ -264,7 +266,7 @@ class Simulate(QtWidgets.QMainWindow):
 			ax.add_artist(ab)
 
 			# Annotate the 2nd position with another image
-			fn = get_sample_data("/Users/user/Desktop/CSC3003S/Egypt/Egypt_Simulation/settlement_yellow.png", asfileobj=False)
+			fn = get_sample_data(r'C:\Users\Justin\Desktop\Egypt_Simulation/settlement_yellow.png', asfileobj=False)
 			arr_img = plt.imread(fn, format='png')
 
 			imagebox = OffsetImage(arr_img, zoom=0.6)
@@ -302,7 +304,7 @@ class Simulate(QtWidgets.QMainWindow):
 			plt.yticks([])
 			'''
 			ax.axis('off') #comment out if you want to see the axis
-			
+
 			self.scrollableWindow(fig)
 			#plt.show()
 
@@ -339,7 +341,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.setPalette(p)
 
 		#################### BUTTONS ####################
-		btnSettings = PicButton(QPixmap('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/settings_pic.png'),self)
+		btnSettings = PicButton(QPixmap(r'C:\Users\Justin\Desktop\Egypt_Simulation/settings_pic.png'),self)
 		btnSettings.move(5, 5)
 		btnSettings.resize(50,50)
 		btnSettings.clicked.connect(self.on_click_Settings)
@@ -365,7 +367,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.setWindowTitle("Egypt Simulation")
 
 		self.show()
-		exit(self.qapp.exec_()) 
+		exit(self.qapp.exec_())
 
 
 	######ACTION FOR BUTTONS######
@@ -405,7 +407,7 @@ class Simulate(QtWidgets.QMainWindow):
 			flay = QFormLayout(content_widget)
 			self.tab1.setWidgetResizable(True)
 			self.tab1.setGeometry(0,0, 400, 640)
-			
+
 			self.lblTimeSpan = QLabel("Model Time Span: ",self)
 			self.lblTimeSpan.setGeometry(54,115, 200, 30)
 
@@ -565,7 +567,7 @@ class Simulate(QtWidgets.QMainWindow):
 
 			flay.addRow(self.lblTimeSpan)
 			flay.addRow(self.sliderTS)
-			
+
 			flay.addRow(self.rbtnManSeed)
 
 			flay.addRow(self.lblSettlements)
@@ -643,7 +645,7 @@ class Simulate(QtWidgets.QMainWindow):
 
 		def on_click_SU(self):
 			#get all the user input
-			#	def saveUserInput(self, time, settlements, households, household_size, grain, comp, amb, gen_var, 
+			#	def saveUserInput(self, time, settlements, households, household_size, grain, comp, amb, gen_var,
 		#knowledge, dist, fallow, pop_growth, allow_fission, fission_chance, allow_rent, rent_rate):
 		#,self.rbtnManSeed.isChecked() - NEED TO CHECK IF WE STILL DOING THIS
 			Simulate().saveUserInput(self.sliderTS.value(), self.sliderSett.value(), self.sliderHouse.value(), self.sliderHSize.value(), self.sliderGrain.value(), self.sliderComp.value()/10, \
@@ -674,7 +676,7 @@ class Simulate(QtWidgets.QMainWindow):
 		def changeValueAmbit(self):
 			value = str(self.sliderAmbit.value()/10)
 			self.lblAmbit.setText("Min Ambition: "+value)
-			
+
 		def changeValueComp(self):
 			value = str(self.sliderComp.value()/10)
 			self.lblComp.setText("Min Competency: "+value)
@@ -707,11 +709,11 @@ class Simulate(QtWidgets.QMainWindow):
 			value = str(self.sliderRentalR.value())
 			self.lblRentalR.setText("Rental Rate: "+value+"%")
 
-if __name__ == "__main__":	
+if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	w = Simulate().SetUpWindow()
 	w.show()
-	
+
 
 	#qapp = QtWidgets.QApplication([])
 	s = Simulate()
@@ -722,7 +724,3 @@ if __name__ == "__main__":
 
 	sys.exit(app.exec_())
 	#sys.exit(qapp.exec_())
-
-
-
-

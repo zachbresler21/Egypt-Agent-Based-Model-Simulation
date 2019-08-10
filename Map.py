@@ -13,7 +13,7 @@ class Map:
 	__avg_ambition = 0.0
 	__avg_competency = 0.0
 
-  
+
 	__grid = np.empty((41,41), dtype= int)
 	__patches = np.empty((41,41), dtype = Patch) #list of patches
 
@@ -55,13 +55,12 @@ class Map:
 
 	def isPatchAvailable(self,coords):
 		if not self.__patches[coords[0], coords[1]].isRiver() and not self.__patches[coords[0],coords[1]].isSettlement():
-
 			return True
 		else:
 			return False
 
 
-	def setUpSettlements(self,settlement_list)
+	def setUpSettlements(self,settlement_list):
 		#takes a list of settlements as a parameter
 		counter = 0
 		coords_list = []
@@ -69,6 +68,7 @@ class Map:
 		while(counter < len(settlement_list)):
 			coords = self.generateCoords()
 			if self.isPatchAvailable(coords) == True:
+				s = settlement_list[counter]
 				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
@@ -84,7 +84,7 @@ class Map:
 		#happens every tick
 		pass
 	def claimField(household):
-    
+
 		#takes a Household object as a parameter
 		pass
 
