@@ -5,14 +5,18 @@ from Settlement import Settlement
 from Household import Household
 from Patch import Patch
 
+
 class Map:
 	#Attributes
 	__lorenz_points = 0.0
 	__gini_index_reserve = 0.0
 	__avg_ambition = 0.0
 	__avg_competency = 0.0
+
+  
 	__grid = np.empty((41,41), dtype= int)
 	__patches = np.empty((41,41), dtype = Patch) #list of patches
+
 
 	def __init__(self):
 		self.__grid = np.random.randint(10, size= (40,40))
@@ -51,12 +55,13 @@ class Map:
 
 	def isPatchAvailable(self,coords):
 		if not self.__patches[coords[0], coords[1]].isRiver() and not self.__patches[coords[0],coords[1]].isSettlement():
+
 			return True
 		else:
 			return False
 
 
-	def setUpSettlements(self,settlement_list ):
+	def setUpSettlements(self,settlement_list)
 		#takes a list of settlements as a parameter
 		counter = 0
 		coords_list = []
@@ -74,28 +79,15 @@ class Map:
 		return coords_list
 
 
-		'''
-		coords_list = []
-		for i in range (len(settlement_list)):
-			coords = []
-			r = random.randint(0,41)
-			c = random.randint(0,41)
-			if not self.__patches[r,c].isRiver() AND not self.__patches[r,c].isSettlement():
-				__settlement_list[i].setCoordinates([r,c]) #set coords in settlement object [r,c]
-				coords.append([r,c]) #set of coords for one settlement
-				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
-				#change block to a settlement in the plot (return list of coords to simulate)
-		return coords_list
-		'''
-
-
 	def assignFertilityColour(fertility):
 		#takes a string as a parameter
 		#happens every tick
 		pass
 	def claimField(household):
+    
 		#takes a Household object as a parameter
 		pass
+
 
 	def harvest():
 		#harvest
@@ -112,6 +104,7 @@ class Map:
 	def enlargeSettlement(factor):
 		#takes an int as a parameter
 		pass
+
 
 
 	def reduceSettlement(factor):

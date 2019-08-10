@@ -1,4 +1,6 @@
+
 class Patch:
+
 	#Attributes
 	__patch_id = 0
 	__isSettlement = False

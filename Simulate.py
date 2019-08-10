@@ -56,12 +56,14 @@ class Simulate(QtWidgets.QMainWindow):
 	__allow_land_rental = False
 	__rental_rate = 0.0
 	__projected_historical_population = 0
+
 	__household_List= np.empty(250, dtype= Household) #List of all Household objects
 	__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
 	coordinates = []
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
+
 
 	def clearAll():
 		#clear all method
@@ -82,9 +84,11 @@ class Simulate(QtWidgets.QMainWindow):
 		self.__allow_land_rental = False
 		self.__rental_rate = 0.0
 		self.__projected_historical_population = 0
+
 		self.__household_List= np.empty(250, dtype= Household) #List of all Household objects
 		self.__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
 		self.map = Map() 
+
 		#WILL ALSO NEED TO CLEAR THE NUMPY ARRAY AND THE VISUALS 
 		
 	def resetTicks():
@@ -96,6 +100,7 @@ class Simulate(QtWidgets.QMainWindow):
 
 	def setUpSettlements(self):
 		#MAP
+
 		self.map = Map()
 		s_id=0
 		for i in range(self.__starting_settlements):
@@ -112,6 +117,7 @@ class Simulate(QtWidgets.QMainWindow):
 		for i in range(self.__starting_households):
 			c_id = self.c_id+1
 			h = Household(c_id, settle, self.__starting_household_size, self.__min_competency, self.__min_ambition)
+
 			self.__household_List[i] = h
 			households_for_settlement[i] = h
 		
@@ -159,6 +165,7 @@ class Simulate(QtWidgets.QMainWindow):
 	def saveUserInput(self, time, settlements, households, household_size, grain, comp, amb, gen_var, 
 		knowledge, dist, fallow, pop_growth, allow_fission, fission_chance, allow_rent, rent_rate):
 		self.c_id = 0
+
 		self.__model_time_span = time
 		self.__starting_settlements = settlements
 		self.__starting_households = households
@@ -176,6 +183,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.__allow_land_rental = allow_rent
 		self.__rental_rate = rent_rate
 
+
 		print(self.__model_time_span)
 
 		self.setUpPatches()
@@ -186,6 +194,7 @@ class Simulate(QtWidgets.QMainWindow):
 	def runSimulation(self):
 		arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning 
 		cmap = mpl.colors.ListedColormap(['yellow', 'green'])
+
 		#bounds = [1,2,3 ]
 		#norm = colors.BoundaryNorm(cmap.N)
 		plt.rcParams['toolbar'] = 'None' #removes the toolbar at the bottom of the GUI
@@ -198,6 +207,7 @@ class Simulate(QtWidgets.QMainWindow):
 
 			# Define a 1st position to annotate (display it with a marker)
 			xy = (23, 40)
+
 			#ax.plot(xy[0], xy[1], "ro-")
 
 			for i in self.coordinates:
@@ -207,7 +217,8 @@ class Simulate(QtWidgets.QMainWindow):
 				ax.plot(x,y , "ro-") #need a getX and getY coordinate methods in settlement class
 
 
-
+			for s in self.__settlement_List:
+				ax.plot(s.getX(), s.getY(), "ro-") #need a getX and getY coordinate methods in settlement class
 			# Annotate the 1st position with a text box ('Test 1')
 			'''
 			offsetbox = TextArea("Test 1", minimumdescent=False)
