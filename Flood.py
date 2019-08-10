@@ -1,6 +1,6 @@
-class Flood(object):
+class Flood:
 	#Atributes
-	__fertility_colour = "White"
+	__fertility_colour = "Green"
 
 	"""docstring for Flood"""
 	def __init__(self, arg):
@@ -9,12 +9,16 @@ class Flood(object):
 	
 	def beginFlood():
 		#
+		pass
 
 	def setFertility():
 		#
+		pass
 
 	def assignFertilityColour():
 		#
+		pass
 
 	def fieldsAffected():
 		#returns a list of Field objects
+		pass
