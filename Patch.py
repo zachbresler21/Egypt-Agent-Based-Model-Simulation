@@ -1,6 +1,4 @@
-class Patch(object):
-
-
+class Patch:
 	#Attributes
 	__patch_id = 0
 	__isSettlement = False
@@ -30,7 +28,17 @@ class Patch(object):
 	def changeColour(self, colour):
 		self.__colour = colour
 
+	def isRiver(self):
+		return self.__isRiver
 
+	def isSettlement(self):
+		return self.__isSettlement
+
+	def isField(self):
+		return self.__isField
+
+	def isOwned(self):
+		return self.__isOwned
 
 	class Field:
 
