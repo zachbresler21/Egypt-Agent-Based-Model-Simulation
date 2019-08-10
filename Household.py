@@ -1,12 +1,12 @@
-from Map import Map
-from Settlement import Settlement
+#from Map import Map
+
 class Household:
 
 	#Attributes
 	__id = 0
 	__size = 0
 	__tot_grain = 0
-	__ambtion = 0.0
+	__ambition = 0.0
 	__competency = 0.0
 	__knowledge_radius = 0
 	__colour = ""
@@ -19,7 +19,7 @@ class Household:
 	#__belongingSettlement = Settlement()
 
 	"""docstring for Household"""
-	def __init__(self,h_id, settle,size ,tot_grain, houseColour, fields_owned, fields_harvested, ):
+	def __init__(self,h_id, settle,size ,tot_grain, houseColour, fields_owned, fields_harvested):
 
 		self.__id = h_id
 		self.__belongingSettlement = settle
@@ -35,6 +35,13 @@ class Household:
 		self.__rental_rate = 0
 		self.__fields_owned = fields_owned
 		self.__fields_harvested = fields_harvested
+
+	def __init__(self,h_id, settle,size, competency, ambition):
+		self.__id = h_id
+		self.__belongingSettlement = settle
+		self.__size = size
+		self.__ambtion = ambition
+		self.__competency = competency
 
 	def set_ambtion(self, ambtion):
 		pass
