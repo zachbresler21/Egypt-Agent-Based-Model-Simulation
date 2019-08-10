@@ -1,6 +1,9 @@
 import numpy as np
 from multiprocessing import Pool
 import random
+from Settlement import Settlement
+from Household import Household
+from Patch import Patch
 
 class Map:
 	#Attributes
@@ -8,8 +11,8 @@ class Map:
 	__gini_index_reserve = 0.0
 	__avg_ambition = 0.0
 	__avg_competency = 0.0
-	__grid = np.empty((40,40), dtype= int)
-	__patches = np.empty((40,40), dtype = object) #list of patches
+	__grid = np.empty((41,41), dtype= int)
+	__patches = np.empty((41,41), dtype = Patch) #list of patches
 
 	def __init__(self):
 		self.__grid = np.random.randint(10, size= (40,40))
@@ -24,8 +27,8 @@ class Map:
 	def createPatches(self):
 		#Use multiprocessing
 		count = 1
-		for r in range(40):
-			for c in range(40):
+		for r in range(41):
+			for c in range(41):
 				self.__patches[r,c] = Patch(count, True) #this should insert a Patch object - I made every Patch a Field
 				count += 1
 		return self.__patches
@@ -40,8 +43,10 @@ class Map:
 			self.__patches[r,1].toggleRiver()
 
 	def generateCoords(self):
-		r = random.randint(0,41)
-		c = random.randint(0,41)
+		r = random.randint(0,40)
+		print(r)
+		c = random.randint(0,40)
+		print(c)
 		return [r,c]
 
 	def isPatchAvailable(self,coords):
@@ -51,20 +56,20 @@ class Map:
 			return False
 
 
-	def setUpSettlements(self,settlement_list):
+	def setUpSettlements(self,settlement_list ):
 		#takes a list of settlements as a parameter
 		counter = 0
 		coords_list = []
 
 		while(counter < len(settlement_list)):
-			coords = generateCoords()
+			coords = self.generateCoords()
 			if self.isPatchAvailable(coords) == True:
-				__settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
+				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
 				counter += 1
 			else:
-				coords = generateCoords()
+				coords = self.generateCoords()
 
 		return coords_list
 
