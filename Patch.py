@@ -15,6 +15,11 @@ class Patch:
 		if self.__isField == True:
 			self.inner = self.Field(patch_id, 0.8, 0)
 
+	def findCoordinates(self):
+	    r = math.floor(self.__patch_id/41)
+	    c = self.__patch_id % 41
+		return [r,c]
+
 	def toggleSettlement(self):
 		self.__isSettlement =  not self.__isSettlement
 
