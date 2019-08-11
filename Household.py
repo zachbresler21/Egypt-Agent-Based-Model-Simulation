@@ -1,4 +1,7 @@
-from Map import Map
+#from Map import Map
+from Patch import Patch
+import Settlement
+import Map
 import random
 
 class Household:
@@ -17,8 +20,8 @@ class Household:
 	__rental_rate = 0.0
 	__fields_owned = [] #list of Field objects
 	__fields_harvested = [] #list of Field objects
-	__belongingSettlement = Settlement()
-	map = Map()
+	__belongingSettlement = Settlement
+	map = Map
 
 
 	"""docstring for Household"""
