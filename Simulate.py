@@ -39,6 +39,7 @@ class PicButton(QAbstractButton):
 class Simulate(QtWidgets.QMainWindow):
 	#Attributes
 	global c_id
+	fig, ax = plt.subplots(figsize=(15,8.2))
 	__model_time_span = 0
 	__starting_settlements = 0
 	__starting_households = 0
@@ -60,6 +61,7 @@ class Simulate(QtWidgets.QMainWindow):
 	#__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
 	__settlement_List = []
 	coordinates = []
+	qapp = QtWidgets.QApplication([])
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
@@ -105,11 +107,10 @@ class Simulate(QtWidgets.QMainWindow):
 			#self.__settlement_List[i] = s
 			self.__settlement_List.append(s)
 			s.setHouseholds(self.setUpHouseholds(s)) #calls method in settlement class to set households in the settlement
-		coordinates = self.map.setUpSettlements(self.__settlement_List)
+		self.coordinates = self.map.setUpSettlements(self.__settlement_List)
 
 	def setUpHouseholds(self, settle):
 		#MAP
-
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
 			c_id = self.c_id+1
@@ -119,12 +120,12 @@ class Simulate(QtWidgets.QMainWindow):
 
 		return households_for_settlement
 
-	def createRiver():
+	def createRiver(self):
 		#need to set 2 columns of the Map to river
 		#this means setting the Patch objects' attribute isRiver to true
 		#and chanding the colour of the 2 columns to blue
 		#this method will be called within the run simulation method
-		map.createRiver()
+		self.map.createRiver()
 
 	def establishPopulation(self):
 		return self.__starting_settlements * self.__starting_households * self.__starting_household_size
@@ -178,42 +179,41 @@ class Simulate(QtWidgets.QMainWindow):
 		self.__allow_land_rental = allow_rent
 		self.__rental_rate = rent_rate
 
-		print(self.__model_time_span)
-
 		self.setUpPatches()
 		self.setUpSettlements()
 		self.createRiver()
 		self.establishPopulation()
 
+		for i in self.coordinates:
+			self.ax.plot(i[0], i[1], marker="p") 
+
+		self.runSimulation()
+
+
 	def runSimulation(self):
-		arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning
-		cmap = mpl.colors.ListedColormap(['yellow', 'green'])
-		#bounds = [1,2,3 ]
-		#norm = colors.BoundaryNorm(cmap.N)
-		plt.rcParams['toolbar'] = 'None' #removes the toolbar at the bottom of the GUI
+		#arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning
+
+		cmap = mpl.colors.ListedColormap(['blue', 'green'])
+		#bounds = [1,2]
+		#norm = colors.BoundaryNorm(bounds,cmap.N)
+		plt.rcParams['toolbar'] = 'None' #removes the toolbar
+
 
 		if 1:
-			fig, ax = plt.subplots(figsize=(15,8.2))
-			ax.imshow(arr, cmap=cmap, interpolation= "None")
+			#fig, ax = plt.subplots(figsize=(15,8.2))
+			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+			np.set_printoptions(threshold=sys.maxsize)
+			print(self.map.getGrid())
 
 			#plt.subplots_adjust(left = 0.4)#adds space to the right of the plot
 
 			# Define a 1st position to annotate (display it with a marker)
 			xy = (23, 40)
 			#ax.plot(xy[0], xy[1], "ro-")
-
-			for i in self.coordinates:
-				x = coordinates[i][0]
-				y = coordinates[i][1]
-
-				ax.plot(x,y , "ro-") #need a getX and getY coordinate methods in settlement class
-
-
-
+			
 			# Annotate the 1st position with a text box ('Test 1')
 			'''
 			offsetbox = TextArea("Test 1", minimumdescent=False)
-
 			ab = AnnotationBbox(offsetbox, xy,
 								xybox=(-60, 40),
 								xycoords='data',
@@ -224,7 +224,6 @@ class Simulate(QtWidgets.QMainWindow):
 			# Annotate the 1st position with another text box ('Test')
 			'''
 			offsetbox = TextArea("Test", minimumdescent=False)
-
 			ab = AnnotationBbox(offsetbox, xy,
 								xybox=(1.02, xy[1]),
 								xycoords='data',
@@ -232,7 +231,7 @@ class Simulate(QtWidgets.QMainWindow):
 								box_alignment=(0., 0.5),
 								arrowprops=dict(arrowstyle="->"))
 			ax.add_artist(ab)
-			'''
+			
 
 			# Define a 2nd position to annotate (don't display with a marker this time)
 			xy = [10, 4]
@@ -249,12 +248,12 @@ class Simulate(QtWidgets.QMainWindow):
 								box_alignment=(0., 0.5),
 								arrowprops=dict(arrowstyle="->"))
 
-			ax.add_artist(ab)
+			self.ax.add_artist(ab)
 
 			# Annotate the 2nd position with an image (a generated array of pixels)
 			arr = np.arange(1600).reshape((40, 40))
 			im = OffsetImage(arr, zoom=1)
-			im.image.axes = ax
+			im.image.axes = self.ax
 
 			ab = AnnotationBbox(im, xy,
 								xybox=(-40., 50.),
@@ -263,14 +262,14 @@ class Simulate(QtWidgets.QMainWindow):
 								pad=0.3,
 								arrowprops=dict(arrowstyle="->"))
 
-			ax.add_artist(ab)
+			self.ax.add_artist(ab)
 
 			# Annotate the 2nd position with another image
-			fn = get_sample_data(r'C:\Users\Justin\Desktop\Egypt_Simulation/settlement_yellow.png', asfileobj=False)
+			fn = get_sample_data('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/settlement_yellow.png', asfileobj=False)
 			arr_img = plt.imread(fn, format='png')
 
 			imagebox = OffsetImage(arr_img, zoom=0.6)
-			imagebox.image.axes = ax
+			imagebox.image.axes = self.ax
 
 			ab = AnnotationBbox(imagebox, xy,
 								xybox=(120., -80.),
@@ -281,9 +280,9 @@ class Simulate(QtWidgets.QMainWindow):
 									arrowstyle="->",
 									connectionstyle="angle,angleA=0,angleB=90,rad=3")
 								)
-
-			ax.add_artist(ab)
-			ax.grid(which='major', axis='both', linestyle='-', color='0', linewidth=0)
+			self.ax.add_artist(ab)
+			self.ax.grid(which='major', axis='both', linestyle='-', color='0', linewidth=0)
+			'''
 
 			#UNCOMMENT BELOW IF YOU WANT TO INVERT THE DIMENSIONS (EITHER 0 TO 40 OR 40 TO 0)
 			#ax.set_xlim(0, 42)
@@ -291,9 +290,9 @@ class Simulate(QtWidgets.QMainWindow):
 
 			major_ticks = np.arange(-1, 42, 1)
 			minor_ticks = np.arange(0, 42, 1)
-			ax.set_xticks(major_ticks)
+			self.ax.set_xticks(major_ticks)
 			#ax.set_xticks(minor_ticks, minor=True)
-			ax.set_yticks(major_ticks)
+			self.ax.set_yticks(major_ticks)
 			#ax.set_yticks(minor_ticks, minor=True)
 
 			#REMOVE THE AXES LABELS AND TICKS
@@ -303,10 +302,10 @@ class Simulate(QtWidgets.QMainWindow):
 			plt.xticks([])
 			plt.yticks([])
 			'''
-			ax.axis('off') #comment out if you want to see the axis
+			self.ax.axis('off') #comment out if you want to see the axis
 
-			self.scrollableWindow(fig)
-			#plt.show()
+			#self.QWindow(self.fig)
+			plt.show()
 
 	def main(self):
 		#Main METHOD
@@ -315,8 +314,8 @@ class Simulate(QtWidgets.QMainWindow):
 		#with threadLock:
 		#	global_counter += 1
 
-	def scrollableWindow(self, fig):
-		self.qapp = QtWidgets.QApplication([])
+	def QWindow(self, fig):
+		#self.qapp = QtWidgets.QApplication([])
 
 		QtWidgets.QMainWindow.__init__(self)
 		self.widget = QtWidgets.QWidget()
@@ -341,7 +340,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.setPalette(p)
 
 		#################### BUTTONS ####################
-		btnSettings = PicButton(QPixmap(r'C:\Users\Justin\Desktop\Egypt_Simulation/settings_pic.png'),self)
+		btnSettings = PicButton(QPixmap('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/settings_pic.png'),self)
 		btnSettings.move(5, 5)
 		btnSettings.resize(50,50)
 		btnSettings.clicked.connect(self.on_click_Settings)
@@ -378,7 +377,26 @@ class Simulate(QtWidgets.QMainWindow):
 		print("PAUSE ALL THREADS INCREMENTING THE YEARS/TICKS AND ALL OTHER DATA ALTERING THINGS")
 
 	def on_click_Start(self):
-		print("THIS WILL JUST CALL THE RUN SIMULATION METHOD AS WELL AS START ANY RELAVENT THREADS")
+		import threading
+		import time
+
+		lock = threading.Lock()
+		count = 0
+
+		def a():
+			global count
+			while(count<10):
+				lock.acquire()
+				try:
+					count += 1
+					
+				finally:
+					time.sleep(1)
+					lock.release()
+
+		t = threading.Thread(name='a', target=a)
+
+		t.start()
 
 	def on_click_Settings(self):
 		#app = QApplication(sys.argv)
@@ -386,7 +404,7 @@ class Simulate(QtWidgets.QMainWindow):
 		#w.show()
 		pass
 		#sys.exit(app.exec_())
-	##############################
+##############################################################################################################################################################################
 
 	class SetUpWindow(QWidget):
 
@@ -397,7 +415,6 @@ class Simulate(QtWidgets.QMainWindow):
 			self.tabs = QTabWidget()
 			self.tab1 = QWidget()
 			self.tab2 = QScrollArea()
-
 			self.tabs.addTab(self.tab1, 'Tab 1')
 			self.tabs.addTab(self.tab2, 'Tab 2')
 			'''
@@ -614,7 +631,7 @@ class Simulate(QtWidgets.QMainWindow):
 			flay.addRow(self.sliderRentalR)
 
 			self.btnSU = QPushButton('Set Up', self)
-			self.btnSU.setToolTip('To set up/restart the simulation')
+			self.btnSU.setToolTip('To set up the simulation')
 			self.btnSU.move(306,646)
 			self.btnSU.clicked.connect(self.on_click_SU)
 
@@ -716,9 +733,9 @@ if __name__ == "__main__":
 
 
 	#qapp = QtWidgets.QApplication([])
-	s = Simulate()
-	s.main()
-	s.runSimulation()
+	#s = Simulate()
+	#s.main()
+	#s.runSimulation()
 	w.activateWindow()
 
 
