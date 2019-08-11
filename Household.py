@@ -73,7 +73,7 @@ class Household:
 		#
 		patches = self.map.getPatches()
 		claim_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if((claim_chance < self.__ambition) and (self.__size > len(self.__fields_owned) or len(self.__fields_owned <= 1)): #checks if household will be trying to claim land
+		if(claim_chance < self.__ambition) and (self.__size > len(self.__fields_owned) or len(self.__fields_owned <= 1)): #checks if household will be trying to claim land
 
 			current_grain = self.__tot_grain
 			claim_field = Patch().Field()
