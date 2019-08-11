@@ -41,7 +41,7 @@ class Household:
 		self.__rental_rate = 0
 		self.__fields_owned = fields_owned
 		self.__fields_harvested = fields_harvested
-		self.map = Map()
+		self.map = Map
 
 	def __init__(self,h_id, settle,size, competency, ambition):
 		self.__id = h_id
@@ -49,7 +49,7 @@ class Household:
 		self.__size = size
 		self.__ambtion = ambition
 		self.__competency = competency
-		self.map = Map()
+		self.map = Map
 
 	def set_ambtion(self, ambtion):
 		pass
