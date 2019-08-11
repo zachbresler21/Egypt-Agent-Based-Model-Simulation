@@ -82,8 +82,8 @@ class Household:
 			claim_field = Patch().Field()
 			best_fertility = 0
 
-			r = np.arange(0, 10)
-			c = np.arange(0, 10)
+			r = np.arange(0, 41)
+			c = np.arange(0, 41)
 
 			cr = self.__belongingSettlement
 			cc = self.__belongingSettlement
