@@ -39,6 +39,9 @@ class Map:
 		return self.__patches
 		#populate list of patches
 
+	def getPatches(self):
+		return self.__patches
+
 
 	def createRiver(self):
 		#change patches isRiver true
