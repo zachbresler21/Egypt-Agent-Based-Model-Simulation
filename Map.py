@@ -19,7 +19,8 @@ class Map:
 
 
 	def __init__(self):
-		self.__grid = np.random.randint(10, size= (40,40))
+		#self.__grid = np.random.randint(10, size= (41,41))
+		self.__grid = np.ones((41,41))
 
 	def getPatches(self):
 		return self.__patches
@@ -42,19 +43,19 @@ class Map:
 	def createRiver(self):
 		#change patches isRiver true
 		#making first 2 columns river
-		for r in range (len(__patches)):
+		for r in range (len(self.__patches)):
 			self.__patches[r,0].toggleRiver()
 			self.__patches[r,1].toggleRiver()
+			self.__grid[r,0] = 0
+			self.__grid[r,1] = 0
 
 	def generateCoords(self):
 		r = random.randint(0,40)
-		print(r)
 		c = random.randint(0,40)
-		print(c)
 		return [r,c]
 
 	def isPatchAvailable(self,coords):
-		if not self.__patches[coords[0], coords[1]].isRiver() and not self.__patches[coords[0],coords[1]].isSettlement():
+		if self.__patches[coords[0], coords[1]].isRiver() == False and self.__patches[coords[0],coords[1]].isSettlement() == False:
 			return True
 		else:
 			return False
@@ -68,14 +69,12 @@ class Map:
 		while(counter < len(settlement_list)):
 			coords = self.generateCoords()
 			if self.isPatchAvailable(coords) == True:
-				s = settlement_list[counter]
 				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
 				counter += 1
 			else:
 				coords = self.generateCoords()
-
 		return coords_list
 
 
@@ -104,8 +103,6 @@ class Map:
 	def enlargeSettlement(factor):
 		#takes an int as a parameter
 		pass
-
-
 
 	def reduceSettlement(factor):
 		##takes an int as a parameter
