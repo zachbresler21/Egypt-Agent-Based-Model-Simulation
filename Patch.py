@@ -46,7 +46,7 @@ class Patch:
 
 		#Attributes
 		__field_id = 0
-		__fetility = 0
+		__fertility = 0
 		__avg_fertility = 0
 		__harvested = False
 		__years_fallow = 0
@@ -56,8 +56,11 @@ class Patch:
 			self.__fetility = fertility
 			self.__years_fallow = years_fallow
 
+		def getFertility(self):
+			return self.__fertility
+
 		def toggleHarvested(self):
-			self.__harvested = not self.__harvested;
+			self.__harvested = not self.__harvested
 
 		def fieldChangeover():
 			return 0
