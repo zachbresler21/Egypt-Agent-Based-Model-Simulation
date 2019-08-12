@@ -1,8 +1,5 @@
 import numpy as np
-from multiprocessing import Pool
 import random
-from Settlement import Settlement
-from Household import Household
 from Patch import Patch
 
 
