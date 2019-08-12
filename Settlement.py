@@ -26,6 +26,9 @@ class Settlement:
 		self.__population = __population
 		self.__num_households = __num_households
 
+	def getCoordinates(self):
+		return self.__coordinates
+
 	def checkSettlementPopulation(self):
 		#Size 1 - small ; 2 - medium ; 3 large ; 4 XL
 		#Same as setSize() method that used to be in this class
@@ -52,6 +55,9 @@ class Settlement:
 		#takes in either a list of household objects or just one household object
 		#adds/removes a household for populationShift() OR fission()
 		#self.__households.append(household)
+
+	def getHouseholdList(self):
+		return self.__household_List
 
 	def setSize():
 		pass
