@@ -1,8 +1,9 @@
-#from Map import Map
 from Patch import Patch
-import Settlement
-import Map
+#import Settlement
+from Map import Map
 import random
+import numpy as np
+
 
 class Household:
 
@@ -20,15 +21,15 @@ class Household:
 	__rental_rate = 0.0
 	__fields_owned = [] #list of Field objects
 	__fields_harvested = [] #list of Field objects
-	__belongingSettlement = Settlement
-	map = Map
+	#__belongingSettlement = Settlement
+	map = Map()
 
 
 	"""docstring for Household"""
 	def __init__(self,h_id, settle,size ,tot_grain, houseColour, fields_owned, fields_harvested):
 
 		self.__id = h_id
-		self.__belongingSettlement = settle
+		#self.__belongingSettlement = settle
 		self.__size = size
 		self.__tot_grain = tot_grain
 		self.__ambition = 0
@@ -41,15 +42,16 @@ class Household:
 		self.__rental_rate = 0
 		self.__fields_owned = fields_owned
 		self.__fields_harvested = fields_harvested
-		self.map = Map
+		self.map = Map()
 
-	def __init__(self,h_id, settle,size, competency, ambition):
+	def __init__(self,h_id, settle,size, competency, ambition, know_radius):
 		self.__id = h_id
-		self.__belongingSettlement = settle
+		#self.__belongingSettlement = settle
+		self.__knowledge_radius = know_radius
 		self.__size = size
 		self.__ambtion = ambition
 		self.__competency = competency
-		self.map = Map
+		self.map = Map()
 
 	def set_ambtion(self, ambtion):
 		pass
@@ -72,41 +74,43 @@ class Household:
 	def set_rental_rate(self, rental_rate):
 		self.__rental_rate = rental_rate
 
-	def claimFields(self):
+	def claimFields(self, row, col):
 		#
 		patches = self.map.getPatches()
 		claim_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if(claim_chance < self.__ambition) and (self.__size > len(self.__fields_owned) or len(self.__fields_owned <= 1)): #checks if household will be trying to claim land
+		if (self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land ADD LATER(claim_chance < self.__ambition) and
 
 			current_grain = self.__tot_grain
-			claim_field = Patch().Field()
+			claim_field = Patch(34567, True)
 			best_fertility = 0
 
 			r = np.arange(0, 41)
 			c = np.arange(0, 41)
 
-			cr = self.__belongingSettlement
-			cc = self.__belongingSettlement
-			r = self.__knowledge_radius
+			cr = row
+			cc = col
+			radius = self.__knowledge_radius
 
 			#determines indices in the circle with knowledge radius
-			mask = (r[np.newaxis,:]-cr)**2 + (c[:,np.newaxis]-cc)**2 < r**2
-
+			mask = (r[np.newaxis,:]-cr)**2 + (c[:,np.newaxis]-cc)**2 < radius**2
+			
 			for patch in patches[mask]: #traverses through array of patches in the circle
-				if patch.isRiver():
-					fertility = patch.Field().getFertility()
+				if patch.isField()==True and patch.isOwned() == False:
+					#fertility = patch.Field().getFertility()
+					fertility = 5
 					if fertility > best_fertility: #finds field with best fertility
 						best_fertility = fertility
 						claim_field = patch
 
-			completeClaim(claim_field)
+			x = self.completeClaim(claim_field)
+			print(x)
+			return x
 
 
 	def completeClaim(self, claim_field):
-
-		if(claim_field.isOwned() == False):
-			claim_field.toggleOwned()
-			self.__fields_owned.append(claim_field.Field())
+		claim_field.toggleOwned()
+		self.__fields_owned.append(claim_field)
+		return claim_field.findCoordinates()
 
 	def rentLand():
 		#
@@ -125,12 +129,12 @@ class Household:
 	def populationShift():
 		#
 		pass
-
+	'''
 	def removeMember():
 		self.__size = self.__size - 1
 		if self.__size == 0:
 			self.__belongingSettlement.removeHousehold()
-
+	'''
 	def addMember():
 		self.__size = self.__size + 1
 

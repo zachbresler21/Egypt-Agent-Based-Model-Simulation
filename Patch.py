@@ -1,4 +1,4 @@
-
+import math
 class Patch:
 
 	#Attributes
@@ -15,9 +15,12 @@ class Patch:
 		if self.__isField == True:
 			self.inner = self.Field(patch_id, 0.8, 0)
 
+	def getID(self):
+		self.__patch_id
+
 	def findCoordinates(self):
-	    r = math.floor(self.__patch_id/41)
-	    c = self.__patch_id % 41
+		r = math.floor(self.__patch_id/41)
+		c = self.__patch_id % 41
 		return [r,c]
 
 	def toggleSettlement(self):
@@ -47,6 +50,10 @@ class Patch:
 	def isOwned(self):
 		return self.__isOwned
 
+	def getFieldFertility(self):
+		pass
+
+
 	class Field:
 
 		#Attributes
@@ -58,7 +65,7 @@ class Patch:
 
 		def __init__(self, field_id, fertility, years_fallow):
 			self.__field_id = field_id
-			self.__fetility = fertility
+			self.__fetility = 5
 			self.__years_fallow = years_fallow
 
 		def getFertility(self):

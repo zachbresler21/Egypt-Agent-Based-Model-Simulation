@@ -61,7 +61,7 @@ class Simulate(QtWidgets.QMainWindow):
 	#__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
 	__settlement_List = []
 	coordinates = []
-	qapp = QtWidgets.QApplication([])
+	#qapp = QtWidgets.QApplication([])
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
@@ -114,7 +114,7 @@ class Simulate(QtWidgets.QMainWindow):
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
 			c_id = self.c_id+1
-			h = Household(c_id, settle, self.__starting_household_size, self.__min_competency, self.__min_ambition)
+			h = Household(c_id, settle, self.__starting_household_size, self.__min_competency, self.__min_ambition, self.__knowledge_radius)
 			self.__household_List[i] = h
 			households_for_settlement[i] = h
 
@@ -202,15 +202,41 @@ class Simulate(QtWidgets.QMainWindow):
 		if 1:
 			#fig, ax = plt.subplots(figsize=(15,8.2))
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-			np.set_printoptions(threshold=sys.maxsize)
-			print(self.map.getGrid())
+			#np.set_printoptions(threshold=sys.maxsize)
+			#print(self.map.getGrid())
 
 			#plt.subplots_adjust(left = 0.4)#adds space to the right of the plot
 
 			# Define a 1st position to annotate (display it with a marker)
 			xy = (23, 40)
 			#ax.plot(xy[0], xy[1], "ro-")
-			
+			import threading
+			import time
+
+			lock = threading.Lock()
+			farmCoordinates = []
+			def a():
+				count =0
+				while(count<self.__model_time_span):
+					lock.acquire()
+					try:
+						count += 1
+						print(count)
+						for i in range(len(self.__settlement_List)):
+							for j in range(len(self.__settlement_List[i].getHouseholdList())):
+								print(self.__settlement_List[i].getHouseholdList()[j])
+								farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
+								self.ax.plot(farmCoordinates[0][0], farmCoordinates[0][1], '-ro')
+
+					finally:
+						time.sleep(0.1)
+						lock.release()
+
+			t = threading.Thread(name='a', target=a)
+
+			t.start()
+			print("check")
+			print(farmCoordinates)
 			# Annotate the 1st position with a text box ('Test 1')
 			'''
 			offsetbox = TextArea("Test 1", minimumdescent=False)
@@ -232,45 +258,35 @@ class Simulate(QtWidgets.QMainWindow):
 								arrowprops=dict(arrowstyle="->"))
 			ax.add_artist(ab)
 			
-
 			# Define a 2nd position to annotate (don't display with a marker this time)
 			xy = [10, 4]
-
 			# Annotate the 2nd position with a circle patch
 			da = DrawingArea(20, 20, 0, 0)
 			p = Circle((10, 10), 10)
 			da.add_artist(p)
-
 			ab = AnnotationBbox(da, xy,
 								xybox=(1.02, xy[1]),
 								xycoords='data',
 								boxcoords=("axes fraction", "data"),
 								box_alignment=(0., 0.5),
 								arrowprops=dict(arrowstyle="->"))
-
 			self.ax.add_artist(ab)
-
 			# Annotate the 2nd position with an image (a generated array of pixels)
 			arr = np.arange(1600).reshape((40, 40))
 			im = OffsetImage(arr, zoom=1)
 			im.image.axes = self.ax
-
 			ab = AnnotationBbox(im, xy,
 								xybox=(-40., 50.),
 								xycoords='data',
 								boxcoords="offset points",
 								pad=0.3,
 								arrowprops=dict(arrowstyle="->"))
-
 			self.ax.add_artist(ab)
-
 			# Annotate the 2nd position with another image
 			fn = get_sample_data('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/settlement_yellow.png', asfileobj=False)
 			arr_img = plt.imread(fn, format='png')
-
 			imagebox = OffsetImage(arr_img, zoom=0.6)
 			imagebox.image.axes = self.ax
-
 			ab = AnnotationBbox(imagebox, xy,
 								xybox=(120., -80.),
 								xycoords='data',
@@ -377,26 +393,7 @@ class Simulate(QtWidgets.QMainWindow):
 		print("PAUSE ALL THREADS INCREMENTING THE YEARS/TICKS AND ALL OTHER DATA ALTERING THINGS")
 
 	def on_click_Start(self):
-		import threading
-		import time
-
-		lock = threading.Lock()
-		count = 0
-
-		def a():
-			global count
-			while(count<10):
-				lock.acquire()
-				try:
-					count += 1
-					
-				finally:
-					time.sleep(1)
-					lock.release()
-
-		t = threading.Thread(name='a', target=a)
-
-		t.start()
+		pass
 
 	def on_click_Settings(self):
 		#app = QApplication(sys.argv)
