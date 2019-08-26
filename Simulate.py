@@ -193,7 +193,7 @@ class Simulate(QtWidgets.QMainWindow):
 	def runSimulation(self):
 		#arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning
 
-		cmap = mpl.colors.ListedColormap(['blue', 'green'])
+		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
 		#bounds = [1,2]
 		#norm = colors.BoundaryNorm(bounds,cmap.N)
 		plt.rcParams['toolbar'] = 'None' #removes the toolbar
@@ -221,12 +221,15 @@ class Simulate(QtWidgets.QMainWindow):
 					lock.acquire()
 					try:
 						count += 1
-						print(count)
+						#print(count)
 						for i in range(len(self.__settlement_List)):
 							for j in range(len(self.__settlement_List[i].getHouseholdList())):
-								print(self.__settlement_List[i].getHouseholdList()[j])
-								farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
-								self.ax.plot(farmCoordinates[0][0], farmCoordinates[0][1], '-ro')
+								#print(self.__settlement_List[i].getHouseholdList()[j])
+								#farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
+								#self.ax.plot(farmCoordinates[][0], farmCoordinates[k][1], '-ro')
+								x = self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1])
+								print(x[0],x[1])
+								self.ax.plot(x[0], x[1], '-rs')
 
 					finally:
 						time.sleep(0.1)
@@ -235,8 +238,7 @@ class Simulate(QtWidgets.QMainWindow):
 			t = threading.Thread(name='a', target=a)
 
 			t.start()
-			print("check")
-			print(farmCoordinates)
+			
 			# Annotate the 1st position with a text box ('Test 1')
 			'''
 			offsetbox = TextArea("Test 1", minimumdescent=False)
@@ -320,8 +322,8 @@ class Simulate(QtWidgets.QMainWindow):
 			'''
 			self.ax.axis('off') #comment out if you want to see the axis
 
-			#self.QWindow(self.fig)
-			plt.show()
+			self.QWindow(self.fig)
+			#plt.show()
 
 	def main(self):
 		#Main METHOD
@@ -329,7 +331,7 @@ class Simulate(QtWidgets.QMainWindow):
 		#threadLock = threading.Lock()
 		#with threadLock:
 		#	global_counter += 1
-
+	
 	def QWindow(self, fig):
 		#self.qapp = QtWidgets.QApplication([])
 
@@ -382,7 +384,7 @@ class Simulate(QtWidgets.QMainWindow):
 		self.setWindowTitle("Egypt Simulation")
 
 		self.show()
-		exit(self.qapp.exec_())
+		#exit(self.qapp.exec_())
 
 
 	######ACTION FOR BUTTONS######
@@ -402,7 +404,7 @@ class Simulate(QtWidgets.QMainWindow):
 		pass
 		#sys.exit(app.exec_())
 ##############################################################################################################################################################################
-
+	
 	class SetUpWindow(QWidget):
 
 		def __init__(self, parent=None):
@@ -728,13 +730,10 @@ if __name__ == "__main__":
 	w = Simulate().SetUpWindow()
 	w.show()
 
-
 	#qapp = QtWidgets.QApplication([])
 	#s = Simulate()
 	#s.main()
 	#s.runSimulation()
-	w.activateWindow()
-
 
 	sys.exit(app.exec_())
 	#sys.exit(qapp.exec_())
