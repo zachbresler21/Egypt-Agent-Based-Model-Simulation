@@ -74,8 +74,12 @@ class Patch:
 		def toggleHarvested(self):
 			self.__harvested = not self.__harvested
 
-		def fieldChangeover():
-			return 0
+		def fieldChangeover(self):
+			if(self.__harvested == True):
+				self.__years_fallow = 0
+			else:
+				self.__years_fallow += 1
+			return self.__years_fallow
 
 		def updateHousehold():
 			return 0
