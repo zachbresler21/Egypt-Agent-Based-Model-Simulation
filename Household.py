@@ -21,15 +21,17 @@ class Household:
 	__rental_rate = 0.0
 	__fields_owned = [] #list of Field objects
 	__fields_harvested = [] #list of Field objects
+	__coordinates = []
 	#__belongingSettlement = Settlement
 	map = Map()
 
 
 	"""docstring for Household"""
-	def __init__(self,h_id, settle,size ,tot_grain, houseColour, fields_owned, fields_harvested):
+	def __init__(self,h_id, coords,size ,tot_grain, houseColour, fields_owned, fields_harvested):
 
 		self.__id = h_id
 		#self.__belongingSettlement = settle
+		self.__coordinates = coords
 		self.__size = size
 		self.__tot_grain = tot_grain
 		self.__ambition = 0
