@@ -32,8 +32,8 @@ class ScrollFrame(tk.Frame):
 		super().__init__(parent) # create a frame (self)
 
 		self.canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")          #place canvas on self
-		self.viewPort = tk.Frame(self.canvas, width=200, height=400 ,background="#ffffff")                    #place a frame on the canvas, this frame will hold the child widgets 
-		self.vsb = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview) #place a scrollbar on self 
+		self.viewPort = tk.Frame(self.canvas, width=200, height=400 ,background="#ffffff")                    #place a frame on the canvas, this frame will hold the child widgets
+		self.vsb = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview) #place a scrollbar on self
 		self.canvas.configure(yscrollcommand=self.vsb.set)                          #attach scrollbar action to scroll of canvas
 
 		self.vsb.pack(side="right", fill="y")                                       #pack scrollbar to right of self
@@ -43,7 +43,7 @@ class ScrollFrame(tk.Frame):
 
 		self.viewPort.bind("<Configure>", self.onFrameConfigure)                       #bind an event whenever the size of the viewPort frame changes.
 
-	def onFrameConfigure(self, event):                                              
+	def onFrameConfigure(self, event):
 		'''Reset the scroll region to encompass the inner frame'''
 		self.canvas.configure(scrollregion=self.canvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
 
@@ -85,10 +85,10 @@ class Simulate(tk.Frame):
 	map = Map()
 
 	def __init__(self, root):
-		
+
 		tk.Frame.__init__(self, root)
 		self.scrollFrame = ScrollFrame(self) # add a new scrollable frame.
-		
+
 		# **********************************
 		# 			User Inputs
 		# **********************************
@@ -146,14 +146,14 @@ class Simulate(tk.Frame):
 		rr = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Rental Rate %:", length = 180)
 		rr.pack()
 		# **********************************
-		
 
-		# Now add some controls to the scrollframe. 
+
+		# Now add some controls to the scrollframe.
 		# NOTE: the child controls are added to the view port (scrollFrame.viewPort, NOT scrollframe itself)
 		self.scrollFrame.pack(side=tk.LEFT, fill="both", expand=True)
 		# when packing the scrollframe, we pack scrollFrame itself (NOT the viewPort)
-		
-		
+
+
 		'''
 		def on_key_press(event):
 			print("you pressed {}".format(event.key))
@@ -206,15 +206,15 @@ class Simulate(tk.Frame):
 		quit = tk.Button(master=root, text="Quit", command=_quit)
 		quit.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
-		
+
 		self.scrollFrame.pack(side="top", fill="both", expand=True)
-		
+
 	def printMsg(self, msg):
 		print(msg)
 
 	def runSimulation(self):
 		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-		
+
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		for i in self.coordinates:
@@ -224,7 +224,7 @@ class Simulate(tk.Frame):
 		#t = np.arange(0, 3, .01)
 		#
 		#fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
-		
+
 		#fig.add_subplot(111).plot(t, 20)
 
 		self.getData()
@@ -241,12 +241,12 @@ class Simulate(tk.Frame):
 
 	def runSimulation(self):
 		#arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning
-		
+
 		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
 		#bounds = [1,2]
 		#norm = colors.BoundaryNorm(bounds,cmap.N)
 		plt.rcParams['toolbar'] = 'None' #removes the toolbar
-		
+
 
 		if 1:
 			#fig, ax = plt.subplots(figsize=(15,8.2))
@@ -264,7 +264,7 @@ class Simulate(tk.Frame):
 
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 			for i in self.coordinates:
-				self.ax.plot(i[0], i[1], marker="p") 
+				self.ax.plot(i[0], i[1], marker="p")
 
 			#UNCOMMENT BELOW IF YOU WANT TO INVERT THE DIMENSIONS (EITHER 0 TO 40 OR 40 TO 0)
 			#ax.set_xlim(0, 42)
@@ -335,7 +335,7 @@ class Simulate(tk.Frame):
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
 			c_id = self.c_id+1
-			h = Household(c_id, settle, self.__starting_household_size, self.__min_competency, self.__min_ambition, self.__knowledge_radius)
+			h = Household(c_id, settle.getCoordinates(), self.__starting_household_size, self.__min_competency, self.__min_ambition, self.__knowledge_radius)
 			self.__household_List[i] = h
 			households_for_settlement[i] = h
 
@@ -449,7 +449,7 @@ class Simulate(tk.Frame):
 		print("Simulation running"+str(self.__starting_settlements))
 		#threadLock = threading.Lock()
 		#with threadLock:
-		#	global_counter += 1	
+		#	global_counter += 1
 
 
 	def animate(self, i):
@@ -465,6 +465,7 @@ class Simulate(tk.Frame):
 		#for x in range(len(self.xList)):
 		self.ax.plot( self.yList, self.xList, '-rs',linestyle='')
 		#self.ax.plot(64, 89, "b")
+
 
 if __name__ == "__main__":
 	root=tk.Tk()
