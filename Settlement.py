@@ -73,3 +73,9 @@ class Settlement:
 	def removeHousehold(self, household):
 		self.__household_List = self.__household_List[self.__household_List != household]
 		#removes household from household list
+
+	def incrementPopulation(self):
+		self.__population += 1
+
+	def decrementPopulation(self):
+		self.__population -= 1
