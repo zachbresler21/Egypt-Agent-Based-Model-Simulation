@@ -48,6 +48,7 @@ class ScrollFrame(tk.Frame):
 
 class Simulate(tk.Frame):
 	#Attributes
+	fig, ax = plt.subplots(figsize=(10,8.2))
 	xList = []
 	yList = []
 	global c_id
@@ -141,7 +142,6 @@ class Simulate(tk.Frame):
 
 		rr = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Rental Rate %:", length = 180)
 		rr.pack()
-
 		# **********************************
 		
 
@@ -211,11 +211,12 @@ class Simulate(tk.Frame):
 
 	def runSimulation(self):
 		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-		fig, ax = plt.subplots(figsize=(10,8.2))
-		ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+		
+		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		for i in self.coordinates:
-			ax.plot(i[0], i[1], marker="p") 
+			self.ax.plot(i[0], i[1], marker="p") 
+
 		#fig = Figure(figsize=(6, 6), dpi=100)
 		#t = np.arange(0, 3, .01)
 		#
@@ -223,10 +224,14 @@ class Simulate(tk.Frame):
 		
 		#fig.add_subplot(111).plot(t, 20)
 
-		cv = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
+		self.getData()
+		for i in range(100):
+			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
+
+		cv = FigureCanvasTkAgg(self.fig, master=root)  # A tk.DrawingArea.
 		cv.draw()
 		cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
-		ax.axis('off')
+		self.ax.axis('off')
 	"""
 
 	def runSimulation(self):
@@ -409,8 +414,8 @@ class Simulate(tk.Frame):
 		farmCoordinates = []
 		def a():
 			count =0
-			while(count<self.__model_time_span):
-				lock.acquire()
+			while(count<20):#self.__model_time_span
+				#lock.acquire()
 				try:
 					count += 1
 					#print(count)
@@ -420,25 +425,18 @@ class Simulate(tk.Frame):
 							#farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
 							#self.ax.plot(farmCoordinates[][0], farmCoordinates[k][1], '-ro')
 							x = self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1])
-							#print(x[0],x[1])
+							print(x[0],x[1],"- the thread")
 							self.xList.append(x[0])
 							self.yList.append(x[1])
 							#self.ax.plot(x[0], x[1], '-rs')
 
 				finally:
 					time.sleep(0.1)
-					lock.release()
+					#lock.release()
 
 		t = threading.Thread(name='a', target=a)
 		t.start()
 
-	def animate(self, i):
-		
-		print("when do you get HERE")
-		self.ax.clear()
-		self.ax.plot(self.xList, self.yList, "-rs")
-
-	
 
 	def main(self):
 		#Main METHOD
@@ -446,6 +444,14 @@ class Simulate(tk.Frame):
 		#threadLock = threading.Lock()
 		#with threadLock:
 		#	global_counter += 1	
+
+
+	def animate(self, i):
+		
+		print("ANIMATING")
+		#self.ax.clear()
+		print(self.xList, self.yList)
+		self.ax.plot(self.xList, self.yList, "-rs")
 
 if __name__ == "__main__":
 	root=tk.Tk()
