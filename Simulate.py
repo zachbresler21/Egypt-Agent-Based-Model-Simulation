@@ -24,6 +24,7 @@ from Map import Map
 from Settlement import Settlement
 from Household import Household
 from Patch import Patch
+plt.style.use('ggplot')
 
 
 class ScrollFrame(tk.Frame):
@@ -48,7 +49,9 @@ class ScrollFrame(tk.Frame):
 
 class Simulate(tk.Frame):
 	#Attributes
-	fig, ax = plt.subplots(figsize=(10,8.2))
+	fig = plt.figure(figsize=(10,8.2))
+	ax = fig.add_subplot(1,1,1)
+	#ax2 = fig.add_subplot(2,2,2)
 	xList = []
 	yList = []
 	global c_id
@@ -215,7 +218,7 @@ class Simulate(tk.Frame):
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		for i in self.coordinates:
-			self.ax.plot(i[0], i[1], marker="p")
+			self.ax.plot(i[0], i[1], marker="p", ms = 12)
 
 		#fig = Figure(figsize=(6, 6), dpi=100)
 		#t = np.arange(0, 3, .01)
@@ -225,13 +228,15 @@ class Simulate(tk.Frame):
 		#fig.add_subplot(111).plot(t, 20)
 
 		self.getData()
-		for i in range(100):
-			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
+		for i in range(self.__model_time_span):
+			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000) 
 
-		cv = FigureCanvasTkAgg(self.fig, master=root)  # A tk.DrawingArea.
+		cv = FigureCanvasTkAgg(self.fig, master=root) 
+		
 		cv.draw()
 		cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
 		self.ax.axis('off')
+
 	"""
 
 	def runSimulation(self):
@@ -414,8 +419,8 @@ class Simulate(tk.Frame):
 		farmCoordinates = []
 		def a():
 			count =0
-			while(count<20):#self.__model_time_span
-				#lock.acquire()
+			while(count<self.__model_time_span):#s
+				lock.acquire()
 				try:
 					count += 1
 					#print(count)
@@ -425,17 +430,18 @@ class Simulate(tk.Frame):
 							#farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
 							#self.ax.plot(farmCoordinates[][0], farmCoordinates[k][1], '-ro')
 							x = self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1])
-							print(x[0],x[1],"- the thread")
+							
 							self.xList.append(x[0])
 							self.yList.append(x[1])
-							#self.ax.plot(x[0], x[1], '-rs')
+							#self.animate(50)
 
 				finally:
 					time.sleep(0.1)
-					#lock.release()
+					lock.release()
 
 		t = threading.Thread(name='a', target=a)
 		t.start()
+		
 
 
 	def main(self):
@@ -447,11 +453,19 @@ class Simulate(tk.Frame):
 
 
 	def animate(self, i):
+		#print("ANIMATING")
+		self.ax.clear()
+		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
+		
+		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
-		print("ANIMATING")
-		#self.ax.clear()
-		print(self.xList, self.yList)
-		self.ax.plot(self.xList, self.yList, "-rs")
+		for i in self.coordinates:
+			self.ax.plot(i[1],i[0], marker="p")
+		#print(self.xList, self.yList)
+		#for x in range(len(self.xList)):
+		self.ax.plot( self.yList, self.xList, '-rs',linestyle='')
+		#self.ax.plot(64, 89, "b")
+
 
 if __name__ == "__main__":
 	root=tk.Tk()
