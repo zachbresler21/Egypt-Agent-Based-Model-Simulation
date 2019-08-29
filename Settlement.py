@@ -69,12 +69,7 @@ class Settlement:
 	def setSize():
 		#
 		pass
-		
+
 	def removeHousehold(self, household):
-		count = 0
-		for i in self.__households:
-			if self.household_size <= 0: #delete if no one lives here
-				self.__households.remove(count)
-			if i == household: #delete the household passed through as a parameter
-				self.__households.remove(count)
-			count+=1
+		self.__household_List = self.__household_List[self.__household_List != household]
+		#removes household from household list

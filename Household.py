@@ -118,12 +118,21 @@ class Household:
 		#
 		pass
 
-	def consumeGrain():
-		self.__tot_grain = self.__tot_grain - (self.__size*160)
-		self.__grain = self.__grain - (self.__size*160)
-		if self.__tot_grain<=0:
+	def consumeGrain(self):
+		self.__tot_grain = self.__tot_grain - (self.__size*160) #workers consuming 160kg of grain a year
+		if self.__tot_grain <= 0: #if not enough grain to feed workers, one dies
 			self.__tot_grain = 0
-			self.__size = self.__size -1
+			self.__size = self.__size - 1
+			return True
+		return False
+
+	def checkWorkers(self):
+		if(self.__size <= 0): #if no workers left: change households field to unowned and remove household from settlement
+			for field in self.__fields_owned:
+				field.toggleOwned
+			return True
+		return False
+
 
 	def storageLoss():
 		self.__tot_grain = self.__tot_grain - (self.__tot_grain*0.1)
