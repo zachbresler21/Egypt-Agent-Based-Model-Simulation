@@ -55,6 +55,12 @@ class Household:
 		self.__competency = competency
 		self.map = Map()
 
+	def getFieldsOwned(self):
+		return self.__fields_owned
+
+	def removeField(self,field):
+		self.__fields_owned.remove(field)
+
 	def set_ambtion(self, ambtion):
 		pass
 
