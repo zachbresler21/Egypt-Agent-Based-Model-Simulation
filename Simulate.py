@@ -74,6 +74,7 @@ class Simulate(tk.Frame):
 	__allow_land_rental = False
 	__rental_rate = 0.0
 	__projected_historical_population = 0
+	__total_population = 0
 	__household_List= np.empty(250, dtype= Household) #List of all Household objects
 	#__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
 	__settlement_List = []
@@ -229,10 +230,10 @@ class Simulate(tk.Frame):
 
 		self.getData()
 		for i in range(self.__model_time_span):
-			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000) 
+			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
 
-		cv = FigureCanvasTkAgg(self.fig, master=root) 
-		
+		cv = FigureCanvasTkAgg(self.fig, master=root)
+
 		cv.draw()
 		cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
 		self.ax.axis('off')
@@ -349,11 +350,18 @@ class Simulate(tk.Frame):
 		self.map.createRiver()
 
 	def establishPopulation(self):
-		return self.__starting_settlements * self.__starting_households * self.__starting_household_size
+		self.__total_population = self.__starting_settlements * self.__starting_households * self.__starting_household_size
 
-	def populationShift():
-		#popShift
-		pass
+	def populationShift(self, household, settlement, ticks):
+		starting_pop =  self.__starting_settlements * self.__starting_households * self.__starting_household_size
+		populate_chance = random.uniform(0,1) #creates a random float between 0 and 1
+		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/100)),ticks)) and (populate_chance > 0.5)):
+			household.addMember()
+			settlement.incrementPopulation()
+			self.__total_population += 1
+		self.__projected_historical_population = math.pow((starting_pop * 1.001),ticks)
+
+
 
 	def removeHousehold(self, household):
 		self.__household_List.delete(self.__household_List, [household], axis = 0)
@@ -430,7 +438,7 @@ class Simulate(tk.Frame):
 							#farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
 							#self.ax.plot(farmCoordinates[][0], farmCoordinates[k][1], '-ro')
 							x = self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1])
-							
+
 							self.xList.append(x[0])
 							self.yList.append(x[1])
 							#self.animate(50)
@@ -441,7 +449,7 @@ class Simulate(tk.Frame):
 
 		t = threading.Thread(name='a', target=a)
 		t.start()
-		
+
 
 
 	def main(self):
@@ -456,7 +464,7 @@ class Simulate(tk.Frame):
 		#print("ANIMATING")
 		self.ax.clear()
 		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-		
+
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		for i in self.coordinates:
