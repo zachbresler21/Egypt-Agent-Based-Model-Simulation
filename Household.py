@@ -8,35 +8,20 @@ import numpy as np
 class Household:
 
 	#Attributes
-	__id = 0
-	__size = 0
-	__tot_grain = 0
-	__ambition = 0.0
-	__competency = 0.0
 	__knowledge_radius = 0
-	__colour = ""
-	__generationCountdown = 0
-	__distance_cost = 0
-	__allow_land_rental = False
-	__rental_rate = 0.0
-	__fields_owned = [] #list of Field objects
-	__fields_harvested = [] #list of Field objects
-	__coordinates = []
 	#__belongingSettlement = Settlement
 	map = Map()
 
 
 	"""docstring for Household"""
-	def __init__(self,h_id, coords,size ,tot_grain, houseColour, fields_owned, fields_harvested):
+	def __init__(self,h_id, coords,size,tot_grain, houseColour, fields_owned, fields_harvested, competency, ambition, rental_rate, allow_land_rental, distance_cost):
 
 		self.__id = h_id
 		#self.__belongingSettlement = settle
 		self.__coordinates = coords
 		self.__size = size
 		self.__tot_grain = tot_grain
-		self.__ambition = 0
-		self.__competency = 0
-		self.__knowledge_radius = 0
+		
 		self.__houseColour = houseColour
 		self.__generationCountdown = 0
 		self.__distance_cost = 0
@@ -46,6 +31,9 @@ class Household:
 		self.__fields_harvested = fields_harvested
 		self.map = Map()
 
+		self.__competency =  competency + (random.random()*(1-competency))
+		self.__ambition = ambition + (random.random()*(1-ambition))
+
 	def __init__(self,h_id, settle,size, competency, ambition, know_radius):
 		self.__id = h_id
 		#self.__belongingSettlement = settle
@@ -53,16 +41,26 @@ class Household:
 		self.__size = size
 		self.__ambtion = ambition
 		self.__competency = competency
+		self.__tot_grain = 0
+		self.__colour = "Grey"
+		self.__generationCountdown = 0
+		self.__distance_cost = 0
+		self.__allow_land_rental = False
+		self.__rental_rate = 0.0
+		self.__fields_owned = [] #list of Field objects
+		self.__fields_harvested = [] #list of Field objects
+		self.__coordinates = []
 		self.map = Map()
+
+		self.__competency =  competency + (random.random()*(1-competency))
+		self.__ambition = ambition + (random.random()*(1-ambition))
+
 
 	def getFieldsOwned(self):
 		return self.__fields_owned
 
 	def removeField(self,field):
 		self.__fields_owned.remove(field)
-
-	def set_ambtion(self, ambtion):
-		pass
 
 	def set_competency(self, competency):
 		self.__competency = competency
@@ -81,6 +79,9 @@ class Household:
 
 	def set_rental_rate(self, rental_rate):
 		self.__rental_rate = rental_rate
+
+	def getID(self):
+		return self.__id
 
 	def claimFields(self, row, col):
 		#
@@ -111,7 +112,7 @@ class Household:
 						claim_field = patch
 
 			x = self.completeClaim(claim_field)
-			print(x)
+			#print(x)
 			return x
 
 
