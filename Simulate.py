@@ -372,8 +372,8 @@ class Simulate(tk.Frame):
 		self.__manual_seed = manual_seed
 
 		self.setUpPatches()
-		self.createRiver()
 		self.setUpSettlements()
+		self.createRiver()
 		self.establishPopulation()
 		self.runSimulation()
 
