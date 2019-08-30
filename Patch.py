@@ -2,18 +2,18 @@ import math
 class Patch:
 
 	#Attributes
-	__patch_id = 0
-	__isSettlement = False
-	__isField = False
-	__isRiver = False
-	__isOwned = False
-	__colour = "Yellow"
+	
 
 	def __init__(self, patch_id, isField):
+		self.__isSettlement = False
+		self.__isRiver = False
+		self.__isOwned = False
+		self.__colour = "Yellow"
 		self.__patch_id = patch_id
 		self.__isField = isField
 		if self.__isField == True:
 			self.inner = self.Field(patch_id, 0.8, 0)
+
 
 	def getID(self):
 		return self.__patch_id
