@@ -26,7 +26,6 @@ from Household import Household
 from Patch import Patch
 plt.style.use('ggplot')
 
-
 class ScrollFrame(tk.Frame):
 	def __init__(self, parent):
 		super().__init__(parent) # create a frame (self)
@@ -48,6 +47,7 @@ class ScrollFrame(tk.Frame):
 		self.canvas.configure(scrollregion=self.canvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
 
 class Simulate(tk.Frame):
+	total = 0
 	#Attributes
 	fig = plt.figure(figsize=(10,8.2))
 	ax = fig.add_subplot(1,1,1)
@@ -244,10 +244,6 @@ class Simulate(tk.Frame):
 		#fig.add_subplot(111).plot(t, 20)
 
 		self.getData()
-    
-		for i in range(self.__model_time_span):
-			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
-      
 		cv = FigureCanvasTkAgg(self.fig, master=root)
 
 		cv.draw()
@@ -259,56 +255,6 @@ class Simulate(tk.Frame):
 		
 		self.ax.axis('off')
 
-	"""
-
-	def runSimulation(self):
-		#arr = np.random.randint(1, size= (41,41)) #making it all yellow from the beginning
-
-		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-		#bounds = [1,2]
-		#norm = colors.BoundaryNorm(bounds,cmap.N)
-		plt.rcParams['toolbar'] = 'None' #removes the toolbar
-
-
-		if 1:
-			#fig, ax = plt.subplots(figsize=(15,8.2))
-			#np.set_printoptions(threshold=sys.maxsize)
-			#print(self.map.getGrid())
-
-			#plt.subplots_adjust(left = 0.4)#adds space to the right of the plot
-
-			# Define a 1st position to annotate (display it with a marker)
-			#xy = (23, 40)
-			#ax.plot(xy[0], xy[1], "ro-")
-			self.getData()
-			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
-
-
-			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-			for i in self.coordinates:
-				self.ax.plot(i[0], i[1], marker="p")
-
-			#UNCOMMENT BELOW IF YOU WANT TO INVERT THE DIMENSIONS (EITHER 0 TO 40 OR 40 TO 0)
-			#ax.set_xlim(0, 42)
-			#ax.set_ylim(42, 0)
-
-			major_ticks = np.arange(-1, 42, 1)
-			minor_ticks = np.arange(0, 42, 1)
-			self.ax.set_xticks(major_ticks)
-			#ax.set_xticks(minor_ticks, minor=True)
-			self.ax.set_yticks(major_ticks)
-			#ax.set_yticks(minor_ticks, minor=True)
-
-			#REMOVE THE AXES LABELS AND TICKS
-			'''
-			ax.set_yticklabels([])
-			ax.set_xticklabels([])
-			plt.xticks([])
-			plt.yticks([])
-			'''
-			self.ax.axis('off') #comment out if you want to see the axis
-			#plt.show()
-	"""
 	def clearAll():
 		#clear all method
 		self.__model_time_span = 0
@@ -353,6 +299,8 @@ class Simulate(tk.Frame):
 		self.coordinates = self.map.setUpSettlements(self.__settlement_List)
 
 	def setUpHouseholds(self, settle):
+		self.total +=1
+		print(self.total)
 		#MAP
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
@@ -399,13 +347,6 @@ class Simulate(tk.Frame):
 		#need clarification on this method
 		pass
 
-	def calcTotalAmbition(self):
-		pass
-
-	def calcTotalCompetency():
-		#competency
-		pass
-
 	def calcTotalPopulation():
 		return self.__starting_settlements * self.__starting_households * self.__starting_household_size
 
@@ -431,10 +372,9 @@ class Simulate(tk.Frame):
 		self.__manual_seed = manual_seed
 
 		self.setUpPatches()
-		self.setUpSettlements()
 		self.createRiver()
+		self.setUpSettlements()
 		self.establishPopulation()
-
 		self.runSimulation()
 
 	def getData(self):
@@ -443,7 +383,8 @@ class Simulate(tk.Frame):
 		print("IN GET CO")
 		import threading
 		import time
-
+		#tick_Counter = tk.Label (self.scrollFrame.viewPort, text = ("Ticks:", 0)) 
+		#tick_Counter.pack()
 		lock = threading.Lock()
 		farmCoordinates = []
 		def a():
@@ -451,22 +392,19 @@ class Simulate(tk.Frame):
 			while(count<self.__model_time_span):#s
 				lock.acquire()
 				try:
-					count += 1
-					#print(count)
-					for i in range(len(self.__settlement_List)):
-						for j in range(len(self.__settlement_List[i].getHouseholdList())):
-							#print(self.__settlement_List[i].getHouseholdList()[j])
-							#farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
-							#self.ax.plot(farmCoordinates[][0], farmCoordinates[k][1], '-ro')
-							x = self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1])
 
+					count += 1
+					#tick_Counter['text'] = ('Ticks:', count)
+					#print(count)
+					for s in self.__settlement_List:
+						for h in s.getHouseholdList():
+							x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 							try: 
 								self.xList.append(x[0])
 								self.yList.append(x[1])
-								print(x[0], x[1])
 							except:
 								continue 
-
+						
 							#self.animate(50)
 
 				finally:

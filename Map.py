@@ -5,19 +5,20 @@ from Patch import Patch
 
 class Map:
 	#Attributes
-	__lorenz_points = 0.0
-	__gini_index_reserve = 0.0
-	__avg_ambition = 0.0
-	__avg_competency = 0.0
-
-
-	__grid = np.empty((41,41), dtype= int)
-	__patches = np.empty((41,41), dtype = Patch) #list of patches
+	
 
 
 	def __init__(self):
 		#self.__grid = np.random.randint(10, size= (41,41))
 		self.__grid = np.ones((41,41))
+		self.__lorenz_points = 0.0
+		self.__gini_index_reserve = 0.0
+		self.__avg_ambition = 0.0
+		self.__avg_competency = 0.0
+
+
+		self.__grid = np.empty((41,41), dtype= int)
+		self.__patches = np.empty((41,41), dtype = object) #list of patches
 
 	def getPatches(self):
 		return self.__patches
@@ -28,7 +29,7 @@ class Map:
 
 	def createPatches(self):
 		#Use multiprocessing
-		count = 1
+		count = 0
 		for r in range(41):
 			for c in range(41):
 				self.__patches[r,c] = Patch(count, True) #this should insert a Patch object - I made every Patch a Field
@@ -51,7 +52,7 @@ class Map:
 
 	def generateCoords(self):
 		r = random.randint(0,40)
-		c = random.randint(0,40)
+		c = random.randint(2,40)
 		return [r,c]
 
 	def isPatchAvailable(self,coords):
@@ -82,11 +83,9 @@ class Map:
 		#takes a string as a parameter
 		#happens every tick
 		pass
+		
 	def claimField(household):
-
-		#takes a Household object as a parameter
 		pass
-
 
 	def harvest():
 		#harvest

@@ -4,14 +4,8 @@ from Patch import Patch
 class Settlement:
 	#test
 	#Attributes
-	__settlement_id = 0
-	__household_List= np.empty(250, dtype= Household) #list of household objects belonging to this settlement
-	__population = 0
-	__num_households = 0
-	__grain = 0
-	#__neighbors = [] # list of settlement objects
-	__colour = "white"
-	__coordinates = [] #list of x and y coordinates of the position of the settlements
+	
+	
 
 	"""docstring for Settlement"""
 	def __init__(self, __settlement_id, __population, __num_households, __grain, __colour):
@@ -25,6 +19,10 @@ class Settlement:
 		self.__settlement_id = __settlement_id
 		self.__population = __population
 		self.__num_households = __num_households
+		#self.__grain = __grain
+		#self.__colour = __colour
+		self.__coordinates = [] #x and y coordinates of the settlement
+		self.__household_List= np.empty(250, dtype= Household) #list of household objects belonging to this settlement
 
 	def getCoordinates(self):
 		return self.__coordinates
@@ -64,11 +62,6 @@ class Settlement:
 
 	def setCoordinates(self, coords):
 		self.__coordinates = coords
-
-
-	def setSize():
-		#
-		pass
 
 	def removeHousehold(self, household):
 		self.__household_List = self.__household_List[self.__household_List != household]
