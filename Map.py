@@ -5,8 +5,9 @@ from Patch import Patch
 
 class Map:
 	#Attributes
-	
 
+	self.__grid = np.empty((41,41), dtype= int)
+	self.__patches = np.empty((41,41), dtype = Patch) #list of patches
 
 	def __init__(self):
 		#self.__grid = np.random.randint(10, size= (41,41))
@@ -15,10 +16,6 @@ class Map:
 		self.__gini_index_reserve = 0.0
 		self.__avg_ambition = 0.0
 		self.__avg_competency = 0.0
-
-
-		self.__grid = np.empty((41,41), dtype= int)
-		self.__patches = np.empty((41,41), dtype = object) #list of patches
 
 	def getPatches(self):
 		return self.__patches
