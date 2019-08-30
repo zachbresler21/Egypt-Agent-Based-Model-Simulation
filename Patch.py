@@ -16,7 +16,7 @@ class Patch:
 			self.inner = self.Field(patch_id, 0.8, 0)
 
 	def getID(self):
-		self.__patch_id
+		return self.__patch_id
 
 	def findCoordinates(self):
 		r = math.floor(self.__patch_id/41)
