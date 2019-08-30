@@ -244,6 +244,10 @@ class Simulate(tk.Frame):
 		#fig.add_subplot(111).plot(t, 20)
 
 		self.getData()
+    
+		for i in range(self.__model_time_span):
+			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
+      
 		cv = FigureCanvasTkAgg(self.fig, master=root)
 
 		cv.draw()
@@ -455,13 +459,14 @@ class Simulate(tk.Frame):
 							#farmCoordinates.append(self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1]))
 							#self.ax.plot(farmCoordinates[][0], farmCoordinates[k][1], '-ro')
 							x = self.__settlement_List[i].getHouseholdList()[j].claimFields(self.__settlement_List[i].getCoordinates()[0],self.__settlement_List[i].getCoordinates()[1])
+
 							try: 
 								self.xList.append(x[0])
 								self.yList.append(x[1])
 								print(x[0], x[1])
 							except:
 								continue 
-						
+
 							#self.animate(50)
 
 				finally:

@@ -16,7 +16,7 @@ class Patch:
 			self.inner = self.Field(patch_id, 0.8, 0)
 
 	def getID(self):
-		self.__patch_id
+		return self.__patch_id
 
 	def findCoordinates(self):
 		r = math.floor(self.__patch_id/41)
@@ -74,8 +74,12 @@ class Patch:
 		def toggleHarvested(self):
 			self.__harvested = not self.__harvested
 
-		def fieldChangeover():
-			return 0
+		def fieldChangeover(self):
+			if(self.__harvested == True):
+				self.__years_fallow = 0
+			else:
+				self.__years_fallow += 1
+			return self.__years_fallow
 
 		def updateHousehold():
 			return 0

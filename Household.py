@@ -55,6 +55,12 @@ class Household:
 		self.__competency = competency
 		self.map = Map()
 
+	def getFieldsOwned(self):
+		return self.__fields_owned
+
+	def removeField(self,field):
+		self.__fields_owned.remove(field)
+
 	def set_ambtion(self, ambtion):
 		pass
 
@@ -153,9 +159,45 @@ class Household:
 		#
 		pass
 
-	def generationalChangeover():
-		#
-		pass
+	def generationalChangeover(self,generational_variation, min_ambition, min_competency):
+		self.__generationCountdown = self.__generationCountdown - 1
+		if(self.__generationCountdown <= 0):
+			self.__generationCountdown = random.randint(0,5) + 10
+			ambition_change = random.uniform(0,generational_variation)
+			decrease_chance = random.uniform(0,1)
+
+			if(decrease_chance < 0.5):
+				ambition_change = ambition_change * -1
+
+			new_ambition = self.__ambition + ambition_change
+
+			while(new_ambition > 1 or new_ambition < min_ambition):
+				ambition_change = random.uniform(0,generational_variation)
+				decrease_chance = random.uniform (0,1)
+				if(decrease_chance < 0.5):
+					ambition_change = ambition_change * -1
+
+				new_ambition = self.__ambition + ambition_change
+			self.__ambition = new_ambition
+
+			competency_change = random.uniform(0,generational_variation)
+			decrease_chance = random.uniform(0,1)
+			if(decrease_chance < 0.5):
+				competency_change = competency_change * -1
+
+			new_competency = self.__competency + competency_change
+
+			while(new_competency > 1 or new_competency < min_competency):
+				competency_change = random.uniform(0,generational_variation)
+				decrease_chance = random.uniform (0,1)
+				if(decrease_chance < 0.5):
+					competency_change = competency_change * -1
+
+				new_competency = self.__competency + competency_change
+
+			self.__competency = new_competency
+
+
 
 	def removeFields():
 		#
