@@ -1,11 +1,12 @@
 class Flood:
 	#Atributes
-	__fertility_colour = "Green"
+	
 
 	"""docstring for Flood"""
 	def __init__(self, arg):
 		super(Flood, self).__init__()
 		self.arg = arg
+		__fertility_colour = "White"
 	
 	def beginFlood():
 		#
