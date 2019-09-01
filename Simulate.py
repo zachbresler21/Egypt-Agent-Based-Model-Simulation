@@ -5,8 +5,8 @@ import matplotlib.animation as animation
 from matplotlib import colors
 import matplotlib.patches as ptc
 from matplotlib.patches import Circle
+import matplotlib.image as mpimg
 from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage, AnnotationBbox)
-from matplotlib.cbook import get_sample_data
 import tkinter as tk
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -47,15 +47,12 @@ class ScrollFrame(tk.Frame):
 		self.canvas.configure(scrollregion=self.canvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
 
 class Simulate(tk.Frame):
-	total = 0
-	#Attributes
+
 	fig = plt.figure(figsize=(10,8.2))
 	ax = fig.add_subplot(1,1,1)
-	#ax2 = fig.add_subplot(2,2,2)
 	xList = []
 	yList = []
 	global c_id
-	#fig, ax = plt.subplots(figsize=(15,8.2))
 	__model_time_span = 0
 	__manual_seed = False
 	__starting_settlements = 0
@@ -76,26 +73,22 @@ class Simulate(tk.Frame):
 	__projected_historical_population = 0
 	__total_population = 0
 	__household_List= np.empty(250, dtype= Household) #List of all Household objects
-	#__settlement_List = np.empty(21, dtype= Settlement) #List of all Settlement objects
 	__settlement_List = []
 	coordinates = []
-	#qapp = QtWidgets.QApplication([])
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
-
 	map = Map()
 
 	def __init__(self, root):
 
 		tk.Frame.__init__(self, root)
 		self.scrollFrame = ScrollFrame(self) # add a new scrollable frame.
-
 		# **********************************
 		# 			User Inputs
 		# **********************************
 		mtp = tk.Scale(self.scrollFrame.viewPort, from_=100, to=500, orient=HORIZONTAL, label = "Model Time Span:", length = 180, resolution=50)
 		mtp.pack(padx=20, pady=10, side=tk.TOP)
-		mtp.set(200)
+		mtp.set(100)
 
 		varSeed = IntVar()
 		chkSeed = tk.Checkbutton (self.scrollFrame.viewPort, text = "Manual Seed" , padx = 0, pady = 2, variable = varSeed)
@@ -161,14 +154,11 @@ class Simulate(tk.Frame):
 		rr.pack()
 		rr.set(5)
 		# **********************************
-
-
 		# Now add some controls to the scrollframe.
 		# NOTE: the child controls are added to the view port (scrollFrame.viewPort, NOT scrollframe itself)
 		self.scrollFrame.pack(side=tk.LEFT, fill="both", expand=True)
 		# when packing the scrollframe, we pack scrollFrame itself (NOT the viewPort)
-
-
+		
 		'''
 		def on_key_press(event):
 			print("you pressed {}".format(event.key))
@@ -177,7 +167,6 @@ class Simulate(tk.Frame):
 
 		cv.mpl_connect("key_press_event", on_key_press)
 		'''
-
 		def _quit():
 			root.quit()     # stops mainloop
 			root.destroy()  # this is necessary on Windows to prevent
@@ -208,7 +197,6 @@ class Simulate(tk.Frame):
 			root.quit()     # stops mainloop
 			root.destroy()
 
-
 		start = tk.Button(master=root, text="Start", command=_start, cursor = "pointinghand")
 		start.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
@@ -221,39 +209,9 @@ class Simulate(tk.Frame):
 		quit = tk.Button(master=root, text="Quit", command=_quit, cursor = "pointinghand")
 		quit.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
-
 		self.scrollFrame.pack(side="top", fill="both", expand=True)
-
-	def printMsg(self, msg):
-		print(msg)
-
-	def runSimulation(self):
-		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-
-		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-
-
-		for i in self.coordinates:
-			self.ax.plot(i[0], i[1], marker="p", ms = 12)
-
-		#fig = Figure(figsize=(6, 6), dpi=100)
-		#t = np.arange(0, 3, .01)
-		#
-		#fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
-
-		#fig.add_subplot(111).plot(t, 20)
-
-		self.getData()
-		cv = FigureCanvasTkAgg(self.fig, master=root)
-
-		cv.draw()
-		cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
-		for i in range(self.__model_time_span):
-			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
-
-		root.geometry("1200x700")
+		self.img=mpimg.imread('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/map.png')
 		
-		self.ax.axis('off')
 
 	def clearAll():
 		#clear all method
@@ -299,8 +257,6 @@ class Simulate(tk.Frame):
 		self.coordinates = self.map.setUpSettlements(self.__settlement_List)
 
 	def setUpHouseholds(self, settle):
-		self.total +=1
-		print(self.total)
 		#MAP
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
@@ -329,8 +285,6 @@ class Simulate(tk.Frame):
 			settlement.incrementPopulation()
 			self.__total_population += 1
 		self.__projected_historical_population = math.pow((starting_pop * 1.001),ticks)
-
-
 
 	def removeHousehold(self, household):
 		self.__household_List.delete(self.__household_List, [household], axis = 0)
@@ -372,71 +326,68 @@ class Simulate(tk.Frame):
 		self.__manual_seed = manual_seed
 
 		self.setUpPatches()
+
 		self.setUpSettlements()
 		self.createRiver()
 		self.establishPopulation()
 		self.runSimulation()
 
+	def runSimulation(self):
+		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
+
+		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+		
+		for i in self.coordinates:
+			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
+
+		self.getData()
+
+		self.cv = FigureCanvasTkAgg(self.fig, master=root)
+		self.cv.draw()
+		self.cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
+		
+		for i in range(self.__model_time_span):
+			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
+
+		root.geometry("1200x700")
+		
+		self.ax.axis('off')
+
 	def getData(self):
 		self.xList =[]
 		self.yList = []
 		print("IN GET CO")
-		import threading
-		import time
+		
 		#tick_Counter = tk.Label (self.scrollFrame.viewPort, text = ("Ticks:", 0)) 
-		#tick_Counter.pack()
-		lock = threading.Lock()
-		farmCoordinates = []
-		def a():
-			count =0
-			while(count<self.__model_time_span):#s
-				lock.acquire()
-				try:
+		#tick_Counter.pack(side = tk.TOP)
+		
+		count =0
+		while(count<self.__model_time_span):
 
-					count += 1
-					#tick_Counter['text'] = ('Ticks:', count)
-					#print(count)
-					for s in self.__settlement_List:
-						for h in s.getHouseholdList():
-							x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
-							try: 
-								self.xList.append(x[0])
-								self.yList.append(x[1])
-							except:
-								continue 
-						
-							#self.animate(50)
-
-				finally:
-					time.sleep(0.1)
-					lock.release()
-
-		t = threading.Thread(name='a', target=a)
-		t.start()
-
-
-
-	def main(self):
-		#Main METHOD
-		print("Simulation running"+str(self.__starting_settlements))
-		#threadLock = threading.Lock()
-		#with threadLock:
-		#	global_counter += 1
-
+			count += 1
+			#tick_Counter['text'] = ('Ticks:', count)
+			for s in self.__settlement_List:
+				for h in s.getHouseholdList():
+					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
+					try: 
+						self.xList.append(x[0])
+						self.yList.append(x[1])
+					except:
+						continue 
 
 	def animate(self, i):
-		#print("ANIMATING")
+		#self.getData()
 		self.ax.clear()
-		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-
-		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+		
+		#cmap = mpl.colors.ListedColormap(['blue','lightgreen'])
+		#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+		self.ax.imshow(self.img)
 
 		for i in self.coordinates:
-			self.ax.plot(i[1],i[0], marker="p")
-		#for x in range(len(self.xList)):
-		self.ax.plot( self.yList, self.xList, '-rs',linestyle='')
-		#self.ax.plot(64, 89, "b")
-
+			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
+		
+		self.ax.plot( self.yList, self.xList, marker = '$☘$',color = 'green',ms = 8,linestyle='')
+	
 
 if __name__ == "__main__":
 	root=tk.Tk()
@@ -444,3 +395,4 @@ if __name__ == "__main__":
 	root.geometry("480x700")
 	Simulate(root).pack(side=tk.LEFT, fill="both", expand=True)
 	root.mainloop()
+
