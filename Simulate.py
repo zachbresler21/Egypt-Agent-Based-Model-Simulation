@@ -374,10 +374,10 @@ class Simulate(tk.Frame):
 				for h in s.getHouseholdList():
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 					try:
-						self.xList.append(x[0])
+						self.xList.append(x[1])
 						self.xList.append(s.getCoordinates()[0])
 						
-						self.yList.append(x[1])
+						self.yList.append(x[0])
 						self.yList.append(s.getCoordinates()[1])
 					except:
 						continue 
