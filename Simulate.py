@@ -86,7 +86,7 @@ class Simulate(tk.Frame):
 		# **********************************
 		# 			User Inputs
 		# **********************************
-		mtp = tk.Scale(self.scrollFrame.viewPort, from_=100, to=500, orient=HORIZONTAL, label = "Model Time Span:", length = 180, resolution=50)
+		mtp = tk.Scale(self.scrollFrame.viewPort, from_=100, to=500, orient=HORIZONTAL, label = "Model Time Span:", length = 180, resolution=50, cursor = "hand")
 		mtp.pack(padx=20, pady=10, side=tk.TOP)
 		mtp.set(100)
 
@@ -94,47 +94,47 @@ class Simulate(tk.Frame):
 		chkSeed = tk.Checkbutton (self.scrollFrame.viewPort, text = "Manual Seed" , padx = 0, pady = 2, variable = varSeed)
 		chkSeed.pack()
 
-		ss = tk.Scale(self.scrollFrame.viewPort, from_=5, to=20, orient=HORIZONTAL, label = "Starting Settlements:", length = 180)
+		ss = tk.Scale(self.scrollFrame.viewPort, from_=5, to=20, orient=HORIZONTAL, label = "Starting Settlements:", length = 180, cursor = "hand")
 		ss.pack(pady = 10)
 		ss.set(5)
 
-		sh = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Households:", length = 180)
+		sh = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Households:", length = 180, cursor = "hand")
 		sh.pack()
 		sh.set(3)
 
-		shs = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Household Size:", length = 180)
+		shs = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Household Size:", length = 180, cursor = "hand")
 		shs.pack()
 		shs.set(3)
 
-		sg = tk.Scale(self.scrollFrame.viewPort, from_=100, to=8000, orient=HORIZONTAL, label = "Starting Grain:", length = 180)
+		sg = tk.Scale(self.scrollFrame.viewPort, from_=100, to=8000, orient=HORIZONTAL, label = "Starting Grain:", length = 180, cursor = "hand")
 		sg.pack()
 		sg.set(3500)
 
-		ma = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Ambition:", length = 180, resolution=0.1)
+		ma = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Ambition:", length = 180, resolution=0.1, cursor = "hand")
 		ma.pack()
 		ma.set(0.4)
 
-		mc = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Competency:", length = 180, resolution=0.1)
+		mc = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Competency:", length = 180, resolution=0.1, cursor = "hand")
 		mc.pack()
 		mc.set(0.5)
 
-		gv = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Generation Variation:", length = 180, resolution=0.1)
+		gv = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Generation Variation:", length = 180, resolution=0.1, cursor = "hand")
 		gv.pack()
 		gv.set(0.2)
 
-		kr = tk.Scale(self.scrollFrame.viewPort, from_=5, to=40, orient=HORIZONTAL, label = "Knowledge Radius:", length = 180)
+		kr = tk.Scale(self.scrollFrame.viewPort, from_=5, to=40, orient=HORIZONTAL, label = "Knowledge Radius:", length = 180, cursor = "hand")
 		kr.pack()
 		kr.set(15)
 
-		dc = tk.Scale(self.scrollFrame.viewPort, from_=1, to=15, orient=HORIZONTAL, label = "Distance Cost (kg):", length = 180)
+		dc = tk.Scale(self.scrollFrame.viewPort, from_=1, to=15, orient=HORIZONTAL, label = "Distance Cost (kg):", length = 180, cursor = "hand")
 		dc.pack()
 		sh.set(3)
 
-		fl = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Fallow Limit:", length = 180)
+		fl = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Fallow Limit:", length = 180, cursor = "hand")
 		fl.pack()
 		fl.set(17)
 
-		pg = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Population Growth %:", length = 180)
+		pg = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Population Growth %:", length = 180, cursor = "hand")
 		pg.pack()
 		pg.set(20)
 
@@ -142,7 +142,7 @@ class Simulate(tk.Frame):
 		chkFis = tk.Checkbutton (self.scrollFrame.viewPort, text = "Household Fission" , padx = 0, pady = 2, variable= varFis)
 		chkFis.pack()
 
-		mfc = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Min Fission Chance:", length = 180)
+		mfc = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Min Fission Chance:", length = 180, cursor = "hand")
 		mfc.pack()
 		mfc.set(4)
 
@@ -150,7 +150,7 @@ class Simulate(tk.Frame):
 		chkRent = tk.Checkbutton (self.scrollFrame.viewPort, text = "Land Rental" , padx = 0, pady = 2, variable = varRent)
 		chkRent.pack()
 
-		rr = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Rental Rate %:", length = 180)
+		rr = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Rental Rate %:", length = 180, cursor = "hand")
 		rr.pack()
 		rr.set(5)
 		# **********************************
@@ -326,7 +326,7 @@ class Simulate(tk.Frame):
 		self.__manual_seed = manual_seed
 
 		self.setUpPatches()
-
+		
 		self.setUpSettlements()
 		self.createRiver()
 		self.establishPopulation()
@@ -337,18 +337,21 @@ class Simulate(tk.Frame):
 
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 		
-		for i in self.coordinates:
-			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
+		
 
 		self.getData()
 
 		self.cv = FigureCanvasTkAgg(self.fig, master=root)
 		self.cv.draw()
 		self.cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
-		
+		for i in self.coordinates:
+			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
+		'''
 		for i in range(self.__model_time_span):
-			ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
-
+			#ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
+			self.animate(i)
+			#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+		'''
 		root.geometry("1200x700")
 		
 		self.ax.axis('off')
@@ -357,6 +360,7 @@ class Simulate(tk.Frame):
 		self.xList =[]
 		self.yList = []
 		print("IN GET CO")
+		
 		
 		#tick_Counter = tk.Label (self.scrollFrame.viewPort, text = ("Ticks:", 0)) 
 		#tick_Counter.pack(side = tk.TOP)
@@ -369,13 +373,20 @@ class Simulate(tk.Frame):
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
-					try: 
+					try:
 						self.xList.append(x[0])
+						self.xList.append(s.getCoordinates()[0])
+						
 						self.yList.append(x[1])
+						self.yList.append(s.getCoordinates()[1])
 					except:
 						continue 
-
-	def animate(self, i):
+				self.ax.plot(self.yList, self.xList, marker = '$☘$',markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
+				self.xList.clear()
+				self.yList.clear()
+				
+	'''
+	def animate(self, x):
 		#self.getData()
 		self.ax.clear()
 		
@@ -383,12 +394,11 @@ class Simulate(tk.Frame):
 		#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 		self.ax.imshow(self.img)
 
+		self.ax.plot(self.yList, self.xList, marker = '$☘$', color = 'white', ms = 8, linestyle='-')
+		
 		for i in self.coordinates:
 			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
-		
-		self.ax.plot( self.yList, self.xList, marker = '$☘$',color = 'green',ms = 8,linestyle='')
-	
-
+	'''
 if __name__ == "__main__":
 	root=tk.Tk()
 	root.title("Egypt Simulation")
