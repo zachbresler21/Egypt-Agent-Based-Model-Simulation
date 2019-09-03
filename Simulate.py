@@ -19,6 +19,7 @@ if sys_pf == 'darwin':
 	matplotlib.use("TkAgg")
 import sys
 import threading
+import time
 import random
 from Map import Map
 from Settlement import Settlement
@@ -27,6 +28,7 @@ from Patch import Patch
 plt.style.use('ggplot')
 
 class ScrollFrame(tk.Frame):
+
 	def __init__(self, parent):
 		super().__init__(parent) # create a frame (self)
 
@@ -47,7 +49,7 @@ class ScrollFrame(tk.Frame):
 		self.canvas.configure(scrollregion=self.canvas.bbox("all"))                 #whenever the size of the frame changes, alter the scroll region respectively.
 
 class Simulate(tk.Frame):
-
+	continuePlotting = False
 	fig = plt.figure(figsize=(10,8.2))
 	ax = fig.add_subplot(1,1,1)
 	xList = []
@@ -75,9 +77,12 @@ class Simulate(tk.Frame):
 	__household_List= np.empty(250, dtype= Household) #List of all Household objects
 	__settlement_List = []
 	coordinates = []
+	cv = fig
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
+
+	
 
 	def __init__(self, root):
 
@@ -372,18 +377,33 @@ class Simulate(tk.Frame):
 		self.establishPopulation()
 		self.runSimulation()
 
+	
+ 
+	def change_state(self):
+		#global continuePlotting
+		if self.continuePlotting == True:
+			self.continuePlotting = False
+		else:
+			self.continuePlotting = True
+
+
 	def runSimulation(self):
 		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
 
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
-		self.getData()
+		#self.getData()
 		#self.ax.imshow(self.img)
 		self.cv = FigureCanvasTkAgg(self.fig, master=root)
-		self.cv.draw()
 		self.cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
+		
 		for i in self.coordinates:
 			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
+
+		self.change_state()
+		threading.Thread(target=self.getData()).start()
+
+
 		'''
 		for i in range(self.__model_time_span):
 			#ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
@@ -392,13 +412,14 @@ class Simulate(tk.Frame):
 		'''
 		root.geometry("1200x700")
 		
-		#self.ax.axis('off')
+		self.ax.axis('off')
 
 	def getData(self):
 		self.xList =[]
 		self.yList = []
 		print("IN GET CO")
-		
+		root.geometry("1200x700")
+		self.ax.axis('off')
 		#tick_Counter = tk.Label (root, text = ("Ticks:", 0)) 
 		#tick_Counter.pack(side = tk.TOP)
 		
@@ -411,12 +432,18 @@ class Simulate(tk.Frame):
 				for h in s.getHouseholdList():
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 					try:
-						self.xList.append(x[1])
-						self.xList.append(s.getCoordinates()[0])
+						self.xList.append(x[0])
+						self.xList.append(s.getCoordinates()[1])
+						self.yList.append(x[1])
+						self.yList.append(s.getCoordinates()[0])
 
-						self.yList.append(x[0])
-						self.yList.append(s.getCoordinates()[1])
-
+						self.ax.plot(self.xList, self.yList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
+						self.cv.draw()
+						self.cv.flush_events()
+						time.sleep(0.085)
+						self.xList.clear()
+						self.yList.clear()
+						
 						if(h.consumeGrain()):
 							s.decrementPopulation()
 							self.__total_population =- 1
@@ -429,13 +456,14 @@ class Simulate(tk.Frame):
 								h.removeField(field)
 
 						self.populationShift(h, s, count)
-						h.generationalChangeover(self.__min_ambition, self.__min_competency)
 
+						h.generationalChangeover(self.__min_ambition, self.__min_competency)
+						
+						h.Farm().beginFarm(self.__distance_cost)
 					except:
-						continue 
-				self.ax.plot(self.yList, self.xList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
-				self.xList.clear()
-				self.yList.clear()
+						continue
+				
+
 				
 	'''
 	def animate(self, x):
@@ -457,4 +485,3 @@ if __name__ == "__main__":
 	root.geometry("480x700")
 	Simulate(root).pack(side=tk.LEFT, fill="both", expand=True)
 	root.mainloop()
-
