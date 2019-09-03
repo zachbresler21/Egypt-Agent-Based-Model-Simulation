@@ -104,7 +104,7 @@ class Household:
 			mask = (r[np.newaxis,:]-cr)**2 + (c[:,np.newaxis]-cc)**2 < radius**2
 
 			for patch in patches[mask]: #traverses through array of patches in the circle
-				if patch.isField()==True and patch.isOwned() == False and patch.isRiver() == False:
+				if patch.isField()==True and patch.isOwned() == False and patch.isRiver() == False and patch.isSettlement() == False:
 					#fertility = patch.Field().getFertility()
 					fertility = 5
 					if fertility > best_fertility: #finds field with best fertility
@@ -204,7 +204,7 @@ class Household:
 		#
 		pass
 
-	class Farm (object):
+	class Farm:
 
 		#Attributes
 
@@ -223,6 +223,7 @@ class Household:
 			total_harvest = calcYield(best_field)
 			Household().tot_grain += total_harvest
 			Household().__fields_harvested.append(best_field)
+			print("so is justing a whore")
 
 
 		def determineField(self,distance_cost):
@@ -236,7 +237,7 @@ class Household:
 					if(field.Field().isHarvested() == False and this_harvest > self.__best_harvest): #finds highest yield field
 						self.__best_harvest = this_harvest
 						best_field = field
-
+			print("a huge whore")
 			return best_field
 
 
@@ -249,7 +250,7 @@ class Household:
 				#Change shape? Show harvest on the plot?
 				total_harvest = self.__best_harvest - 300  #300 = cost of seeding the field, assuming 1/8 of maximum potential yield.
 				self.__workers_worked += 2
-
+				print("im a whore")
 				return total_harvest
 
 
