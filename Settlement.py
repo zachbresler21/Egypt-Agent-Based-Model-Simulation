@@ -37,7 +37,7 @@ class Settlement:
 			return 0
 		elif self.__population > 150:
 			return 4
-		elif (self.__population > 100 and self.__population <= 150) :
+		elif (self.__population > 100 and self.__population <= 150):
 			return 3
 		elif (self.__population > 49 and self.__population <= 100):
 			return 2
