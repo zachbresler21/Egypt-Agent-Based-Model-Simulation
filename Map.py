@@ -5,9 +5,9 @@ from Patch import Patch
 
 class Map:
 	#Attributes
-
-	self.__grid = np.empty((41,41), dtype= int)
-	self.__patches = np.empty((41,41), dtype = Patch) #list of patches
+	
+	__grid = np.empty((41,41), dtype= int)
+	__patches = np.empty((41,41), dtype = Patch) #list of patches
 
 	def __init__(self):
 		#self.__grid = np.random.randint(10, size= (41,41))
@@ -16,6 +16,7 @@ class Map:
 		self.__gini_index_reserve = 0.0
 		self.__avg_ambition = 0.0
 		self.__avg_competency = 0.0
+		
 
 	def getPatches(self):
 		return self.__patches
@@ -31,7 +32,9 @@ class Map:
 			for c in range(41):
 				self.__patches[r,c] = Patch(count, True) #this should insert a Patch object - I made every Patch a Field
 				count += 1
+				print(count)
 		return self.__patches
+
 		#populate list of patches
 
 	def getPatches(self):
@@ -42,8 +45,8 @@ class Map:
 		#change patches isRiver true
 		#making first 2 columns river
 		for r in range (len(self.__patches)):
-			self.__patches[r,0].toggleRiver()
-			self.__patches[r,1].toggleRiver()
+			self.__patches[0,r].toggleRiver()
+			self.__patches[1,r].toggleRiver()
 			self.__grid[r,0] = 0
 			self.__grid[r,1] = 0
 
@@ -53,6 +56,7 @@ class Map:
 		return [r,c]
 
 	def isPatchAvailable(self,coords):
+		
 		if self.__patches[coords[0], coords[1]].isRiver() == False and self.__patches[coords[0],coords[1]].isSettlement() == False:
 			return True
 		else:
@@ -118,5 +122,5 @@ class Map:
 		__gini_index_reserve = 0.0
 		__avg_ambition = 0.0
 		__avg_competency = 0.0
-		__grid = np.empty((40,40), dtype= int)
-		__patches = np.empty((40,40), dtype = object)
+		__grid = np.empty((41,41), dtype= int)
+		__patches = np.empty((41,41), dtype = object)

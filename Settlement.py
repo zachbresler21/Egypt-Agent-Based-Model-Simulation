@@ -14,6 +14,8 @@ class Settlement:
 		self.__num_households = __num_households
 		self.__grain = __grain
 		self.__colour = __colour
+		self.__coordinates = [] #x and y coordinates of the settlement
+		self.__household_List= np.empty(250, dtype= Household) #list of household objects belonging to this settlement
 
 	def __init__(self, __settlement_id, __population, __num_households):
 		self.__settlement_id = __settlement_id

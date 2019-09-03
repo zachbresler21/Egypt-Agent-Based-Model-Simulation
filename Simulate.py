@@ -15,8 +15,8 @@ from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 from sys import platform as sys_pf
 if sys_pf == 'darwin':
-    import matplotlib
-    matplotlib.use("TkAgg")
+	import matplotlib
+	matplotlib.use("TkAgg")
 import sys
 import threading
 import random
@@ -86,7 +86,7 @@ class Simulate(tk.Frame):
 		# **********************************
 		# 			User Inputs
 		# **********************************
-		mtp = tk.Scale(self.scrollFrame.viewPort, from_=100, to=500, orient=HORIZONTAL, label = "Model Time Span:", length = 180, resolution=50, cursor = "hand")
+		mtp = tk.Scale(self.scrollFrame.viewPort, from_=100, to=500, orient=HORIZONTAL, label = "Model Time Span:", length = 180, resolution=50)
 		mtp.pack(padx=20, pady=10, side=tk.TOP)
 		mtp.set(100)
 
@@ -94,47 +94,47 @@ class Simulate(tk.Frame):
 		chkSeed = tk.Checkbutton (self.scrollFrame.viewPort, text = "Manual Seed" , padx = 0, pady = 2, variable = varSeed)
 		chkSeed.pack()
 
-		ss = tk.Scale(self.scrollFrame.viewPort, from_=5, to=20, orient=HORIZONTAL, label = "Starting Settlements:", length = 180, cursor = "hand")
+		ss = tk.Scale(self.scrollFrame.viewPort, from_=5, to=20, orient=HORIZONTAL, label = "Starting Settlements:", length = 180)
 		ss.pack(pady = 10)
 		ss.set(5)
 
-		sh = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Households:", length = 180, cursor = "hand")
+		sh = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Households:", length = 180)
 		sh.pack()
 		sh.set(3)
 
-		shs = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Household Size:", length = 180, cursor = "hand")
+		shs = tk.Scale(self.scrollFrame.viewPort, from_=1, to=10, orient=HORIZONTAL, label = "Starting Household Size:", length = 180)
 		shs.pack()
 		shs.set(3)
 
-		sg = tk.Scale(self.scrollFrame.viewPort, from_=100, to=8000, orient=HORIZONTAL, label = "Starting Grain:", length = 180, cursor = "hand")
+		sg = tk.Scale(self.scrollFrame.viewPort, from_=100, to=8000, orient=HORIZONTAL, label = "Starting Grain:", length = 180)
 		sg.pack()
 		sg.set(3500)
 
-		ma = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Ambition:", length = 180, resolution=0.1, cursor = "hand")
+		ma = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Ambition:", length = 180, resolution=0.1)
 		ma.pack()
 		ma.set(0.4)
 
-		mc = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Competency:", length = 180, resolution=0.1, cursor = "hand")
+		mc = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Min Competency:", length = 180, resolution=0.1)
 		mc.pack()
 		mc.set(0.5)
 
-		gv = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Generation Variation:", length = 180, resolution=0.1, cursor = "hand")
+		gv = tk.Scale(self.scrollFrame.viewPort, from_=0.0, to=1.0, orient=HORIZONTAL, label = "Generation Variation:", length = 180, resolution=0.1)
 		gv.pack()
 		gv.set(0.2)
 
-		kr = tk.Scale(self.scrollFrame.viewPort, from_=5, to=40, orient=HORIZONTAL, label = "Knowledge Radius:", length = 180, cursor = "hand")
+		kr = tk.Scale(self.scrollFrame.viewPort, from_=5, to=40, orient=HORIZONTAL, label = "Knowledge Radius:", length = 180)
 		kr.pack()
 		kr.set(15)
 
-		dc = tk.Scale(self.scrollFrame.viewPort, from_=1, to=15, orient=HORIZONTAL, label = "Distance Cost (kg):", length = 180, cursor = "hand")
+		dc = tk.Scale(self.scrollFrame.viewPort, from_=1, to=15, orient=HORIZONTAL, label = "Distance Cost (kg):", length = 180)
 		dc.pack()
 		sh.set(3)
 
-		fl = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Fallow Limit:", length = 180, cursor = "hand")
+		fl = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Fallow Limit:", length = 180)
 		fl.pack()
 		fl.set(17)
 
-		pg = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Population Growth %:", length = 180, cursor = "hand")
+		pg = tk.Scale(self.scrollFrame.viewPort, from_=0, to=50, orient=HORIZONTAL, label = "Population Growth %:", length = 180)
 		pg.pack()
 		pg.set(20)
 
@@ -142,7 +142,7 @@ class Simulate(tk.Frame):
 		chkFis = tk.Checkbutton (self.scrollFrame.viewPort, text = "Household Fission" , padx = 0, pady = 2, variable= varFis)
 		chkFis.pack()
 
-		mfc = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Min Fission Chance:", length = 180, cursor = "hand")
+		mfc = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Min Fission Chance:", length = 180)
 		mfc.pack()
 		mfc.set(4)
 
@@ -150,7 +150,7 @@ class Simulate(tk.Frame):
 		chkRent = tk.Checkbutton (self.scrollFrame.viewPort, text = "Land Rental" , padx = 0, pady = 2, variable = varRent)
 		chkRent.pack()
 
-		rr = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Rental Rate %:", length = 180, cursor = "hand")
+		rr = tk.Scale(self.scrollFrame.viewPort, from_=0, to=10, orient=HORIZONTAL, label = "Rental Rate %:", length = 180)
 		rr.pack()
 		rr.set(5)
 		# **********************************
@@ -169,8 +169,8 @@ class Simulate(tk.Frame):
 		'''
 		def _quit():
 			root.quit()     # stops mainloop
-			root.destroy()  # this is necessary on Windows to prevent
-							# Fatal Python Error: PyEval_RestoreThread: NULL tstate
+			root.destroy()  
+							
 		def _start():
 			rent = False
 			seed = False
@@ -197,20 +197,60 @@ class Simulate(tk.Frame):
 			root.quit()     # stops mainloop
 			root.destroy()
 
-		start = tk.Button(master=root, text="Start", command=_start, cursor = "pointinghand")
+		# **********************************
+		# 		 INFORMATION WINDOW
+		# **********************************
+		def _info():
+			
+			informationWindow = Toplevel()
+			self.sf = ScrollFrame(informationWindow)
+			informationWindow.title("Simulation Essential Information")
+			h1 = tk.Label(self.sf.viewPort, text = "WHAT IS THIS?", bg= "lightblue", font = "calibri", fg = "black", bd = 10, width = 60)
+			h1.pack()
+			p1 = tk.Label(self.sf.viewPort, text = "\nAn abstraction of predynastic Nile valley (ca. 3700 BCE)\n\nModel allows one to see how they dynamics of variable Nile floods + chance + human\npersonality affect the accumulation of wealth and population distribution.\n", font = "calibri", fg = "black", bd = 10, width = 60, justify = LEFT)
+			p1.pack()
+
+			h2 = tk.Label(self.sf.viewPort, text = "HOW IT WORKS", bg= "lightblue", font = "calibri", fg = "black", bd = 10, width = 60)
+			h2.pack()
+			p2 = tk.Label(self.sf.viewPort, text = "\nAt the beginning of the run (setup), settlements are randomly distributed across the\nflood plain (but they are not allowed to be too close to each other - this is in the code)\n\nNotes about world setup:\n6km x 6km abstraction of the Nile valley\neach patch = 200m x 200m\nthus, in the code, max agricultural yield is set at 2450kg per patch according to\nhistorical data\n\nconsumption is set at 160kg per year according to historical data\n\nseeding cost set at 1/8 yield, rounded here to 300kg\n\n(what rules the agents use to create the overall behavior of the model)\n", font = "calibri", fg = "black", bd = 10, width = 60, justify = LEFT)
+			p2.pack()
+
+			h3 = tk.Label(self.sf.viewPort, text = "HOW TO USE IT", bg= "lightblue", font = "calibri", fg = "black", bd = 10, width = 60)
+			h3.pack()
+			p3 = tk.Label(self.sf.viewPort, text = "\n(how to use the model, including a description of each of the items in the Interface tab)\n", font = "calibri", fg = "black", bd = 10, width = 60, justify = LEFT)
+			p3.pack()
+
+			h4 = tk.Label(self.sf.viewPort, text = "THINGS TO NOTICE", bg= "lightblue", font = "calibri", fg = "black", bd = 10, width = 60)
+			h4.pack()
+			p4 = tk.Label(self.sf.viewPort, text = "\n(suggested things for the user to notice while running the model)\n", font = "calibri", fg = "black", bd = 10, width = 60, justify = LEFT)
+			p4.pack()
+
+			h5 = tk.Label(self.sf.viewPort, text = "THINGS TO TRY", bg= "lightblue", font = "calibri", fg = "black", bd = 10, width = 60)
+			h5.pack()
+			p6 = tk.Label(self.sf.viewPort, text = "\n(suggested things for the user to try to do (move sliders, switches, etc.) with the model)\n", font = "calibri", fg = "black", bd = 10, width = 60, justify = LEFT)
+			p6.pack()
+
+			self.sf.pack(fill="both", expand=True)
+			informationWindow.geometry("600x700")
+		# **********************************
+
+		start = tk.Button(master=root, text="Start", command=_start)
 		start.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
-		pause = tk.Button(master=root, text="Pause", command=_pause, cursor = "pointinghand")
+		pause = tk.Button(master=root, text="Pause", command=_pause)
 		pause.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
-		stop = tk.Button(master=root, text="Stop", command=_stop, cursor = "pointinghand")
+		stop = tk.Button(master=root, text="Stop", command=_stop)
 		stop.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
-		quit = tk.Button(master=root, text="Quit", command=_quit, cursor = "pointinghand")
+		quit = tk.Button(master=root, text="Quit", command=_quit)
 		quit.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
+		info = tk.Button(master=root, text="Info", command=_info)
+		info.pack(in_ = root, side=tk.TOP)
+
 		self.scrollFrame.pack(side="top", fill="both", expand=True)
-		self.img=mpimg.imread('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/map.png')
+		self.img=mpimg.imread('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/map.png') #image is imported into a numpy array which will be used for the flooding simulation each tick
 		
 
 	def clearAll():
@@ -336,11 +376,9 @@ class Simulate(tk.Frame):
 		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
 
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-		
-		
 
 		self.getData()
-
+		#self.ax.imshow(self.img)
 		self.cv = FigureCanvasTkAgg(self.fig, master=root)
 		self.cv.draw()
 		self.cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
@@ -354,15 +392,14 @@ class Simulate(tk.Frame):
 		'''
 		root.geometry("1200x700")
 		
-		self.ax.axis('off')
+		#self.ax.axis('off')
 
 	def getData(self):
 		self.xList =[]
 		self.yList = []
 		print("IN GET CO")
 		
-		
-		#tick_Counter = tk.Label (self.scrollFrame.viewPort, text = ("Ticks:", 0)) 
+		#tick_Counter = tk.Label (root, text = ("Ticks:", 0)) 
 		#tick_Counter.pack(side = tk.TOP)
 		
 		count =0
@@ -376,12 +413,27 @@ class Simulate(tk.Frame):
 					try:
 						self.xList.append(x[1])
 						self.xList.append(s.getCoordinates()[0])
-						
+
 						self.yList.append(x[0])
 						self.yList.append(s.getCoordinates()[1])
+
+						if(h.consumeGrain()):
+							s.decrementPopulation()
+							self.__total_population =- 1
+						if(h.checkWorkers()):
+							s.removeHousehold(h)
+
+						for field in h.getFieldsOwned():
+							if(field.fieldChangeover() >= self.__fallow_limit):
+								field.toggleOwned()
+								h.removeField(field)
+
+						self.populationShift(h, s, count)
+						h.generationalChangeover(self.__min_ambition, self.__min_competency)
+
 					except:
 						continue 
-				self.ax.plot(self.yList, self.xList, marker = '$☘$',markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
+				self.ax.plot(self.yList, self.xList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
 				self.xList.clear()
 				self.yList.clear()
 				
