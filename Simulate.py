@@ -485,4 +485,3 @@ if __name__ == "__main__":
 	root.geometry("480x700")
 	Simulate(root).pack(side=tk.LEFT, fill="both", expand=True)
 	root.mainloop()
-
