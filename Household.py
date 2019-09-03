@@ -14,7 +14,7 @@ class Household:
 
 
 	"""docstring for Household"""
-	def __init__(self,h_id, coords,size,tot_grain, houseColour, fields_owned, fields_harvested, competency, ambition, rental_rate, allow_land_rental, distance_cost):
+	def __init__(self, h_id, coords, size,tot_grain, houseColour, fields_owned, fields_harvested, competency, ambition, rental_rate, allow_land_rental, distance_cost):
 
 		self.__id = h_id
 		#self.__belongingSettlement = settle
@@ -34,7 +34,7 @@ class Household:
 		self.__competency =  competency + (random.random()*(1-competency))
 		self.__ambition = ambition + (random.random()*(1-ambition))
 
-	def __init__(self,h_id, settle,size, competency, ambition, know_radius):
+	def __init__(self, h_id, settle, size, competency, ambition, know_radius):
 		self.__id = h_id
 		#self.__belongingSettlement = settle
 		self.__knowledge_radius = know_radius
@@ -104,7 +104,7 @@ class Household:
 			mask = (r[np.newaxis,:]-cr)**2 + (c[:,np.newaxis]-cc)**2 < radius**2
 
 			for patch in patches[mask]: #traverses through array of patches in the circle
-				if patch.isField()==True and patch.isOwned() == False:
+				if patch.isField()==True and patch.isOwned() == False and patch.isRiver() == False:
 					#fertility = patch.Field().getFertility()
 					fertility = 5
 					if fertility > best_fertility: #finds field with best fertility
