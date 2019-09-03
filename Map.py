@@ -5,7 +5,7 @@ from Patch import Patch
 
 class Map:
 	#Attributes
-	
+
 	__grid = np.empty((41,41), dtype= int)
 	__patches = np.empty((41,41), dtype = Patch) #list of patches
 
@@ -16,7 +16,7 @@ class Map:
 		self.__gini_index_reserve = 0.0
 		self.__avg_ambition = 0.0
 		self.__avg_competency = 0.0
-		
+
 
 	def getPatches(self):
 		return self.__patches
@@ -32,7 +32,6 @@ class Map:
 			for c in range(41):
 				self.__patches[r,c] = Patch(count, True) #this should insert a Patch object - I made every Patch a Field
 				count += 1
-				print(count)
 		return self.__patches
 
 		#populate list of patches
@@ -56,7 +55,7 @@ class Map:
 		return [r,c]
 
 	def isPatchAvailable(self,coords):
-		
+
 		if self.__patches[coords[0], coords[1]].isRiver() == False and self.__patches[coords[0],coords[1]].isSettlement() == False:
 			return True
 		else:
@@ -72,6 +71,7 @@ class Map:
 			coords = self.generateCoords()
 			if self.isPatchAvailable(coords) == True:
 				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
+				self.__patches[coords[0],coords[1]].toggleSettlement()
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
 				counter += 1
@@ -84,7 +84,7 @@ class Map:
 		#takes a string as a parameter
 		#happens every tick
 		pass
-		
+
 	def claimField(household):
 		pass
 
