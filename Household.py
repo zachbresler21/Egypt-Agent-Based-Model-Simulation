@@ -3,6 +3,7 @@ from Patch import Patch
 from Map import Map
 import random
 import numpy as np
+import math
 
 
 class Household:
@@ -21,7 +22,7 @@ class Household:
 		self.__coordinates = coords
 		self.__size = size
 		self.__tot_grain = tot_grain
-		
+
 		self.__houseColour = houseColour
 		self.__generationCountdown = 0
 		self.__distance_cost = 0
@@ -153,7 +154,7 @@ class Household:
 		if self.__size == 0:
 			self.__belongingSettlement.removeHousehold()
 	'''
-	def addMember():
+	def addMember(self):
 		self.__size = self.__size + 1
 
 	def beginFarm():
@@ -199,7 +200,6 @@ class Household:
 			self.__competency = new_competency
 
 
-
 	def removeFields():
 		#
 		pass
@@ -227,7 +227,7 @@ class Household:
 
 
 		def determineField(self,distance_cost):
-			num_harvests = math.floor(self.__size / 2) #one harvest for every 2 workers
+			num_harvests = math.floor(outer.__size / 2) #one harvest for every 2 workers
 			self.__best_harvest = 0
 			best_field = Patch()
 			for i in range(num_harvests):
