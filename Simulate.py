@@ -413,6 +413,7 @@ class Simulate(tk.Frame):
 					try:
 						self.xList.append(x[1])
 						self.xList.append(s.getCoordinates()[0])
+
 						self.yList.append(x[0])
 						self.yList.append(s.getCoordinates()[1])
 
