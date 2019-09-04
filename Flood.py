@@ -3,7 +3,6 @@ from Patch import Patch
 import random
 import math
 
-
 class Flood:
 	#Atributes
 	map = Map()

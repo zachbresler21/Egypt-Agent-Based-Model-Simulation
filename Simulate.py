@@ -187,6 +187,7 @@ class Simulate(tk.Frame):
 				xs.append(x)
 				ys.append(y)
 			return xs, ys
+
 		def _start():
 
 			# **********************************
@@ -420,12 +421,7 @@ class Simulate(tk.Frame):
 
 		self.change_state()
 		threading.Thread(target=self.getData()).start()
-		'''
-		for i in range(self.__model_time_span):
-			#ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
-			self.animate(i)
-			#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-		'''
+
 		root.geometry("1200x700")
 
 		self.ax.axis('off')
@@ -437,23 +433,27 @@ class Simulate(tk.Frame):
 		root.geometry("1200x700")
 		self.ax.axis('off')
 		#tick_Counter = tk.Label (root, text = ("Ticks:", 0))
+
 		#tick_Counter.pack()
 		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
+
 		count = 0
 		while(count<self.__model_time_span):
 
 			count += 1
 			flood = Flood()
+
 			
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
 			self.establishPopulation() # dont think this is the right method - we need a method that checks the population every tick
 			#****************************************************************************************************************
+
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
 					flood.setFertility()
-					
+
 					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 					if(h.consumeGrain()):
@@ -471,7 +471,7 @@ class Simulate(tk.Frame):
 					self.populationShift(h, s, count)
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
-					
+
 					h.inner.beginFarm(self.__distance_cost)
 
 					try:
@@ -483,6 +483,7 @@ class Simulate(tk.Frame):
 						self.ax.plot(self.xList, self.yList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
 						self.cv.draw()
 						self.cv.flush_events()
+
 						#time.sleep(0.01)
 						self.xList.clear()
 						self.yList.clear()
@@ -490,17 +491,6 @@ class Simulate(tk.Frame):
 					except:
 						continue
 
-	'''
-	def animate(self, x):
-		#self.getData()
-		self.ax.clear()
-		#cmap = mpl.colors.ListedColormap(['blue','lightgreen'])
-		#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-		self.ax.imshow(self.img)
-		self.ax.plot(self.yList, self.xList, marker = '$☘$', color = 'white', ms = 8, linestyle='-')
-		for i in self.coordinates:
-			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
-	'''
 if __name__ == "__main__":
 	root=tk.Tk()
 	root.title("Egypt Simulation")

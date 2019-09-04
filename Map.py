@@ -24,7 +24,6 @@ class Map:
 	def getGrid(self):
 		return self.__grid
 
-
 	def createPatches(self):
 		#Use multiprocessing
 		count = 0
@@ -72,6 +71,7 @@ class Map:
 			if self.isPatchAvailable(coords) == True:
 				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				self.__patches[coords[0],coords[1]].toggleSettlement()
+				self.__patches[coords[0],coords[1]].toggleField()
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
 				counter += 1

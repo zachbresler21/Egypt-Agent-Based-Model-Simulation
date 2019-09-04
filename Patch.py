@@ -2,7 +2,6 @@ import math
 class Patch:
 
 	#Attributes
-	
 
 	def __init__(self, patch_id, isField):
 		self.__isSettlement = False
@@ -12,7 +11,7 @@ class Patch:
 		self.__patch_id = patch_id
 		self.__isField = isField
 		if self.__isField == True:
-			self.inner = self.Field(patch_id, 0.8, 0)
+			self.inner = self.Field(patch_id)
 
 
 	def getID(self):
@@ -56,20 +55,23 @@ class Patch:
 
 	class Field:
 
-		#Attributes
-		__field_id = 0
-		__fertility = 0
-		__avg_fertility = 0
-		__harvested = False
-		__years_fallow = 0
-
-		def __init__(self, field_id, fertility, years_fallow):
+		def __init__(self, field_id):
 			self.__field_id = field_id
-			self.__fetility = 5
-			self.__years_fallow = years_fallow
+			self.__fertility = 5
+			self.__years_fallow = 0
+			self.__harvested = False
 
 		def getFertility(self):
 			return self.__fertility
+
+		def setFertility(self,fertility):
+			self.__fertility = fertility
+
+		def setHarvestFalse(self):
+			self.harvest = False
+
+		def isHarvested(self):
+			return self.__harvested
 
 		def toggleHarvested(self):
 			self.__harvested = not self.__harvested

@@ -3,6 +3,7 @@ from Patch import Patch
 from Map import Map
 import random
 import numpy as np
+import math
 
 
 class Household:
@@ -21,7 +22,7 @@ class Household:
 		self.__coordinates = coords
 		self.__size = size
 		self.__tot_grain = tot_grain
-		
+
 		self.__houseColour = houseColour
 		self.__generationCountdown = 0
 		self.__distance_cost = 0
@@ -34,9 +35,12 @@ class Household:
 		self.__competency =  competency + (random.random()*(1-competency))
 		self.__ambition = ambition + (random.random()*(1-ambition))
 
-	def __init__(self, h_id, settle, size, competency, ambition, know_radius):
+		self.__inner = self.Farm(self)
+
+	def __init__(self, h_id, coords, size, competency, ambition, know_radius):
 		self.__id = h_id
 		#self.__belongingSettlement = settle
+		self.__coordinates = coords
 		self.__knowledge_radius = know_radius
 		self.__size = size
 		self.__ambtion = ambition
@@ -49,18 +53,44 @@ class Household:
 		self.__rental_rate = 0.0
 		self.__fields_owned = [] #list of Field objects
 		self.__fields_harvested = [] #list of Field objects
-		self.__coordinates = []
+
 		self.map = Map()
 
 		self.__competency =  competency + (random.random()*(1-competency))
 		self.__ambition = ambition + (random.random()*(1-ambition))
 
+		self.inner = self.Farm(self)
+
 
 	def getFieldsOwned(self):
 		return self.__fields_owned
 
+	def getSize(self):
+		return self.__size
+
+	def getCompetency(self):
+		return self.__competency
+
+	def getAmbition(self):
+		return self.__ambition
+
+	def getCoordinates(self):
+		return self.__coordinates
+
+	def getTotGrain(self):
+		return self.__tot_grain
+
+	def addTotGrain(self,tot_harvest):
+		self.__tot_grain += tot_harvest
+
+	def addHarvestField(self, field):
+		self.__fields_harvested.append(field)
+
 	def removeField(self,field):
 		self.__fields_owned.remove(field)
+
+	def setCoordinates(self,coords):
+		self.__coordinates = coords
 
 	def set_competency(self, competency):
 		self.__competency = competency
@@ -88,7 +118,6 @@ class Household:
 		patches = self.map.getPatches()
 		claim_chance = random.uniform(0,1) #creates a random float between 0 and 1
 		if (self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land ADD LATER(claim_chance < self.__ambition) and
-
 			current_grain = self.__tot_grain
 			claim_field = Patch(34567, True)
 			best_fertility = 0
@@ -153,7 +182,7 @@ class Household:
 		if self.__size == 0:
 			self.__belongingSettlement.removeHousehold()
 	'''
-	def addMember():
+	def addMember(self):
 		self.__size = self.__size + 1
 
 	def beginFarm():
@@ -199,7 +228,6 @@ class Household:
 			self.__competency = new_competency
 
 
-
 	def removeFields():
 		#
 		pass
@@ -207,60 +235,56 @@ class Household:
 	class Farm:
 
 		#Attributes
-
 		__max_potential_yield = 2475
-		__best_harvest = 0
-		__workers_worked = 0
 
+		def __init__(self, household):
+			self.__best_harvest = 0
+			self.__workers_worked = 0
+			self.__household = household
 
-		"""docstring for ClassName"""
-		#def __init__(self, arg):
-			#super(ClassName, self).__init__()
-			#self.arg = arg
 
 		def beginFarm(self, distance_cost):
 			best_field = self.determineField(distance_cost)
-			total_harvest = calcYield(best_field)
-			Household().tot_grain += total_harvest
-			Household().__fields_harvested.append(best_field)
-			print("so is justing a whore")
+			total_harvest = self.calcYield(best_field)
+			self.__household.addTotGrain(total_harvest)
+			self.__household.addHarvestField(best_field)
 
 
 		def determineField(self,distance_cost):
-			num_harvests = math.floor(self.__size / 2) #one harvest for every 2 workers
+			num_harvests = math.floor(self.__household.getSize() / 2) #one harvest for every 2 workers
 			self.__best_harvest = 0
-			best_field = Patch()
+			best_field = Patch(34567, True)
 			for i in range(num_harvests):
-				for field in self.__fields_owned: #fields_owned is an array of patches
-					this_harvest = (field.Field().getFertility()*self.__max_potential_yield*self.__competency)-(self.findDistance(field)*distance_cost)
+				for field in self.__household.getFieldsOwned(): #fields_owned is an array of patches
+					this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*distance_cost)
 					#yield dependent on fertility, whether or not the household actually farms the field (competency) and distance cost
-					if(field.Field().isHarvested() == False and this_harvest > self.__best_harvest): #finds highest yield field
+					if(field.inner.isHarvested() == False and this_harvest > self.__best_harvest): #finds highest yield field
 						self.__best_harvest = this_harvest
 						best_field = field
-			print("a huge whore")
 			return best_field
 
 
-		def calcYield(field):
+		def calcYield(self,field):
 			#takes a Field object as a parameter
 			farm_chance = random.uniform(0,1) #creates a random float between 0 and 1
-			if(self.__tot_grain < (self.__size * 160) or farm_chance < (self.__ambition * self.__competency)):
+			if(self.__household.getTotGrain() < (self.__household.getSize() * 160) or farm_chance < (self.__household.getAmbition() * self.__household.getCompetency())):
 				#160 is kilograms of grain per person annually, after Hassan 1984, 63.
-				field.Field().toggleHarvested() #NEED TO TOGGLE FIELDS HARVESTED EVERY TICK
+				field.inner.toggleHarvested() #NEED TO TOGGLE FIELDS HARVESTED EVERY TICK
 				#Change shape? Show harvest on the plot?
 				total_harvest = self.__best_harvest - 300  #300 = cost of seeding the field, assuming 1/8 of maximum potential yield.
 				self.__workers_worked += 2
-				print("im a whore")
 				return total_harvest
+			else:
+				return 0
 
 
 		def findDistance(self, field):
 			#determines distance between household and field
 			cor1 = field.findCoordinates()
-			cor2 = self.__coordinates
-
+			cor2 = self.__household.getCoordinates()
 			hor = math.pow((cor1[0]-cor2[0]),2)
 			ver = math.pow((cor1[1]-cor2[1]),2)
 
-			distance = math.sqrt(hor + ver)
+			#distance = math.sqrt(hor + ver)
+			distance = 0
 			return distance
