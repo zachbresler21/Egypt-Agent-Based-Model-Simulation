@@ -85,7 +85,7 @@ class Map:
 				num = int(10*round(self.__patches[r][c].inner.getFertility(), 1))
 				if(num == 0):
 					num += 1
-				print(num, num == 0)###########testing to see whether there are any zeros
+				#print(num, num == 0)###########testing to see whether there are any zeros
 				self.__grid[c][r] = num
 		#self.createRiver()
 

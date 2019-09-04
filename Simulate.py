@@ -456,7 +456,7 @@ class Simulate(tk.Frame):
 					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 
-					self.populationShift(h, s, count)
+					#self.populationShift(h, s, count) (ADDING TOO OFTEN)
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
