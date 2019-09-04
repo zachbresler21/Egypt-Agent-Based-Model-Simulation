@@ -424,31 +424,34 @@ class Simulate(tk.Frame):
 		#tick_Counter = tk.Label (root, text = ("Ticks:", 0))
 		#tick_Counter.pack(side = tk.TOP)
 
-		count =0
+		count = 0
 		while(count<self.__model_time_span):
 
 			count += 1
+
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
+					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
-					'''if(h.consumeGrain()):
+					if(h.consumeGrain()):
 						s.decrementPopulation()
 						self.__total_population =- 1
 
 					if(h.checkWorkers()):
 						s.removeHousehold(h)
 
-					for field in h.getFieldsOwned():
+					"""for field in h.getFieldsOwned():
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
-							h.removeField(field)
+							h.removeField(field)"""
 
 					self.populationShift(h, s, count)
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
-					h.Farm().beginFarm(self.__distance_cost)'''
+					h.inner.beginFarm(self.__distance_cost)
+
 					try:
 						self.xList.append(x[0])
 						self.xList.append(s.getCoordinates()[1])

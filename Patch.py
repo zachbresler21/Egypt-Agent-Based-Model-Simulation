@@ -3,7 +3,6 @@ class Patch:
 
 	#Attributes
 
-
 	def __init__(self, patch_id, isField):
 		self.__isSettlement = False
 		self.__isRiver = False
@@ -12,9 +11,7 @@ class Patch:
 		self.__patch_id = patch_id
 		self.__isField = isField
 		if self.__isField == True:
-			self.inner = self.Field(patch_id, 0)
-
-
+			self.inner = self.Field(patch_id)
 
 
 	def getID(self):
@@ -58,20 +55,17 @@ class Patch:
 
 	class Field:
 
-		#Attributes
-		__field_id = 0
-		__fertility = 0
-		__avg_fertility = 0
-		__harvested = False
-
-
-		def __init__(self, field_id, fertility):
+		def __init__(self, field_id):
 			self.__field_id = field_id
-			self.__fetility = 5
+			self.__fertility = 5
 			self.__years_fallow = 0
+			self.__harvested = False
 
 		def getFertility(self):
 			return self.__fertility
+
+		def isHarvested(self):
+			return self.__harvested
 
 		def toggleHarvested(self):
 			self.__harvested = not self.__harvested
