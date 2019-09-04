@@ -11,7 +11,7 @@ class Map:
 
 	def __init__(self):
 		#self.__grid = np.random.randint(10, size= (41,41))
-		self.__grid = np.ones((41,41))
+		#self.__grid = np.ones((41,41))
 		self.__lorenz_points = 0.0
 		self.__gini_index_reserve = 0.0
 		self.__avg_ambition = 0.0
@@ -79,6 +79,15 @@ class Map:
 				coords = self.generateCoords()
 		return coords_list
 
+	def gridRecolour(self):
+		for r in range(2,41):
+			for c in range(0,41):
+				num = int(10*round(self.__patches[r][c].inner.getFertility(), 1))
+				if(num == 0):
+					num += 1
+				print(num, num == 0)###########testing to see whether there are any zeros
+				self.__grid[c][r] = num
+		#self.createRiver()
 
 	def assignFertilityColour(fertility):
 		#takes a string as a parameter
