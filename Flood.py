@@ -10,9 +10,7 @@ class Flood:
 
 	"""docstring for Flood"""
 	def __init__(self):
-		super(Flood, self).__init__()
-		#self.arg = arg
-		__fertility_colour = "White"
+		self.__fertility_colour = "White"
 
 	def beginFlood():
 		#
@@ -28,8 +26,9 @@ class Flood:
 		for i in range (41):
 			for j in range(41):
 				fertility = 17 * (beta * (math.exp(0 - math.pow((patches[i][j].findCoordinates()[0] - mu),2)/alpha)))
-				patches[i][j].Field().setFertility(fertility)
-				patches[i][j].Field().setHarvestFalse()
+				if(patches[i][j].isField()):
+					patches[i][j].inner.setFertility(fertility)
+					patches[i][j].inner.setHarvestFalse()
 
 	def assignFertilityColour():
 		#

@@ -64,6 +64,12 @@ class Patch:
 		def getFertility(self):
 			return self.__fertility
 
+		def setFertility(self,fertility):
+			self.__fertility = fertility
+
+		def setHarvestFalse(self):
+			self.harvest = False
+
 		def isHarvested(self):
 			return self.__harvested
 
