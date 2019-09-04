@@ -25,6 +25,8 @@ from Map import Map
 from Settlement import Settlement
 from Household import Household
 from Patch import Patch
+from Flood import Flood
+import math
 plt.style.use('ggplot')
 
 class ScrollFrame(tk.Frame):
@@ -52,6 +54,7 @@ class Simulate(tk.Frame):
 	continuePlotting = False
 	fig = plt.figure(figsize=(10,8.2))
 	ax = fig.add_subplot(1,1,1)
+	#totPop = plt.subplot2grid((6,2), (0,0), rowspan = 2 , colspan= 1)
 	xList = []
 	yList = []
 	global c_id
@@ -81,8 +84,9 @@ class Simulate(tk.Frame):
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
+	flood = Flood()
 
-	
+
 
 	def __init__(self, root):
 
@@ -163,20 +167,42 @@ class Simulate(tk.Frame):
 		# NOTE: the child controls are added to the view port (scrollFrame.viewPort, NOT scrollframe itself)
 		self.scrollFrame.pack(side=tk.LEFT, fill="both", expand=True)
 		# when packing the scrollframe, we pack scrollFrame itself (NOT the viewPort)
-		
+
 		'''
 		def on_key_press(event):
 			print("you pressed {}".format(event.key))
 			key_press_handler(event, cv, toolbar)
-
-
 		cv.mpl_connect("key_press_event", on_key_press)
 		'''
 		def _quit():
 			root.quit()     # stops mainloop
-			root.destroy()  
-							
+			root.destroy()
+
+		def createPlots():
+			xs = []
+			ys = []
+			for i in range(10):
+				x = i
+				y = random.randrange(10)
+				xs.append(x)
+				ys.append(y)
+			return xs, ys
 		def _start():
+
+			# **********************************
+			# 		    GRAPH WINDOW
+			# **********************************
+			graphWindow = Toplevel()
+			self.gw = ScrollFrame(graphWindow)
+			graphWindow.title("Graphs")
+			x, y = createPlots()
+
+			#self.totPop.plot(x, y)
+
+			self.gw.pack(fill="both", expand=True, anchor = "e")
+			graphWindow.geometry("600x700")
+			# **********************************
+
 			rent = False
 			seed = False
 			fis = False
@@ -194,10 +220,6 @@ class Simulate(tk.Frame):
 			ma.get(), gv.get(), kr.get(), dc.get(), fl.get(), pg.get(),fis, \
 			mfc.get(), rent, rr.get(), seed)
 
-		def _pause():
-			root.quit()     # stops mainloop
-			root.destroy()
-
 		def _stop():
 			root.quit()     # stops mainloop
 			root.destroy()
@@ -206,7 +228,7 @@ class Simulate(tk.Frame):
 		# 		 INFORMATION WINDOW
 		# **********************************
 		def _info():
-			
+
 			informationWindow = Toplevel()
 			self.sf = ScrollFrame(informationWindow)
 			informationWindow.title("Simulation Essential Information")
@@ -242,9 +264,6 @@ class Simulate(tk.Frame):
 		start = tk.Button(master=root, text="Start", command=_start)
 		start.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
-		pause = tk.Button(master=root, text="Pause", command=_pause)
-		pause.pack(in_ = self.scrollFrame, side=tk.LEFT)
-
 		stop = tk.Button(master=root, text="Stop", command=_stop)
 		stop.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
@@ -255,8 +274,8 @@ class Simulate(tk.Frame):
 		info.pack(in_ = root, side=tk.TOP)
 
 		self.scrollFrame.pack(side="top", fill="both", expand=True)
-		self.img=mpimg.imread('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/map.png') #image is imported into a numpy array which will be used for the flooding simulation each tick
-		
+		#self.img=mpimg.imread('/Users/user/Desktop/CSC3003S/EGYPT/Egypt_Simulation/map.png') #image is imported into a numpy array which will be used for the flooding simulation each tick
+
 
 	def clearAll():
 		#clear all method
@@ -325,7 +344,7 @@ class Simulate(tk.Frame):
 	def populationShift(self, household, settlement, ticks):
 		starting_pop =  self.__starting_settlements * self.__starting_households * self.__starting_household_size
 		populate_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/100)),ticks)) and (populate_chance > 0.5)):
+		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/10000)),ticks)) and (populate_chance > 0.5)):
 			household.addMember()
 			settlement.incrementPopulation()
 			self.__total_population += 1
@@ -371,16 +390,15 @@ class Simulate(tk.Frame):
 		self.__manual_seed = manual_seed
 
 		self.setUpPatches()
-		
+
 		self.setUpSettlements()
 		self.createRiver()
 		self.establishPopulation()
 		self.runSimulation()
 
-	
- 
+
+
 	def change_state(self):
-		#global continuePlotting
 		if self.continuePlotting == True:
 			self.continuePlotting = False
 		else:
@@ -388,22 +406,20 @@ class Simulate(tk.Frame):
 
 
 	def runSimulation(self):
-		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-
+		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
+		
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		#self.getData()
 		#self.ax.imshow(self.img)
 		self.cv = FigureCanvasTkAgg(self.fig, master=root)
 		self.cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
-		
+
 		for i in self.coordinates:
 			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
 
 		self.change_state()
 		threading.Thread(target=self.getData()).start()
-
-
 		'''
 		for i in range(self.__model_time_span):
 			#ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
@@ -411,7 +427,7 @@ class Simulate(tk.Frame):
 			#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 		'''
 		root.geometry("1200x700")
-		
+
 		self.ax.axis('off')
 
 	def getData(self):
@@ -420,17 +436,44 @@ class Simulate(tk.Frame):
 		print("IN GET CO")
 		root.geometry("1200x700")
 		self.ax.axis('off')
-		#tick_Counter = tk.Label (root, text = ("Ticks:", 0)) 
-		#tick_Counter.pack(side = tk.TOP)
-		
-		count =0
+		#tick_Counter = tk.Label (root, text = ("Ticks:", 0))
+		#tick_Counter.pack()
+		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
+		count = 0
 		while(count<self.__model_time_span):
 
 			count += 1
+			flood = Flood()
+			
+			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
+			self.establishPopulation() # dont think this is the right method - we need a method that checks the population every tick
+			#****************************************************************************************************************
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
+					flood.setFertility()
+					
+					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
+					if(h.consumeGrain()):
+						s.decrementPopulation()
+						self.__total_population =- 1
+
+					if(h.checkWorkers()):
+						s.removeHousehold(h)
+
+					for field in h.getFieldsOwned():
+						if(field.inner.fieldChangeover() >= self.__fallow_limit):
+							field.toggleOwned()
+							h.removeField(field)
+
+					self.populationShift(h, s, count)
+
+					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
+					
+					h.inner.beginFarm(self.__distance_cost)
+
 					try:
 						self.xList.append(x[0])
 						self.xList.append(s.getCoordinates()[1])
@@ -440,42 +483,21 @@ class Simulate(tk.Frame):
 						self.ax.plot(self.xList, self.yList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
 						self.cv.draw()
 						self.cv.flush_events()
-						time.sleep(0.085)
+						#time.sleep(0.01)
 						self.xList.clear()
 						self.yList.clear()
-						
-						if(h.consumeGrain()):
-							s.decrementPopulation()
-							self.__total_population =- 1
-						if(h.checkWorkers()):
-							s.removeHousehold(h)
 
-						for field in h.getFieldsOwned():
-							if(field.fieldChangeover() >= self.__fallow_limit):
-								field.toggleOwned()
-								h.removeField(field)
-
-						self.populationShift(h, s, count)
-
-						h.generationalChangeover(self.__min_ambition, self.__min_competency)
-						
-						h.Farm().beginFarm(self.__distance_cost)
 					except:
 						continue
-				
 
-				
 	'''
 	def animate(self, x):
 		#self.getData()
 		self.ax.clear()
-		
 		#cmap = mpl.colors.ListedColormap(['blue','lightgreen'])
 		#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 		self.ax.imshow(self.img)
-
 		self.ax.plot(self.yList, self.xList, marker = '$☘$', color = 'white', ms = 8, linestyle='-')
-		
 		for i in self.coordinates:
 			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
 	'''
