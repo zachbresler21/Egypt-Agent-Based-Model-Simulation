@@ -408,7 +408,7 @@ class Simulate(tk.Frame):
 
 	def runSimulation(self):
 		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
-		
+
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		#self.getData()
@@ -443,8 +443,6 @@ class Simulate(tk.Frame):
 			count += 1
 			flood = Flood()
 
-
-			
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
 			self.establishPopulation() # dont think this is the right method - we need a method that checks the population every tick
@@ -457,12 +455,6 @@ class Simulate(tk.Frame):
 
 					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
-					if(h.consumeGrain()):
-						s.decrementPopulation()
-						self.__total_population =- 1
-
-					if(h.checkWorkers()):
-						s.removeHousehold(h)
 
 					self.populationShift(h, s, count)
 
@@ -476,6 +468,13 @@ class Simulate(tk.Frame):
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
 							h.removeField(field)
+
+					if(h.consumeGrain()):
+						s.decrementPopulation()
+						self.__total_population =- 1
+
+					if(h.checkWorkers()):
+						s.removeHousehold(h)
 
 					try:
 						self.xList.append(x[0])
