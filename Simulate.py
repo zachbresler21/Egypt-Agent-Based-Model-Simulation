@@ -443,6 +443,7 @@ class Simulate(tk.Frame):
 			count += 1
 			flood = Flood()
 
+
 			
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
@@ -463,16 +464,18 @@ class Simulate(tk.Frame):
 					if(h.checkWorkers()):
 						s.removeHousehold(h)
 
-					for field in h.getFieldsOwned():
-						if(field.inner.fieldChangeover() >= self.__fallow_limit):
-							field.toggleOwned()
-							h.removeField(field)
-
 					self.populationShift(h, s, count)
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
-					h.inner.beginFarm(self.__distance_cost)
+					num_harvests = math.floor(h.getSize() / 2) #one harvest for every 2 workers
+					for i in range(num_harvests):
+						h.inner.beginFarm(self.__distance_cost)
+
+					for field in h.getFieldsOwned():
+						if(field.inner.fieldChangeover() >= self.__fallow_limit):
+							field.toggleOwned()
+							h.removeField(field)
 
 					try:
 						self.xList.append(x[0])

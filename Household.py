@@ -135,7 +135,7 @@ class Household:
 			for patch in patches[mask]: #traverses through array of patches in the circle
 				if patch.isField()==True and patch.isOwned() == False and patch.isRiver() == False and patch.isSettlement() == False:
 					#fertility = patch.Field().getFertility()
-					fertility = 5
+					fertility = patch.inner.getFertility()
 					if fertility > best_fertility: #finds field with best fertility
 						best_fertility = fertility
 						claim_field = patch
@@ -251,16 +251,14 @@ class Household:
 
 
 		def determineField(self,distance_cost):
-			num_harvests = math.floor(self.__household.getSize() / 2) #one harvest for every 2 workers
 			self.__best_harvest = 0
 			best_field = Patch(34567, True)
-			for i in range(num_harvests):
-				for field in self.__household.getFieldsOwned(): #fields_owned is an array of patches
-					this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*distance_cost)
-					#yield dependent on fertility, whether or not the household actually farms the field (competency) and distance cost
-					if(field.inner.isHarvested() == False and this_harvest > self.__best_harvest): #finds highest yield field
-						self.__best_harvest = this_harvest
-						best_field = field
+			for field in self.__household.getFieldsOwned(): #fields_owned is an array of patches
+				this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*distance_cost)
+				#yield dependent on fertility, whether or not the household actually farms the field (competency) and distance cost
+				if(field.inner.isHarvested() == False and this_harvest > self.__best_harvest): #finds highest yield field
+					self.__best_harvest = this_harvest
+					best_field = field
 			return best_field
 
 

@@ -57,7 +57,7 @@ class Patch:
 
 		def __init__(self, field_id):
 			self.__field_id = field_id
-			self.__fertility = 5
+			self.__fertility = 0
 			self.__years_fallow = 0
 			self.__harvested = False
 
@@ -68,7 +68,7 @@ class Patch:
 			self.__fertility = fertility
 
 		def setHarvestFalse(self):
-			self.harvest = False
+			self.__harvested = False
 
 		def isHarvested(self):
 			return self.__harvested
