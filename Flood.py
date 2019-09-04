@@ -3,7 +3,6 @@ from Patch import Patch
 import random
 import math
 
-
 class Flood:
 	#Atributes
 	map = Map()
@@ -11,10 +10,6 @@ class Flood:
 	"""docstring for Flood"""
 	def __init__(self):
 		self.__fertility_colour = "White"
-
-	def beginFlood():
-		#
-		pass
 
 	def setFertility(self):
 		patches = self.map.getPatches()
@@ -29,7 +24,4 @@ class Flood:
 				if(patches[i][j].isField()):
 					patches[i][j].inner.setFertility(fertility)
 					patches[i][j].inner.setHarvestFalse()
-
-	def assignFertilityColour():
-		#
-		pass
+		self.map.gridRecolour()

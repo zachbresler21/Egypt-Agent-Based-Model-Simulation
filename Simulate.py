@@ -54,6 +54,7 @@ class Simulate(tk.Frame):
 	continuePlotting = False
 	fig = plt.figure(figsize=(10,8.2))
 	ax = fig.add_subplot(1,1,1)
+	#totPop = plt.subplot2grid((6,2), (0,0), rowspan = 2 , colspan= 1)
 	xList = []
 	yList = []
 	global c_id
@@ -171,15 +172,38 @@ class Simulate(tk.Frame):
 		def on_key_press(event):
 			print("you pressed {}".format(event.key))
 			key_press_handler(event, cv, toolbar)
-
-
 		cv.mpl_connect("key_press_event", on_key_press)
 		'''
 		def _quit():
 			root.quit()     # stops mainloop
 			root.destroy()
 
+		def createPlots():
+			xs = []
+			ys = []
+			for i in range(10):
+				x = i
+				y = random.randrange(10)
+				xs.append(x)
+				ys.append(y)
+			return xs, ys
+
 		def _start():
+
+			# **********************************
+			# 		    GRAPH WINDOW
+			# **********************************
+			graphWindow = Toplevel()
+			self.gw = ScrollFrame(graphWindow)
+			graphWindow.title("Graphs")
+			x, y = createPlots()
+
+			#self.totPop.plot(x, y)
+
+			self.gw.pack(fill="both", expand=True, anchor = "e")
+			graphWindow.geometry("600x700")
+			# **********************************
+
 			rent = False
 			seed = False
 			fis = False
@@ -196,10 +220,6 @@ class Simulate(tk.Frame):
 			self.saveUserInput(mtp.get(), ss.get(), sh.get(), shs.get(), sg.get(), mc.get(), \
 			ma.get(), gv.get(), kr.get(), dc.get(), fl.get(), pg.get(),fis, \
 			mfc.get(), rent, rr.get(), seed)
-
-		def _pause():
-			root.quit()     # stops mainloop
-			root.destroy()
 
 		def _stop():
 			root.quit()     # stops mainloop
@@ -244,9 +264,6 @@ class Simulate(tk.Frame):
 
 		start = tk.Button(master=root, text="Start", command=_start)
 		start.pack(in_ = self.scrollFrame, side=tk.LEFT)
-
-		pause = tk.Button(master=root, text="Pause", command=_pause)
-		pause.pack(in_ = self.scrollFrame, side=tk.LEFT)
 
 		stop = tk.Button(master=root, text="Stop", command=_stop)
 		stop.pack(in_ = self.scrollFrame, side=tk.LEFT)
@@ -383,7 +400,6 @@ class Simulate(tk.Frame):
 
 
 	def change_state(self):
-		#global continuePlotting
 		if self.continuePlotting == True:
 			self.continuePlotting = False
 		else:
@@ -391,8 +407,8 @@ class Simulate(tk.Frame):
 
 
 	def runSimulation(self):
-		cmap = mpl.colors.ListedColormap(['blue', 'lightgreen'])
-
+		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
+		
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
 		#self.getData()
@@ -406,13 +422,6 @@ class Simulate(tk.Frame):
 		self.change_state()
 		threading.Thread(target=self.getData()).start()
 
-
-		'''
-		for i in range(self.__model_time_span):
-			#ani = animation.FuncAnimation(self.fig, self.animate(1000), interval=1000)
-			self.animate(i)
-			#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-		'''
 		root.geometry("1200x700")
 
 		self.ax.axis('off')
@@ -424,7 +433,9 @@ class Simulate(tk.Frame):
 		root.geometry("1200x700")
 		self.ax.axis('off')
 		#tick_Counter = tk.Label (root, text = ("Ticks:", 0))
-		#tick_Counter.pack(side = tk.TOP)
+
+		#tick_Counter.pack()
+		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
 
 		count = 0
 		while(count<self.__model_time_span):
@@ -432,10 +443,17 @@ class Simulate(tk.Frame):
 			count += 1
 			flood = Flood()
 
+			
+			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
+			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
+			self.establishPopulation() # dont think this is the right method - we need a method that checks the population every tick
+			#****************************************************************************************************************
+
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
 					flood.setFertility()
+
 					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 					if(h.consumeGrain()):
@@ -465,27 +483,14 @@ class Simulate(tk.Frame):
 						self.ax.plot(self.xList, self.yList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
 						self.cv.draw()
 						self.cv.flush_events()
-						time.sleep(0.01)
+
+						#time.sleep(0.01)
 						self.xList.clear()
 						self.yList.clear()
 
 					except:
 						continue
 
-	'''
-	def animate(self, x):
-		#self.getData()
-		self.ax.clear()
-
-		#cmap = mpl.colors.ListedColormap(['blue','lightgreen'])
-		#self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-		self.ax.imshow(self.img)
-
-		self.ax.plot(self.yList, self.xList, marker = '$☘$', color = 'white', ms = 8, linestyle='-')
-
-		for i in self.coordinates:
-			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
-	'''
 if __name__ == "__main__":
 	root=tk.Tk()
 	root.title("Egypt Simulation")
