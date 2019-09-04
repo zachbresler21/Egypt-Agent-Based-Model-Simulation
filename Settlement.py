@@ -4,8 +4,8 @@ from Patch import Patch
 class Settlement:
 	#test
 	#Attributes
-	
-	
+
+
 
 	"""docstring for Settlement"""
 	def __init__(self, __settlement_id, __population, __num_households, __grain, __colour):
