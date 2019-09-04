@@ -25,6 +25,7 @@ from Map import Map
 from Settlement import Settlement
 from Household import Household
 from Patch import Patch
+from Flood import Flood
 import math
 plt.style.use('ggplot')
 
@@ -82,6 +83,7 @@ class Simulate(tk.Frame):
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
+	flood = Flood()
 
 
 
@@ -326,7 +328,7 @@ class Simulate(tk.Frame):
 	def populationShift(self, household, settlement, ticks):
 		starting_pop =  self.__starting_settlements * self.__starting_households * self.__starting_household_size
 		populate_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/100)),ticks)) and (populate_chance > 0.5)):
+		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/10000)),ticks)) and (populate_chance > 0.5)):
 			household.addMember()
 			settlement.incrementPopulation()
 			self.__total_population += 1
@@ -428,10 +430,12 @@ class Simulate(tk.Frame):
 		while(count<self.__model_time_span):
 
 			count += 1
+			flood = Flood()
 
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
+					flood.setFertility()
 					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 					if(h.consumeGrain()):
@@ -441,10 +445,10 @@ class Simulate(tk.Frame):
 					if(h.checkWorkers()):
 						s.removeHousehold(h)
 
-					"""for field in h.getFieldsOwned():
+					for field in h.getFieldsOwned():
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
-							h.removeField(field)"""
+							h.removeField(field)
 
 					self.populationShift(h, s, count)
 
@@ -461,14 +465,12 @@ class Simulate(tk.Frame):
 						self.ax.plot(self.xList, self.yList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
 						self.cv.draw()
 						self.cv.flush_events()
-						time.sleep(0.085)
+						time.sleep(0.01)
 						self.xList.clear()
 						self.yList.clear()
 
 					except:
 						continue
-
-
 
 	'''
 	def animate(self, x):
