@@ -431,7 +431,6 @@ class Simulate(tk.Frame):
 
 			count += 1
 			flood = Flood()
-
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
@@ -445,16 +444,18 @@ class Simulate(tk.Frame):
 					if(h.checkWorkers()):
 						s.removeHousehold(h)
 
-					for field in h.getFieldsOwned():
-						if(field.inner.fieldChangeover() >= self.__fallow_limit):
-							field.toggleOwned()
-							h.removeField(field)
-
 					self.populationShift(h, s, count)
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
-					h.inner.beginFarm(self.__distance_cost)
+					num_harvests = math.floor(h.getSize() / 2) #one harvest for every 2 workers
+					for i in range(num_harvests):
+						h.inner.beginFarm(self.__distance_cost)
+
+					for field in h.getFieldsOwned():
+						if(field.inner.fieldChangeover() >= self.__fallow_limit):
+							field.toggleOwned()
+							h.removeField(field)
 
 					try:
 						self.xList.append(x[0])
