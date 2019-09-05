@@ -189,7 +189,7 @@ class Simulate(tk.Frame):
 			return xs, ys
 
 		def _start():
-
+			'''
 			# **********************************
 			# 		    GRAPH WINDOW
 			# **********************************
@@ -203,7 +203,7 @@ class Simulate(tk.Frame):
 			self.gw.pack(fill="both", expand=True, anchor = "e")
 			graphWindow.geometry("600x700")
 			# **********************************
-
+			'''
 			rent = False
 			seed = False
 			fis = False
@@ -315,8 +315,7 @@ class Simulate(tk.Frame):
 		s_id=0
 		for i in range(self.__starting_settlements):
 			s_id+=1
-			s = Settlement(s_id,(self.__starting_households*self.__starting_household_size), self.__starting_households )
-			#self.__settlement_List[i] = s
+			s = Settlement(s_id,(self.__starting_households*self.__starting_household_size), self.__starting_households, )
 			self.__settlement_List.append(s)
 			s.setHouseholds(self.setUpHouseholds(s)) #calls method in settlement class to set households in the settlement
 		self.coordinates = self.map.setUpSettlements(self.__settlement_List)
@@ -326,7 +325,7 @@ class Simulate(tk.Frame):
 		households_for_settlement = np.empty(self.__starting_households, dtype = Household)
 		for i in range(self.__starting_households):
 			c_id = self.c_id+1
-			h = Household(c_id, settle.getCoordinates(), self.__starting_household_size, self.__min_competency, self.__min_ambition, self.__knowledge_radius)
+			h = Household(c_id, self.__starting_household_size,self.__starting_grain,self.__min_competency, self.__min_ambition, self.__rental_rate, self.__allow_land_rental, self.__distance_cost,self.__knowledge_radius)
 			self.__household_List[i] = h
 			households_for_settlement[i] = h
 
@@ -345,7 +344,7 @@ class Simulate(tk.Frame):
 	def populationShift(self, household, settlement, ticks):
 		starting_pop =  self.__starting_settlements * self.__starting_households * self.__starting_household_size
 		populate_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/10000)),ticks)) and (populate_chance > 0.5)):
+		if(self.__total_population <= (starting_pop * math.pow((1 + (self.__pop_growth_rate/100)),ticks)) and (populate_chance > 0.5)):
 			household.addMember()
 			settlement.incrementPopulation()
 			self.__total_population += 1
@@ -427,6 +426,7 @@ class Simulate(tk.Frame):
 		self.ax.axis('off')
 
 	def getData(self):
+		lines = ""
 		self.xList =[]
 		self.yList = []
 		print("IN GET CO")
@@ -441,7 +441,6 @@ class Simulate(tk.Frame):
 		while(count<self.__model_time_span):
 
 			count += 1
-			flood = Flood()
 
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
@@ -450,13 +449,14 @@ class Simulate(tk.Frame):
 
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
+				self.ax.plot(s.getCoordinates()[1],s.getCoordinates()[0], marker='$⌂$', ms = str(s.checkSettlementPopulation()), color = "yellow")
 				for h in s.getHouseholdList():
-					flood.setFertility()
+					self.map.setFertility()
 
 					h.setCoordinates(s.getCoordinates())
 					x = h.claimFields(s.getCoordinates()[0],s.getCoordinates()[1])
 
-					#self.populationShift(h, s, count) (ADDING TOO OFTEN)
+					self.populationShift(h, s, count)
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
@@ -468,6 +468,7 @@ class Simulate(tk.Frame):
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
 							h.removeField(field)
+							#self.ax.lines.remove(self.ax.lines[0])
 
 					if(h.consumeGrain()):
 						s.decrementPopulation()
