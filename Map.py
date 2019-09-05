@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import math
 from Patch import Patch
 
 
@@ -23,6 +24,7 @@ class Map:
 
 	def getGrid(self):
 		return self.__grid
+
 
 	def createPatches(self):
 		#Use multiprocessing
@@ -71,7 +73,6 @@ class Map:
 			if self.isPatchAvailable(coords) == True:
 				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				self.__patches[coords[0],coords[1]].toggleSettlement()
-				self.__patches[coords[0],coords[1]].toggleField()
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
 				#change block to a settlement in the plot (return list of coords to simulate)
 				counter += 1
@@ -79,12 +80,27 @@ class Map:
 				coords = self.generateCoords()
 		return coords_list
 
+	def setFertility(self):
+		patches = self.__patches
+		mu = random.randint(0,10) + 5
+		sigma = random.randint(0,5) + 5
+		alpha = 2 * math.pow(sigma,2)
+		beta = 1 / (sigma * math.sqrt(2 * math.pi))
+
+		for i in range (41):
+			for j in range(41):
+				fertility = 17 * (beta * (math.exp(0 - math.pow((patches[i][j].findCoordinates()[0] - mu),2)/alpha)))
+				if(patches[i][j].isField()):
+					patches[i][j].inner.setFertility(fertility)
+					patches[i][j].inner.setHarvestFalse()
+		self.gridRecolour()
+
 	def gridRecolour(self):
 		for r in range(2,41):
 			for c in range(0,41):
 				num = int(10*round(self.__patches[r][c].inner.getFertility(), 1))
-				if(num == 0):
-					num += 1
+				if(num<=0):
+					num = 1
 				#print(num, num == 0)###########testing to see whether there are any zeros
 				self.__grid[c][r] = num
 		#self.createRiver()
