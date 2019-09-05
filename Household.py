@@ -15,45 +15,18 @@ class Household:
 
 
 	"""docstring for Household"""
-	def __init__(self, h_id, coords, size,tot_grain, houseColour, fields_owned, fields_harvested, competency, ambition, rental_rate, allow_land_rental, distance_cost):
+	def __init__(self, h_id, size,tot_grain, competency, ambition, rental_rate, allow_land_rental, distance_cost, knowledge_radius):
 
 		self.__id = h_id
-		#self.__belongingSettlement = settle
-		self.__coordinates = coords
 		self.__size = size
 		self.__tot_grain = tot_grain
-
-		self.__houseColour = houseColour
-		self.__generationCountdown = 0
-		self.__distance_cost = 0
-		self.__allow_land_rental = False
-		self.__rental_rate = 0
-		self.__fields_owned = fields_owned
-		self.__fields_harvested = fields_harvested
-		self.map = Map()
-
-		self.__competency =  competency + (random.random()*(1-competency))
-		self.__ambition = ambition + (random.random()*(1-ambition))
-
-		self.__inner = self.Farm(self)
-
-	def __init__(self, h_id, coords, size, competency, ambition, know_radius):
-		self.__id = h_id
-		#self.__belongingSettlement = settle
-		self.__coordinates = coords
-		self.__knowledge_radius = know_radius
-		self.__size = size
-		self.__ambtion = ambition
-		self.__competency = competency
-		self.__tot_grain = 0
-		self.__colour = "Grey"
-		self.__generationCountdown = 0
-		self.__distance_cost = 0
-		self.__allow_land_rental = False
-		self.__rental_rate = 0.0
-		self.__fields_owned = [] #list of Field objects
-		self.__fields_harvested = [] #list of Field objects
-
+		self.__generationCountdown = random.randint(0,5)+10
+		self.__distance_cost = distance_cost
+		self.__allow_land_rental = allow_land_rental 
+		self.__rental_rate = rental_rate
+		self.__knowledge_radius = knowledge_radius
+		self.__fields_owned = []
+		self.__fields_harvested = []
 		self.map = Map()
 
 		self.__competency =  competency + (random.random()*(1-competency))
@@ -117,7 +90,7 @@ class Household:
 		#
 		patches = self.map.getPatches()
 		claim_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if ((claim_chance < self.__ambition) and self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land ADD LATER(claim_chance < self.__ambition) and
+		if (self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land ADD LATER(claim_chance < self.__ambition) and
 			current_grain = self.__tot_grain
 			claim_field = Patch(34567, True)
 			best_fertility = 0
@@ -134,9 +107,8 @@ class Household:
 
 			for patch in patches[mask]: #traverses through array of patches in the circle
 				if patch.isField()==True and patch.isOwned() == False and patch.isRiver() == False and patch.isSettlement() == False:
-					#fertility = patch.Field().getFertility()
 					fertility = patch.inner.getFertility()
-					if fertility > best_fertility: #finds field with best fertility
+					if fertility >= best_fertility: #finds field with best fertility
 						best_fertility = fertility
 						claim_field = patch
 
