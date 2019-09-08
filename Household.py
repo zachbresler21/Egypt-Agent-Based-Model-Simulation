@@ -22,7 +22,7 @@ class Household:
 		self.__tot_grain = tot_grain
 		self.__generationCountdown = random.randint(0,5)+10
 		self.__distance_cost = distance_cost
-		self.__allow_land_rental = allow_land_rental 
+		self.__allow_land_rental = allow_land_rental
 		self.__rental_rate = rental_rate
 		self.__knowledge_radius = knowledge_radius
 		self.__fields_owned = []
@@ -216,10 +216,12 @@ class Household:
 
 
 		def beginFarm(self, distance_cost):
-			best_field = self.determineField(distance_cost)
-			total_harvest = self.calcYield(best_field)
-			self.__household.addTotGrain(total_harvest)
-			self.__household.addHarvestField(best_field)
+			num_harvests = math.floor(self.__household.getSize() / 2) #one harvest for every 2 workers
+			for i in range(num_harvests):
+				best_field = self.determineField(distance_cost)
+				total_harvest = self.calcYield(best_field)
+				self.__household.addTotGrain(total_harvest)
+				self.__household.addHarvestField(best_field)
 
 
 		def determineField(self,distance_cost):

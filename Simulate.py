@@ -25,7 +25,6 @@ from Map import Map
 from Settlement import Settlement
 from Household import Household
 from Patch import Patch
-from Flood import Flood
 import math
 plt.style.use('ggplot')
 
@@ -84,7 +83,6 @@ class Simulate(tk.Frame):
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
-	flood = Flood()
 
 
 
@@ -460,9 +458,7 @@ class Simulate(tk.Frame):
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
-					num_harvests = math.floor(h.getSize() / 2) #one harvest for every 2 workers
-					for i in range(num_harvests):
-						h.inner.beginFarm(self.__distance_cost)
+					h.inner.beginFarm(self.__distance_cost)
 
 					for field in h.getFieldsOwned():
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
