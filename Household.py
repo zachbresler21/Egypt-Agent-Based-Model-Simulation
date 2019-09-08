@@ -228,15 +228,14 @@ class Household:
 			self.__workers_worked = 0
 
 		def beginFarm(self):
-			num_harvests = math.floor(self.__household.getSize() / 2) #one harvest for every 2 workers
-			for i in range(num_harvests):
-				best_field = self.determineField()
-				total_harvest = self.calcYield(best_field)
-				self.__household.addTotGrain(total_harvest)
+			best_field = self.determineField()
+			total_harvest = self.calcYield(best_field)
+			self.__household.addTotGrain(total_harvest)
+			return best_field.findCoordinates()
 
 		def determineField(self):
 			self.__best_harvest = 0
-			best_field = Patch(34567, True)
+			best_field = Patch(0, True)
 			for field in self.__household.getFieldsOwned(): #fields_owned is an array of patches
 				this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*self.__household.getDistanceCost())
 				#yield dependent on fertility, whether or not the household actually farms the field (competency) and distance cost
