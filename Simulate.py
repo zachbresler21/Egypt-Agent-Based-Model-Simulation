@@ -3,10 +3,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from matplotlib import colors
-import matplotlib.patches as ptc
-from matplotlib.patches import Circle
 import matplotlib.image as mpimg
-from matplotlib.offsetbox import (TextArea, DrawingArea, OffsetImage, AnnotationBbox)
 import tkinter as tk
 from tkinter import *
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -21,11 +18,13 @@ import sys
 import threading
 import time
 import random
+import math
 from Map import Map
 from Settlement import Settlement
 from Household import Household
 from Patch import Patch
-import math
+from Flood import Flood
+
 plt.style.use('ggplot')
 
 class ScrollFrame(tk.Frame):
@@ -51,8 +50,13 @@ class ScrollFrame(tk.Frame):
 
 class Simulate(tk.Frame):
 	continuePlotting = False
+	graphPlotting = False
 	fig = plt.figure(figsize=(10,8.2))
 	ax = fig.add_subplot(1,1,1)
+	fig2 = plt.figure()
+	ax2 = fig2.add_subplot(2,2,2)
+
+	
 	#totPop = plt.subplot2grid((6,2), (0,0), rowspan = 2 , colspan= 1)
 	xList = []
 	yList = []
@@ -80,11 +84,13 @@ class Simulate(tk.Frame):
 	__settlement_List = []
 	coordinates = []
 	cv = fig
+	cv2 = fig2
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
-
-
+	flood = Flood()
+	x = []
+	y = []
 
 	def __init__(self, root):
 
@@ -93,6 +99,7 @@ class Simulate(tk.Frame):
 		# **********************************
 		# 			User Inputs
 		# **********************************
+		self.count = 0
 		mtp = tk.Scale(self.scrollFrame.viewPort, from_=100, to=500, orient=HORIZONTAL, label = "Model Time Span:", length = 180, resolution=50)
 		mtp.pack(padx=20, pady=10, side=tk.TOP)
 		mtp.set(100)
@@ -176,32 +183,8 @@ class Simulate(tk.Frame):
 			root.quit()     # stops mainloop
 			root.destroy()
 
-		def createPlots():
-			xs = []
-			ys = []
-			for i in range(10):
-				x = i
-				y = random.randrange(10)
-				xs.append(x)
-				ys.append(y)
-			return xs, ys
-
 		def _start():
-			'''
-			# **********************************
-			# 		    GRAPH WINDOW
-			# **********************************
-			graphWindow = Toplevel()
-			self.gw = ScrollFrame(graphWindow)
-			graphWindow.title("Graphs")
-			x, y = createPlots()
-
-			#self.totPop.plot(x, y)
-
-			self.gw.pack(fill="both", expand=True, anchor = "e")
-			graphWindow.geometry("600x700")
-			# **********************************
-			'''
+						
 			rent = False
 			seed = False
 			fis = False
@@ -394,30 +377,50 @@ class Simulate(tk.Frame):
 		self.establishPopulation()
 		self.runSimulation()
 
-
-
 	def change_state(self):
 		if self.continuePlotting == True:
 			self.continuePlotting = False
 		else:
 			self.continuePlotting = True
 
+	def populationGraph(self):
+		#print("IN POP GR")
+		self.x.append(self.count)
+		self.y.append(self.__total_population)
+		self.ax2.plot(self.x,self.y, 'b')
+		self.fig2.canvas.draw()
+		self.fig2.canvas.flush_events()
+		self.after(0, self.getData())
+
+	def change_stateGraph(self):
+		if self.graphPlotting == True:
+			self.graphPlotting = False
+		else:
+			self.graphPlotting = True
 
 	def runSimulation(self):
 		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
 
 		self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
 
-		#self.getData()
-		#self.ax.imshow(self.img)
 		self.cv = FigureCanvasTkAgg(self.fig, master=root)
 		self.cv.get_tk_widget().pack(side=tk.RIGHT, fill=tk.BOTH, expand=1)
 
 		for i in self.coordinates:
 			self.ax.plot(i[1],i[0], marker='$⌂$', ms = '11')
 
-		self.change_state()
-		threading.Thread(target=self.getData()).start()
+		#self.fig2.show()
+		#self.change_state()
+		#thread1 = threading.Thread(target=self.getData())
+		# **********************************
+		# 		    GRAPH WINDOW
+		# **********************************
+		#thread1.start()
+		self.getData()
+		#self.change_stateGraph()
+		#thread2 = threading.Thread(target=self.populationGraph)
+		#thread2.start()
+		# **********************************
 
 		root.geometry("1200x700")
 
@@ -427,7 +430,7 @@ class Simulate(tk.Frame):
 		lines = ""
 		self.xList =[]
 		self.yList = []
-		print("IN GET CO")
+		#print("IN GET CO")
 		root.geometry("1200x700")
 		self.ax.axis('off')
 		#tick_Counter = tk.Label (root, text = ("Ticks:", 0))
@@ -436,19 +439,18 @@ class Simulate(tk.Frame):
 		cmap = mpl.colors.ListedColormap(['blue', '#00ff00','#00ed00','#00e600','#00df00','#00da00','#00d400','#00ce00','#00c400','#00bc00','#00b300','#00aa00','#00a500','#009e00','#009900','#007e00'])
 
 		count = 0
-		while(count<self.__model_time_span):
+		while(self.count<self.__model_time_span):
 
-			count += 1
+			self.count += 1
 
 			self.ax.imshow(self.map.getGrid(),vmin=0, vmax=len(cmap.colors), cmap=cmap, interpolation= "None")
-			#**********Check every tick that allows for information to be used for the graphs to keep them updated***********
-			self.establishPopulation() # dont think this is the right method - we need a method that checks the population every tick
-			#****************************************************************************************************************
-
 			#tick_Counter['text'] = ('Ticks:', count)
 			for s in self.__settlement_List:
-				self.ax.plot(s.getCoordinates()[1],s.getCoordinates()[0], marker='$⌂$', ms = str(s.checkSettlementPopulation()), color = "yellow")
+				self.ax.plot(s.getCoordinates()[1],s.getCoordinates()[0], marker='$⌂$', ms = str(s.checkSettlementPopulation()), color = 'yellow')
+				self.ax.plot(s.getCoordinates()[1], s.getCoordinates()[0], marker = 's' ,markerfacecolor = 'yellow',markeredgecolor='yellow', ms = 6.5)
+				
 				for h in s.getHouseholdList():
+
 					self.map.setFertility()
 
 					h.setCoordinates(s.getCoordinates())
@@ -458,13 +460,16 @@ class Simulate(tk.Frame):
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
-					h.inner.beginFarm()
+					num_harvests = math.floor(h.getSize() / 2) #one harvest for every 2 workers
+					for i in range(num_harvests):
+						farm = h.inner.beginFarm()
+						self.ax.plot(farm[0], farm[1], marker = '$☘$' ,markerfacecolor = 'g',markeredgecolor='white' ,ms = 10, color = 'g')
 
 					for field in h.getFieldsOwned():
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
 							h.removeField(field)
-							#self.ax.lines.remove(self.ax.lines[0])
+							self.ax.lines.remove(self.ax.lines[0])
 
 					if(h.consumeGrain()):
 						s.decrementPopulation()
@@ -472,30 +477,30 @@ class Simulate(tk.Frame):
 
 					if(h.checkWorkers()):
 						s.removeHousehold(h)
-
+					
 					try:
 						self.xList.append(x[0])
 						self.xList.append(s.getCoordinates()[1])
 						self.yList.append(x[1])
 						self.yList.append(s.getCoordinates()[0])
 
-						self.ax.plot(self.xList, self.yList, marker = '$☘$', markeredgecolor = 'green' ,color = 'white', ms = 8, linestyle='-')
+						self.ax.plot(self.xList, self.yList, marker = '.' ,markerfacecolor = 'g',markeredgecolor='g',color = 'white', ms = 6, linestyle='-')
+						self.ax.plot(s.getCoordinates()[1], s.getCoordinates()[0], marker = 's' ,markerfacecolor = 'yellow',markeredgecolor='yellow', ms = 6.5)
 						self.cv.draw()
 						self.cv.flush_events()
 
 						#time.sleep(0.01)
 						self.xList.clear()
 						self.yList.clear()
-
+						#self.after(0, self.populationGraph())
+						
 					except:
 						continue
-
 			for s in self.__settlement_List:
 				for h in s.getHouseholdList():
 					num = h.getSize() - h.inner.getWorkersWorked() #workers who didn't previously farm this year
 					for i in range(num):
 						h.rentLand()
-
 
 if __name__ == "__main__":
 	root=tk.Tk()
