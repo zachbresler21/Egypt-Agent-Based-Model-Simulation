@@ -10,7 +10,6 @@ class Household:
 
 	#Attributes
 	__knowledge_radius = 0
-	#__belongingSettlement = Settlement
 	map = Map()
 
 
@@ -26,7 +25,7 @@ class Household:
 		self.__rental_rate = rental_rate
 		self.__knowledge_radius = knowledge_radius
 		self.__fields_owned = []
-		self.__fields_harvested = []
+		self.__coordinates = []
 		self.map = Map()
 
 		self.__competency =  competency + (random.random()*(1-competency))
@@ -53,11 +52,11 @@ class Household:
 	def getTotGrain(self):
 		return self.__tot_grain
 
+	def getDistanceCost(self):
+		return self.__distance_cost
+
 	def addTotGrain(self,tot_harvest):
 		self.__tot_grain += tot_harvest
-
-	def addHarvestField(self, field):
-		self.__fields_harvested.append(field)
 
 	def removeField(self,field):
 		self.__fields_owned.remove(field)
@@ -87,7 +86,6 @@ class Household:
 		return self.__id
 
 	def claimFields(self, row, col):
-		#
 		patches = self.map.getPatches()
 		claim_chance = random.uniform(0,1) #creates a random float between 0 and 1
 		if (self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land ADD LATER(claim_chance < self.__ambition) and
@@ -122,10 +120,6 @@ class Household:
 		self.__fields_owned.append(claim_field)
 		return claim_field.findCoordinates()
 
-	def rentLand():
-		#
-		pass
-
 	def consumeGrain(self):
 		self.__tot_grain = self.__tot_grain - (self.__size*160) #workers consuming 160kg of grain a year
 		if self.__tot_grain <= 0: #if not enough grain to feed workers, one dies
@@ -141,25 +135,12 @@ class Household:
 			return True
 		return False
 
-
 	def storageLoss():
 		self.__tot_grain = self.__tot_grain - (self.__tot_grain*0.1)
 
-	def populationShift():
-		#
-		pass
-	'''
-	def removeMember():
-		self.__size = self.__size - 1
-		if self.__size == 0:
-			self.__belongingSettlement.removeHousehold()
-	'''
+
 	def addMember(self):
 		self.__size = self.__size + 1
-
-	def beginFarm():
-		#
-		pass
 
 	def generationalChangeover(self,generational_variation, min_ambition, min_competency):
 		self.__generationCountdown = self.__generationCountdown - 1
@@ -199,10 +180,36 @@ class Household:
 
 			self.__competency = new_competency
 
+	def rentLand(self):
+		patches = self.map.getPatches()
 
-	def removeFields():
-		#
-		pass
+		r = np.arange(0, 41)
+		c = np.arange(0, 41)
+
+		cr = self.__coordinates[0]
+		cc = self.__coordinates[1]
+		radius = self.__knowledge_radius
+
+		mask = (r[np.newaxis,:]-cr)**2 + (c[:,np.newaxis]-cc)**2 < radius**2 #determines indices in the circle with knowledge radius
+
+		best_harvest = 0
+		total_harvest = 0
+		best_field = Patch(34567, True)
+
+		for patch in patches[mask]: #traverses through array of patches in the knowledge radius
+			this_harvest = (patch.inner.getFertility()*2475*self.__competency)-(self.inner.findDistance(patch)*self.__distance_cost)
+			if(patch.isField() and patch.inner.isHarvested() == False and this_harvest >= best_harvest): #finds highest yield field
+				self.__best_harvest = this_harvest
+				best_field = patch
+
+		harvest_chance = random.uniform(0,1)
+		if(harvest_chance < self.__ambition * self.__competency):
+			best_field.inner.toggleHarvested()
+			total_harvest += ((best_harvest * (1 - (self.__rental_rate / 100))) - 300)
+
+		self.__tot_grain += total_harvest
+		self.inner.clearWorkersWorked()
+
 
 	class Farm:
 
@@ -214,21 +221,24 @@ class Household:
 			self.__workers_worked = 0
 			self.__household = household
 
+		def getWorkersWorked(self):
+			return self.__workers_worked
 
-		def beginFarm(self, distance_cost):
+		def clearWorkersWorked(self):
+			self.__workers_worked = 0
+
+		def beginFarm(self):
 			num_harvests = math.floor(self.__household.getSize() / 2) #one harvest for every 2 workers
 			for i in range(num_harvests):
-				best_field = self.determineField(distance_cost)
+				best_field = self.determineField()
 				total_harvest = self.calcYield(best_field)
 				self.__household.addTotGrain(total_harvest)
-				self.__household.addHarvestField(best_field)
 
-
-		def determineField(self,distance_cost):
+		def determineField(self):
 			self.__best_harvest = 0
 			best_field = Patch(34567, True)
 			for field in self.__household.getFieldsOwned(): #fields_owned is an array of patches
-				this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*distance_cost)
+				this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*self.__household.getDistanceCost())
 				#yield dependent on fertility, whether or not the household actually farms the field (competency) and distance cost
 				if(field.inner.isHarvested() == False and this_harvest > self.__best_harvest): #finds highest yield field
 					self.__best_harvest = this_harvest
@@ -257,6 +267,5 @@ class Household:
 			hor = math.pow((cor1[0]-cor2[0]),2)
 			ver = math.pow((cor1[1]-cor2[1]),2)
 
-			#distance = math.sqrt(hor + ver)
-			distance = 0
+			distance = math.sqrt(hor + ver)
 			return distance

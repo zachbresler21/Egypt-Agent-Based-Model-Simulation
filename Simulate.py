@@ -458,7 +458,7 @@ class Simulate(tk.Frame):
 
 					h.generationalChangeover(self.__generation_variation,self.__min_ambition, self.__min_competency)
 
-					h.inner.beginFarm(self.__distance_cost)
+					h.inner.beginFarm()
 
 					for field in h.getFieldsOwned():
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
@@ -489,6 +489,13 @@ class Simulate(tk.Frame):
 
 					except:
 						continue
+
+			for s in self.__settlement_List:
+				for h in s.getHouseholdList():
+					num = h.getSize() - h.inner.getWorkersWorked() #workers who didn't previously farm this year
+					for i in range(num):
+						h.rentLand()
+
 
 if __name__ == "__main__":
 	root=tk.Tk()
