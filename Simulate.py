@@ -23,7 +23,6 @@ from Map import Map
 from Settlement import Settlement
 from Household import Household
 from Patch import Patch
-from Flood import Flood
 
 plt.style.use('ggplot')
 
@@ -56,7 +55,7 @@ class Simulate(tk.Frame):
 	fig2 = plt.figure()
 	ax2 = fig2.add_subplot(2,2,2)
 
-	
+
 	#totPop = plt.subplot2grid((6,2), (0,0), rowspan = 2 , colspan= 1)
 	xList = []
 	yList = []
@@ -88,7 +87,6 @@ class Simulate(tk.Frame):
 	#x, y = np.empty(20, dtype= int)
 	#__grid = np.random.randint(10, size= (40,40))
 	map = Map()
-	flood = Flood()
 	x = []
 	y = []
 
@@ -184,7 +182,7 @@ class Simulate(tk.Frame):
 			root.destroy()
 
 		def _start():
-						
+
 			rent = False
 			seed = False
 			fis = False
@@ -448,7 +446,7 @@ class Simulate(tk.Frame):
 			for s in self.__settlement_List:
 				self.ax.plot(s.getCoordinates()[1],s.getCoordinates()[0], marker='$⌂$', ms = str(s.checkSettlementPopulation()), color = 'yellow')
 				self.ax.plot(s.getCoordinates()[1], s.getCoordinates()[0], marker = 's' ,markerfacecolor = 'yellow',markeredgecolor='yellow', ms = 6.5)
-				
+
 				for h in s.getHouseholdList():
 
 					self.map.setFertility()
@@ -465,6 +463,7 @@ class Simulate(tk.Frame):
 						farm = h.inner.beginFarm()
 						self.ax.plot(farm[0], farm[1], marker = '$☘$' ,markerfacecolor = 'g',markeredgecolor='white' ,ms = 10, color = 'g')
 
+
 					for field in h.getFieldsOwned():
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
@@ -477,7 +476,7 @@ class Simulate(tk.Frame):
 
 					if(h.checkWorkers()):
 						s.removeHousehold(h)
-					
+
 					try:
 						self.xList.append(x[0])
 						self.xList.append(s.getCoordinates()[1])
@@ -486,6 +485,8 @@ class Simulate(tk.Frame):
 
 						self.ax.plot(self.xList, self.yList, marker = '.' ,markerfacecolor = 'g',markeredgecolor='g',color = 'white', ms = 6, linestyle='-')
 						self.ax.plot(s.getCoordinates()[1], s.getCoordinates()[0], marker = 's' ,markerfacecolor = 'yellow',markeredgecolor='yellow', ms = 6.5)
+
+
 						self.cv.draw()
 						self.cv.flush_events()
 
@@ -493,7 +494,7 @@ class Simulate(tk.Frame):
 						self.xList.clear()
 						self.yList.clear()
 						#self.after(0, self.populationGraph())
-						
+
 					except:
 						continue
 			for s in self.__settlement_List:
