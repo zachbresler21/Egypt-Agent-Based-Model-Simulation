@@ -88,10 +88,10 @@ class Household:
 	def claimFields(self, row, col):
 		patches = self.map.getPatches()
 		claim_chance = random.uniform(0,1) #creates a random float between 0 and 1
-		if (self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land ADD LATER(claim_chance < self.__ambition) and
+		if (claim_chance < self.__ambition and self.__size > len(self.__fields_owned) or len(self.__fields_owned) <= 1): #checks if household will be trying to claim land
 			current_grain = self.__tot_grain
 			claim_field = Patch(34567, True)
-			best_fertility = 0
+			best_fertility = -100
 
 			r = np.arange(0, 41)
 			c = np.arange(0, 41)
@@ -104,14 +104,13 @@ class Household:
 			mask = (r[np.newaxis,:]-cr)**2 + (c[:,np.newaxis]-cc)**2 < radius**2
 
 			for patch in patches[mask]: #traverses through array of patches in the circle
-				if patch.isField()==True and patch.isOwned() == False and patch.isRiver() == False and patch.isSettlement() == False:
+				if patch.isField() == True and patch.isOwned() == False and patch.isRiver() == False and patch.isSettlement() == False:
 					fertility = patch.inner.getFertility()
-					if fertility >= best_fertility: #finds field with best fertility
+					if fertility > best_fertility: #finds field with best fertility
 						best_fertility = fertility
 						claim_field = patch
 
 			x = self.completeClaim(claim_field)
-			#print(x)
 			return x
 
 
@@ -137,7 +136,6 @@ class Household:
 
 	def storageLoss():
 		self.__tot_grain = self.__tot_grain - (self.__tot_grain*0.1)
-
 
 	def addMember(self):
 		self.__size = self.__size + 1
@@ -234,7 +232,7 @@ class Household:
 			return best_field.findCoordinates()
 
 		def determineField(self):
-			self.__best_harvest = 0
+			self.__best_harvest = -1000
 			best_field = Patch(0, True)
 			for field in self.__household.getFieldsOwned(): #fields_owned is an array of patches
 				this_harvest = (field.inner.getFertility()*self.__max_potential_yield*self.__household.getCompetency())-(self.findDistance(field)*self.__household.getDistanceCost())
@@ -250,8 +248,7 @@ class Household:
 			farm_chance = random.uniform(0,1) #creates a random float between 0 and 1
 			if(self.__household.getTotGrain() < (self.__household.getSize() * 160) or farm_chance < (self.__household.getAmbition() * self.__household.getCompetency())):
 				#160 is kilograms of grain per person annually, after Hassan 1984, 63.
-				field.inner.toggleHarvested() #NEED TO TOGGLE FIELDS HARVESTED EVERY TICK
-				#Change shape? Show harvest on the plot?
+				field.inner.toggleHarvested()
 				total_harvest = self.__best_harvest - 300  #300 = cost of seeding the field, assuming 1/8 of maximum potential yield.
 				self.__workers_worked += 2
 				return total_harvest

@@ -425,7 +425,7 @@ class Simulate(tk.Frame):
 		self.ax.axis('off')
 
 	def getData(self):
-		lines = ""
+		#lines = ""
 		self.xList =[]
 		self.yList = []
 		#print("IN GET CO")
@@ -500,6 +500,9 @@ class Simulate(tk.Frame):
 					num = h.getSize() - h.inner.getWorkersWorked() #workers who didn't previously farm this year
 					for i in range(num):
 						h.rentLand()
+
+			for line in self.ax.lines:
+				line.set_marker(".")
 
 if __name__ == "__main__":
 	root=tk.Tk()
