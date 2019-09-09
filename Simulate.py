@@ -467,6 +467,7 @@ class Simulate(tk.Frame):
 						if(field.inner.fieldChangeover() >= self.__fallow_limit):
 							field.toggleOwned()
 							h.removeField(field)
+							field.toggleOwned()
 							self.ax.lines.remove(self.ax.lines[0])
 
 					if(h.consumeGrain()):
