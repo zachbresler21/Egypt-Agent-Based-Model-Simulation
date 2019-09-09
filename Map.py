@@ -92,18 +92,13 @@ class Map:
 				fertility = 17 * (beta * (math.exp(0 - math.pow((patches[i][j].findCoordinates()[0] - mu),2)/alpha)))
 				if(patches[i][j].isField()):
 					patches[i][j].inner.setFertility(fertility)
+					num = int(10*round(fertility, 1))
+					if(num<=0):
+						num = 2
+					self.__grid[j][i] = num
 					patches[i][j].inner.setHarvestFalse()
-		self.gridRecolour()
+			self.createRiver()
 
-	def gridRecolour(self):
-		for r in range(2,41):
-			for c in range(0,41):
-				num = int(10*round(self.__patches[r][c].inner.getFertility(), 1))
-				if(num<=0):
-					num = 1
-				#print(num, num == 0)###########testing to see whether there are any zeros
-				self.__grid[c][r] = num
-		#self.createRiver()
 
 	def assignFertilityColour(fertility):
 		#takes a string as a parameter
