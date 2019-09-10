@@ -16,7 +16,7 @@ class Household:
 	map = Map()
 
 
-	"""docstring for Household"""
+	"""Constructor for Household"""
 	def __init__(self, h_id, size,tot_grain, competency, ambition, rental_rate, allow_land_rental, distance_cost, knowledge_radius):
 
 		self.__id = h_id

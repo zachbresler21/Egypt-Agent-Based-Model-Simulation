@@ -2,7 +2,7 @@ import math
 
 class Patch:
 
-	'''Docstring for patch'''
+	'''Constructor for patch'''
 	def __init__(self, patch_id, isField):
 		self.__isSettlement = False
 		self.__isRiver = False

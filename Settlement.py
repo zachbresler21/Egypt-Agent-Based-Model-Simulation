@@ -4,7 +4,7 @@ from Patch import Patch
 
 class Settlement:
 
-	'''Docstring for settlement'''
+	'''Constructor for settlement'''
 	def __init__(self, __settlement_id, __population, __num_households):
 		self.__settlement_id = __settlement_id
 		self.__population = __population

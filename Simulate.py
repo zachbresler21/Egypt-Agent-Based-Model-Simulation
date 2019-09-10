@@ -87,6 +87,7 @@ class Simulate(tk.Frame):
 	x = []
 	y = []
 
+	'''Constructor for simulate'''
 	def __init__(self, root):
 
 		tk.Frame.__init__(self, root)

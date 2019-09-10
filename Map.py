@@ -10,7 +10,7 @@ class Map:
 	__grid = np.empty((41,41), dtype= int) #numpy array depicting the grid (list of integers)
 	__patches = np.empty((41,41), dtype = Patch) #numpy array of patch objects
 
-	'''Docstring for Map'''
+	'''Constructor for Map'''
 	def __init__(self):
 		self.__lorenz_points = 0.0
 		self.__gini_index_reserve = 0.0
