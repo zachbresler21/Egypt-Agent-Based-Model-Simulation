@@ -291,9 +291,9 @@ class Simulate(tk.Frame):
 		self.__pop_growth_rate = pop_growth
 		self.__allow_land_rental = allow_rent
 		self.__rental_rate = rent_rate
-		#captured upon clicking the setup button
+		#captured upon clicking the start button
 
-		#the below methods are then called to run (after setup is clicked)
+		#the below methods are then called to run (after start is clicked)
 		self.setUpPatches()
 		self.setUpSettlements()
 		self.createRiver()
