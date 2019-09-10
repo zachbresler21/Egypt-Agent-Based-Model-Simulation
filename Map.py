@@ -5,27 +5,24 @@ from Patch import Patch
 
 
 class Map:
-	#Attributes
 
-	__grid = np.empty((41,41), dtype= int)
-	__patches = np.empty((41,41), dtype = Patch) #list of patches
+	'''Attributes'''
+	__grid = np.empty((41,41), dtype= int) #numpy array depicting the grid (list of integers)
+	__patches = np.empty((41,41), dtype = Patch) #numpy array of patch objects
 
+	'''Docstring for Map'''
 	def __init__(self):
-		#self.__grid = np.random.randint(10, size= (41,41))
-		#self.__grid = np.ones((41,41))
 		self.__lorenz_points = 0.0
 		self.__gini_index_reserve = 0.0
 		self.__avg_ambition = 0.0
 		self.__avg_competency = 0.0
 
 
-	def getPatches(self):
-		return self.__patches
-
+	'''Returns the numpy grid'''
 	def getGrid(self):
 		return self.__grid
 
-
+	'''Creates patch objects and adds them to the numpy array of patches'''
 	def createPatches(self):
 		#Use multiprocessing
 		count = 0
@@ -34,35 +31,37 @@ class Map:
 				self.__patches[r,c] = Patch(count, True) #this should insert a Patch object - I made every Patch a Field
 				count += 1
 		return self.__patches
-
 		#populate list of patches
 
+	'''Returns a numpy array of patches'''
 	def getPatches(self):
 		return self.__patches
 
-
+	'''Creates the river'''
 	def createRiver(self):
-		#change patches isRiver true
 		#making first 2 columns river
 		for r in range (len(self.__patches)):
 			self.__patches[0,r].toggleRiver()
 			self.__patches[1,r].toggleRiver()
 			self.__grid[r,0] = 0
 			self.__grid[r,1] = 0
+			#changing the grid and the respective patches (toggles river boolean)
 
+	'''Generates random coordinates'''
 	def generateCoords(self):
 		r = random.randint(0,40)
 		c = random.randint(2,40)
 		return [r,c]
 
+	'''Checks to see if the patch is available'''
 	def isPatchAvailable(self,coords):
-
 		if self.__patches[coords[0], coords[1]].isRiver() == False and self.__patches[coords[0],coords[1]].isSettlement() == False:
 			return True
 		else:
 			return False
+		#returns true if there is no settlement or river at the coordinates
 
-
+	'''Sets up the settlements'''
 	def setUpSettlements(self,settlement_list):
 		#takes a list of settlements as a parameter
 		counter = 0
@@ -74,70 +73,38 @@ class Map:
 				settlement_list[counter].setCoordinates(coords) #set coords in settlement object [r,c]
 				self.__patches[coords[0],coords[1]].toggleSettlement()
 				coords_list.append(coords) #2d array - each element is a new set of coords of settlements
-				#change block to a settlement in the plot (return list of coords to simulate)
+				#change patch to a settlement in the plot (return list of coords to simulate)
 				counter += 1
 			else:
 				coords = self.generateCoords()
 		return coords_list
+		#if the patch is available at the randomly generated coordinates, settlement is created, otherwise coordinates will be regenerated
 
-	def setFertility(self):
+	'''Abstract representation of the annual Nile flood; this method assigns a fertility value to each field based on its distance to water patches'''
+	def flood(self):
 		patches = self.__patches
 		mu = random.randint(0,10) + 5
 		sigma = random.randint(0,5) + 5
+		#chooses a mean a standard dev for the fertility distribution
 		alpha = 2 * math.pow(sigma,2)
 		beta = 1 / (sigma * math.sqrt(2 * math.pi))
+		#sets up part of the normal distribution equation
 
 		for i in range (41):
 			for j in range(41):
-				fertility = 17 * (beta * (math.exp(0 - math.pow((patches[i][j].findCoordinates()[0] - mu),2)/alpha)))
+				fertility = 17 * (beta * (math.exp(0 - math.pow((patches[i][j].findCoordinates()[0] - mu),2)/alpha))) #determines fertility
 				if(patches[i][j].isField()):
-					patches[i][j].inner.setFertility(fertility)
+					patches[i][j].inner.setFertility(fertility) #sets the field's fertility
 					num = int(10*round(fertility, 1))
 					if(num<=0):
 						num = 2
 					self.__grid[j][i] = num
-					patches[i][j].inner.setHarvestFalse()
+					#changes the value in the grid to represent the field's colour displayed on the plot
+					patches[i][j].inner.setHarvestFalse() #after every flood, field harvest is set to false
 			self.createRiver()
 
-
-	def assignFertilityColour(fertility):
-		#takes a string as a parameter
-		#happens every tick
-		pass
-
-	def claimField(household):
-		pass
-
-	def harvest():
-		#harvest
-		pass
-
-	def rentField():
-		#rent
-		pass
-
-	def removeLink():
-		#remove
-		pass
-
-	def enlargeSettlement(factor):
-		#takes an int as a parameter
-		pass
-
-	def reduceSettlement(factor):
-		##takes an int as a parameter
-		pass
-
-	def recolourHouseholds():
-		#recolour
-		pass
-
-	def updatePlotValues(totHouseholds, totPopulation, ambition, competency):
-		#update - REVISE THE METHOD THAT IS IN THE SIMULATE CLASS
-		pass
-
+	'''Clears everything and starts new'''
 	def clearAll(self):
-		#clear everything and start new
 		__lorenz_points = 0.0
 		__gini_index_reserve = 0.0
 		__avg_ambition = 0.0
