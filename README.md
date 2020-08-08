@@ -4,3 +4,5 @@ The project shows how inequality in the form of grain accumulation, arose in Ear
 Ultimately, showing how many small Neolithic farming communities became one large state led by Pharaoh.
 
 Created in python, extensively utilising numpy and matplotlib libraries
+
+Simulate.py is the main class. To run, clone this repo and run the simulate python class
